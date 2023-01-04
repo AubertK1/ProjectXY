@@ -23,8 +23,10 @@ public class Main extends ApplicationAdapter {
 	static Skin skin;
 	//main menu screen
 	MainMenu menu;
+	//game screen
+	GameScreen gameScreen;
 	//detects whether the game is currently being played or not
-	static boolean isGameRunning = false;
+	static boolean isGameRunning = true;
 
 	/**
 	 * This class sets up the screen. It's only called ONCE (when the game is loaded)
@@ -37,6 +39,7 @@ public class Main extends ApplicationAdapter {
 		skin = new Skin(Gdx.files.internal("assets\\skin\\uiskin.json"));
 		//setting main menu screen
 		menu = new MainMenu();
+		gameScreen = new GameScreen();
 /*
 
 		//Houses all the actors so that they can be setup on the screen together and drawn together
@@ -82,12 +85,16 @@ public class Main extends ApplicationAdapter {
 		//sets the background color. Later we'll set a background image over this
 		ScreenUtils.clear(new Color(0x3fc9e8ff));
 		batch.begin();
-		batch.end();
 
 		//if game is not being played, show main menu screen
 		if (isGameRunning == false){
 			menu.draw();
 		}
+		else{
+			gameScreen.render(batch);
+		}
+
+		batch.end();
 		//draws the actors on the screen
 		stage.draw();
 

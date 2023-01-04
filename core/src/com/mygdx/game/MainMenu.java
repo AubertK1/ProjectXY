@@ -29,7 +29,6 @@ public class MainMenu {
         });
 
         myGroup.addActor(myTextbutton);
-        stage.addActor(myGroup);
     }
     public void draw(){
         stage.addActor(myGroup);
