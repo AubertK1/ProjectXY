@@ -1,10 +1,8 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -25,13 +23,13 @@ public class MainMenu {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 myTextbutton.setText("click");
-                Main.isGameRunning = true;
+                Main.isMatchRunning = true;
             }
         });
 
         myGroup.addActor(myTextbutton);
     }
-    public void draw(){
+    public void startDrawing(){
         stage.addActor(myGroup);
     }
     public void stopDrawing(){
