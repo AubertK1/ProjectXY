@@ -26,7 +26,7 @@ public class Main extends ApplicationAdapter {
 	//game screen
 	GameScreen gameScreen;
 	//detects whether the game is currently being played or not
-	static boolean isGameRunning = true;
+	static boolean isGameRunning = false;
 
 	/**
 	 * This class sets up the screen. It's only called ONCE (when the game is loaded)
@@ -40,40 +40,8 @@ public class Main extends ApplicationAdapter {
 		//setting main menu screen
 		menu = new MainMenu();
 		gameScreen = new GameScreen();
-/*
 
-		//Houses all the actors so that they can be setup on the screen together and drawn together
-		Group group = new Group();
-		//this is generally how to use actors
-		//first make the group and set its position on the screen
-		group.setPosition(Gdx.graphics.getWidth()/2f, 200);
-		//next make an actor. Each actor has different parameters but all of them will ask for the skin. Just put skin
-		Label tempLabel = new Label("This is an actor", skin);
-		//then set its size/position (the position is relative to the position of the group)
-		tempLabel.setPosition(0, 200);
-		//buttons are usually final, so you can reference it in a listener
-		final TextButton tempButton2 = new TextButton("so is the button below this (CLICK IT)",skin);
-		tempButton2.setPosition(0, tempLabel.getY()-tempButton2.getHeight());
-		final Button tempButton = new Button(skin);
-		//listeners tell the button what to do after you click it
-		tempButton.addListener(new ClickListener(){
-			public void clicked (InputEvent event, float x, float y) {
-				tempButton2.setText("You clicked the button below me !!");
-			}
-		});
-		tempButton.setSize(150, 30);
-		tempButton.setPosition(0, tempButton2.getY()-tempButton.getHeight());
-
-		//after you make an actor, add it to the group
-		group.addActor(tempLabel);
-		group.addActor(tempButton2);
-		group.addActor(tempButton);
-
-		//then add the group to the stage and that's it
-		stage.addActor(group);
-
-*/
-		//this is so the user can click on the actors
+		//this is so the user can click on the screen
 		Gdx.input.setInputProcessor(stage);
 	}
 
@@ -91,6 +59,7 @@ public class Main extends ApplicationAdapter {
 			menu.draw();
 		}
 		else{
+			menu.stopDrawing();
 			gameScreen.render(batch);
 		}
 

@@ -7,12 +7,12 @@ import com.badlogic.gdx.graphics.Texture;
  */
 public class Platform {
     //this is the visual part of the platform
-    Texture texture;
+    Texture model;
     //this is the physical part of the platform
-    PlatformModel model;
+    Hurtbox hurtbox;
 
     public Platform(Texture texture) {
-        this.texture = texture;
-        model = new PlatformModel();
+        model = texture;
+        hurtbox = new Hurtbox();
     }
 }

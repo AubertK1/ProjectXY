@@ -25,6 +25,7 @@ public class MainMenu {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 myTextbutton.setText("click");
+                Main.isGameRunning = true;
             }
         });
 
@@ -34,6 +35,6 @@ public class MainMenu {
         stage.addActor(myGroup);
     }
     public void stopDrawing(){
-        myGroup.addAction(Actions.removeActor());
+        myGroup.remove();
     }
 }
