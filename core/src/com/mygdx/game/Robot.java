@@ -8,7 +8,9 @@ import com.badlogic.gdx.graphics.Texture;
  */
 public class Robot extends Fighter{
 
-    public Robot() {
+    public Robot(Player player) {
+        //runs the Fighter class's constructor, so it can set up anything in that constructor
+        super(player);
         //setting the visual model of the robot
         model = new Texture("assets\\textures\\stockrobot.png");
     }

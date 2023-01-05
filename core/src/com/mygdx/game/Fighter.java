@@ -12,20 +12,19 @@ import com.badlogic.gdx.math.Vector2;
  * (speed, health, damage, etc.) which may be changed in the fighter's separate class
  */
 public class Fighter {
+    //the fighter will be assigned to a player when chosen
+    Player player;
+    //visual model of fighter
     Texture model;
     Hurtbox hurtbox;
+    //fighter's position stored as an x and y coordinate
     Vector2 position = new Vector2();
+    //fighter's speed
     float speed = 300;
-    public Fighter() {
-
+    public Fighter(Player player) {
+        this.player = player;
     }
 
-    public void update(float delaTime){
-        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) position.x += delaTime * speed;
-        if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) position.x -= delaTime * speed;
-        if(Gdx.input.isKeyPressed(Input.Keys.UP)) position.y += delaTime * speed;
-        if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) position.y -= delaTime * speed;
-    }
 
     /**
      * These will be extended and based on the fighter
@@ -65,11 +64,20 @@ public class Fighter {
     }
     //endregion
 
-    public void render(SpriteBatch batch,float x,float y){
-        batch.draw(model, x, y);
+    /**
+     * renders the fighter's model onto the screen
+     * @param batch just put batch
+     */
+    public void render(SpriteBatch batch){
+        player.update(Gdx.graphics.getDeltaTime());
+        batch.draw(model, position.x, position.y);
     }
+    /**
+     * same function, but you can scale the fighter to make it larger
+     * @param scale how much you want to times it by
+     */
     public void render(SpriteBatch batch, float scale){
-        update(Gdx.graphics.getDeltaTime());
+        player.update(Gdx.graphics.getDeltaTime());
         float newWidth = model.getWidth()*scale;
         float newHeight = model.getHeight()*scale;
         batch.draw(model, position.x, position.y, newWidth, newHeight);
@@ -77,5 +85,13 @@ public class Fighter {
     public void setPosition(float x, float y){
         position.x = x;
         position.y = y;
+    }
+
+    /**
+     * assigns this fighter to a player so that it can get its position updated
+     * @param player the player this fighter belongs to
+     */
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 }

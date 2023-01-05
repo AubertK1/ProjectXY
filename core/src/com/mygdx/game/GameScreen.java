@@ -13,13 +13,14 @@ public class GameScreen {
         //initializing everything
         background = new Texture("assets\\textures\\stockbg.jpg");
         stage = new Platform(new Texture("assets\\textures\\stockstage.png"));
-        player1 = new Player();
-        player2 = new Player();
+        player1 = new Player(1);
+        player2 = new Player(2);
         //setting player 1's fighter (will be moved later so the player can choose)
-        player1.setFighter(new Robot());
+        player1.setFighter(new Robot(player1));
+        //setting player 1's fighter's spawn/starting position
         player1.fighter.setPosition(Gdx.graphics.getWidth()/2f-100, Gdx.graphics.getHeight()/2f);
 
-        player2.setFighter(new Vampire());
+        player2.setFighter(new Vampire(player2));
         player2.fighter.setPosition(Gdx.graphics.getWidth()/2f+100, Gdx.graphics.getHeight()/2f);
     }
 

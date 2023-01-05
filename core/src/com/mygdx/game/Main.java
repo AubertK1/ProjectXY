@@ -3,13 +3,9 @@ package com.mygdx.game;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 /**
@@ -26,19 +22,23 @@ public class Main extends ApplicationAdapter {
 	//game screen
 	GameScreen gameScreen;
 	//detects whether the game is currently being played or not
-	static boolean isGameRunning = false;
+	static boolean isMatchRunning = false;
 
 	/**
 	 * This class sets up the screen. It's only called ONCE (when the game is loaded)
 	 */
 	@Override
 	public void create () {
-		//initializing everything
+		//initializing the batch
 		batch = new SpriteBatch();
+		//initializing the stage
 		stage = new Stage();
+		//initializing the skin
 		skin = new Skin(Gdx.files.internal("assets\\skin\\uiskin.json"));
-		//setting main menu screen
+
+		//setting up main menu screen
 		menu = new MainMenu();
+		//setting up the game screen
 		gameScreen = new GameScreen();
 
 		//this is so the user can click on the screen
@@ -54,11 +54,11 @@ public class Main extends ApplicationAdapter {
 		ScreenUtils.clear(new Color(0x3fc9e8ff));
 		batch.begin();
 
-		//if game is not being played, show main menu screen
-		if (isGameRunning == false){
-			menu.draw();
+		//if match is not being played, show main menu screen
+		if (isMatchRunning == false){
+			menu.startDrawing();
 		}
-		else{
+		else{ //if match is being played show gamescreen
 			menu.stopDrawing();
 			gameScreen.render(batch);
 		}
