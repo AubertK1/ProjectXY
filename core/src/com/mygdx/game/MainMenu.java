@@ -17,7 +17,7 @@ public class MainMenu {
     public MainMenu() {
         myGroup.setPosition(0,0);
 
-        String myString = "Click here";
+        String myString = "Play";
         final TextButton myTextbutton = new TextButton(myString,skin);
         myTextbutton.setPosition(800,600);
         myTextbutton.setSize(400,400);
@@ -25,16 +25,16 @@ public class MainMenu {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 myTextbutton.setText("click");
+                Main.isGameRunning = true;
             }
         });
 
         myGroup.addActor(myTextbutton);
-        stage.addActor(myGroup);
     }
     public void draw(){
         stage.addActor(myGroup);
     }
     public void stopDrawing(){
-        myGroup.addAction(Actions.removeActor());
+        myGroup.remove();
     }
 }
