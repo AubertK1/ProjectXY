@@ -31,7 +31,7 @@ public class Player {
      * updates the visuals or anything that needs to be updated every frame
      * @param delaTime the frame rate I think (just put Gdx.graphics.getDeltaTime())
      */
-    public void update(float delaTime){
+    public void update(float delaTime) {
         //registers player's input
         if(playerNum == 1) { //if player 1...
             if (Gdx.input.isKeyPressed(Input.Keys.D)) fighter.position.x += delaTime * fighter.speed;
@@ -39,12 +39,14 @@ public class Player {
             if (Gdx.input.isKeyPressed(Input.Keys.W)) fighter.position.y += delaTime * fighter.speed;
             if (Gdx.input.isKeyPressed(Input.Keys.S)) fighter.position.y -= delaTime * fighter.speed;
         }
+        
         else if(playerNum == 2) { //if player 2...
             if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) fighter.position.x += delaTime * fighter.speed;
             if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) fighter.position.x -= delaTime * fighter.speed;
             if (Gdx.input.isKeyPressed(Input.Keys.UP)) fighter.position.y += delaTime * fighter.speed;
             if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) fighter.position.y -= delaTime * fighter.speed;
         }
+
     }
 
     /**

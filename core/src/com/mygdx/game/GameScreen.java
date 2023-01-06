@@ -9,7 +9,7 @@ public class GameScreen {
     Player player2;
     Platform stage;
     Texture background;
-    public GameScreen(){
+    public GameScreen() {
         //initializing everything
         background = new Texture("assets\\textures\\stockbg.jpg");
         stage = new Platform(new Texture("assets\\textures\\stockstage.png"));

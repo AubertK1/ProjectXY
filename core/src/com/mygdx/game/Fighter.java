@@ -30,13 +30,20 @@ public class Fighter {
      * These will be extended and based on the fighter
      */
     //region light attacks
-    public void upLightAtk(){
+    public void upLightAtk() {
+
     }
-    public void neutralLightAtk(){
+    
+    public void neutralLightAtk() {
+
     }
-    public void sideLightAtk(){
+
+    public void sideLightAtk() {
+
     }
-    public void downLightAtk(){
+
+    public void downLightAtk() {
+
     }
     //endregion
 
