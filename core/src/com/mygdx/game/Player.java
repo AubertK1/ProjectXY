@@ -32,19 +32,33 @@ public class Player {
      * @param delaTime the frame rate I think (just put Gdx.graphics.getDeltaTime())
      */
     public void update(float delaTime) {
+        //region gravity
+        if(fighter.position.y >= 400) fighter.canFall = true;
+        else fighter.canFall = false;
+        if(fighter.canFall){
+            fighter.position.y -= delaTime * GameScreen.GRAVITY;
+        }
+        //endregion
+
         //registers player's input
         if(playerNum == 1) { //if player 1...
             if (Gdx.input.isKeyPressed(Input.Keys.D)) fighter.position.x += delaTime * fighter.speed;
             if (Gdx.input.isKeyPressed(Input.Keys.A)) fighter.position.x -= delaTime * fighter.speed;
-            if (Gdx.input.isKeyPressed(Input.Keys.W)) fighter.position.y += delaTime * fighter.speed;
-            if (Gdx.input.isKeyPressed(Input.Keys.S)) fighter.position.y -= delaTime * fighter.speed;
+            if (Gdx.input.isKeyPressed(Input.Keys.W) && !fighter.isJumping){
+                fighter.isJumping = true;
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.S) && fighter.canFall) fighter.position.y -= delaTime * fighter.speed;
+            if(fighter.isJumping) fighter.jump(delaTime);
         }
-        
+
         else if(playerNum == 2) { //if player 2...
             if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) fighter.position.x += delaTime * fighter.speed;
             if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) fighter.position.x -= delaTime * fighter.speed;
-            if (Gdx.input.isKeyPressed(Input.Keys.UP)) fighter.position.y += delaTime * fighter.speed;
-            if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) fighter.position.y -= delaTime * fighter.speed;
+            if (Gdx.input.isKeyPressed(Input.Keys.UP) && !fighter.isJumping){
+                fighter.isJumping = true;
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.DOWN) && fighter.canFall) fighter.position.y -= delaTime * fighter.speed;
+            if(fighter.isJumping) fighter.jump(delaTime);
         }
 
     }

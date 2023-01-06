@@ -9,6 +9,8 @@ public class GameScreen {
     Player player2;
     Platform stage;
     Texture background;
+    //game gravity variable. This determines how fast the characters fall
+    static float GRAVITY = 600;
     public GameScreen() {
         //initializing everything
         background = new Texture("assets\\textures\\stockbg.jpg");

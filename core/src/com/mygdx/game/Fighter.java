@@ -1,9 +1,7 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
@@ -21,6 +19,12 @@ public class Fighter {
     Vector2 position = new Vector2();
     //fighter's speed
     float speed = 300;
+    //can the player fall through fall lower
+    public boolean canFall = true;
+    //is the player jumping
+    public boolean isJumping = false;
+    public static int maxJumpFrames = 30;
+    private int remainingJumpFrames = maxJumpFrames;
     public Fighter(Player player) {
         this.player = player;
     }
@@ -71,6 +75,33 @@ public class Fighter {
     }
     //endregion
 
+    public void block(){
+
+    }
+
+    public void jump(float delaTime){
+        canFall = false;
+        isJumping = true;
+        //during the starting frames...
+        if(remainingJumpFrames > 15){
+            int x = remainingJumpFrames - 15;
+            //this is a workaround for now. Later I'm gonna have a gravity variable and apply that here instead
+            float jumpParabolaEq = ((-.06666f*(x*x)) + (2*x)); //this is so their jump slows at the end
+            position.y += delaTime * jumpParabolaEq * 125; //to edit jump height change the number at the end
+            remainingJumpFrames--;
+        }
+        //after halfway, you start falling again
+        else if(remainingJumpFrames > 0) {
+            canFall = true;
+            remainingJumpFrames--;
+        }
+        //once it's done, everything is reset
+        else{
+            canFall = true;
+            isJumping = false;
+            remainingJumpFrames = maxJumpFrames;
+        }
+    }
     /**
      * renders the fighter's model onto the screen
      * @param batch just put batch
