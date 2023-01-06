@@ -19,7 +19,7 @@ public class MainMenu {
 
         String myString = "CLICK HERE";
         final TextButton myTextbutton = new TextButton(myString,skin);
-        myTextbutton.setPosition(400,600);
+        myTextbutton.setPosition(550,550);
         myTextbutton.setSize(200,200);
         myTextbutton.addListener(new ChangeListener() {
             @Override
