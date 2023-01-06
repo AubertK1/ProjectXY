@@ -17,14 +17,14 @@ public class MainMenu {
     public MainMenu() {
         myGroup.setPosition(0,0);
 
-        String myString = "Play";
+        String myString = "CLICK HERE";
         final TextButton myTextbutton = new TextButton(myString,skin);
-        myTextbutton.setPosition(800,600);
-        myTextbutton.setSize(400,400);
+        myTextbutton.setPosition(400,600);
+        myTextbutton.setSize(200,200);
         myTextbutton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                myTextbutton.setText("click");
+                myTextbutton.setText("OMG YOU DID IT");
                 Main.isGameRunning = true;
             }
         });
