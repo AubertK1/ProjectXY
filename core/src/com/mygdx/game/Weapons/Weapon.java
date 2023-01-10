@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package com.mygdx.game.Weapons;
 
 /**
  * All weapons will indirectly extend this class by extending either MeleeWeapon or RangedWeapon class.

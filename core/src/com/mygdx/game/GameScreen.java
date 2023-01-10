@@ -3,6 +3,8 @@ package com.mygdx.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.mygdx.game.Characters.Robot;
+import com.mygdx.game.Characters.Vampire;
 
 public class GameScreen {
     Player player1;

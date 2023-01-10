@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package com.mygdx.game.Weapons;
 
 /**
  * Only ranged weapons will extend from this class. It helps separate the weapons so that

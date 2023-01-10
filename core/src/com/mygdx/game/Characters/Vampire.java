@@ -1,6 +1,8 @@
-package com.mygdx.game;
+package com.mygdx.game.Characters;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.mygdx.game.Fighter;
+import com.mygdx.game.Player;
 
 public class Vampire extends Fighter{
 

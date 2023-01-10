@@ -13,7 +13,7 @@ public class Fighter {
     //the fighter will be assigned to a player when chosen
     Player player;
     //visual model of fighter
-    Texture model;
+    protected Texture model;
     Hurtbox hurtbox;
     //fighter's position stored as an x and y coordinate
     Vector2 position = new Vector2();
