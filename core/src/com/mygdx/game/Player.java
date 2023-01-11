@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.mygdx.game.Fighter;
 
 /**
  * The actual player. This is what is directly being affected by the user, and it uses inputs
@@ -42,22 +43,24 @@ public class Player {
 
         //registers player's input
         if(playerNum == 1) { //if player 1...
+            // keypresses
             if (Gdx.input.isKeyPressed(Input.Keys.D)) fighter.position.x += delaTime * fighter.speed;
             if (Gdx.input.isKeyPressed(Input.Keys.A)) fighter.position.x -= delaTime * fighter.speed;
-            if (Gdx.input.isKeyPressed(Input.Keys.W) && !fighter.isJumping){
-                fighter.isJumping = true;
-            }
+            if (Gdx.input.isKeyPressed(Input.Keys.W) && !fighter.isJumping) {fighter.isJumping = true;}
             if (Gdx.input.isKeyPressed(Input.Keys.S) && fighter.canFall) fighter.position.y -= delaTime * fighter.speed;
+
+            // repeat calls
             if(fighter.isJumping) fighter.jump(delaTime);
         }
 
         else if(playerNum == 2) { //if player 2...
+            // keypresses
             if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) fighter.position.x += delaTime * fighter.speed;
             if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) fighter.position.x -= delaTime * fighter.speed;
-            if (Gdx.input.isKeyPressed(Input.Keys.UP) && !fighter.isJumping){
-                fighter.isJumping = true;
-            }
+            if (Gdx.input.isKeyPressed(Input.Keys.UP) && !fighter.isJumping){fighter.isJumping = true;}
             if (Gdx.input.isKeyPressed(Input.Keys.DOWN) && fighter.canFall) fighter.position.y -= delaTime * fighter.speed;
+
+            // repeat calls
             if(fighter.isJumping) fighter.jump(delaTime);
         }
 

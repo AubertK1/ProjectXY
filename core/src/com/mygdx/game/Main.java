@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.mygdx.game.UI.MainMenu;
 
 /**
  * This is the real Main class that all of your code will go into
@@ -14,15 +15,15 @@ import com.badlogic.gdx.utils.ScreenUtils;
 public class Main extends ApplicationAdapter {
 	static SpriteBatch batch;
 	//Houses all the groups so that they can all be drawn together
-	static Stage stage;
+	public static Stage stage;
 	//a spritesheet of all the actors (an actor is a button, textfield, label, etc.)
-	static Skin skin;
+	public static Skin skin;
 	//main menu screen
 	MainMenu menu;
 	//game screen
 	GameScreen gameScreen;
 	//detects whether the game is currently being played or not
-	static boolean isMatchRunning = false;
+	public static boolean isMatchRunning = false;
 
 	/**
 	 * This class sets up the screen. It's only called ONCE (when the game is loaded)
