@@ -1,9 +1,11 @@
-package com.mygdx.game;
+package com.mygdx.game.Characters;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.Hurtbox;
+import com.mygdx.game.Player;
 
 /**
  * All fighters will extend from this class. It declares the basic properties every fighter will have
@@ -16,9 +18,9 @@ public class Fighter {
     protected Texture model;
     Hurtbox hurtbox;
     //fighter's position stored as an x and y coordinate
-    Vector2 position = new Vector2();
+    public Vector2 position = new Vector2();
     //fighter's speed
-    float speed = 300;
+    public float speed = 300;
     //can the player fall through fall lower
     public boolean canFall = true;
     //is the player jumping
