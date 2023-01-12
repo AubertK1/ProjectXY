@@ -1,4 +1,4 @@
-package com.mygdx.game.UI;
+package com.mygdx.game.OI;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;

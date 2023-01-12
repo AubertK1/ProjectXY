@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.mygdx.game.UI.MainMenu;
+import com.mygdx.game.OI.MainMenu;
 
 /**
  * This is the real Main class that all of your code will go into

@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 /**
  * This will be used to create stages and platforms
  */
-public class Platform {
+public class Platform extends Object {
     //this is the visual part of the platform
     Texture model;
     //this is the physical part of the platform

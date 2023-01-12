@@ -5,13 +5,16 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.Hurtbox;
-import com.mygdx.game.Player;
+import com.mygdx.game.OI.Player;
 
 /**
  * All fighters will extend from this class. It declares the basic properties every fighter will have
  * (speed, health, damage, etc.) which may be changed in the fighter's separate class
  */
 public class Fighter {
+
+    // region properties 
+
     //the fighter will be assigned to a player when chosen
     Player player;
     //visual model of fighter
@@ -27,6 +30,8 @@ public class Fighter {
     public boolean isJumping = false;
     public static int maxJumpFrames = 30;
     private int remainingJumpFrames = maxJumpFrames;
+
+    // endregion properties
     
     public Fighter(Player player) {
         this.player = player;
@@ -36,6 +41,8 @@ public class Fighter {
     /**
      * These will be extended and based on the fighter
      */
+    //region attacks
+
     //region light attacks
     public void upLightAtk() {
     }
@@ -69,6 +76,8 @@ public class Fighter {
     }
     public void recoveryAtk(){
     }
+    //endregion
+    
     //endregion
 
     public void block(){
