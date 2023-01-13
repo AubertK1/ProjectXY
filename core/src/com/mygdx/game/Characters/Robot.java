@@ -1,7 +1,7 @@
 package com.mygdx.game.Characters;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.mygdx.game.Player;
+import com.mygdx.game.OI.Player;
 
 /**
  * Every game has a base character that they use to test...this is gonna be our "testing character" per say.

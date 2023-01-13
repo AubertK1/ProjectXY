@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.Hurtbox;
-import com.mygdx.game.Player;
+import com.mygdx.game.OI.Player;
 
 /**
  * All fighters will extend from this class. It declares the basic properties every fighter will have
