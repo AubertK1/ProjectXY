@@ -1,16 +1,13 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.math.Rectangle;
+
 public abstract class Object {
     
     //region properties 
 
-    // the cordinates of the bottom left corner of the objects bounding box
-    private int posX;
-    private int posY;
+    private Rectangle boundingBox;
 
-    // the dimesions of the box in the x and y axies
-    private int sizeX;
-    private int sizeY;
 
     // determins if the object should be included in a collision check
     private boolean isCollidable;
@@ -19,39 +16,30 @@ public abstract class Object {
 
     //endregion properties
 
-    public Object(int posX, int posY, int sizeX, int sizeY, boolean isCollidable, boolean isVisible) {
-        this.posX = posX;
-        this.posY = posY;
-        this.sizeX = sizeX;
-        this.sizeY = sizeY;
+    public Object(float posX, float posY, int sizeX, int sizeY, boolean isCollidable, boolean isVisible) {
+
+        this.boundingBox = new Rectangle(posX, posY, sizeX, sizeY);
         this.isCollidable = isCollidable;
         this.isVisible = isVisible;
     }
 
-    public Object() {
-        this.posX = 0;
-        this.posY = 0;
-        this.sizeX = 10;
-        this.sizeY = 10;
-        this.isCollidable = false;
-        this.isVisible = false;   
-    }
+
 
     //region getters
-    public int getPosX() {
-        return posX;
+    public float getX() {
+        return boundingBox.x;
     }
 
-    public int getPosY() {
-        return posY;
+    public float getY() {
+        return boundingBox.y;
     }
 
-    public int getSizeX() {
-        return sizeX;
+    public float getWidth() {
+        return boundingBox.width;
     }
 
-    public int getSizeY() {
-        return sizeY;
+    public float getHeight() {
+        return boundingBox.height;
     }
 
     public boolean getIsCollidable() {
@@ -59,7 +47,7 @@ public abstract class Object {
     }
 
     public boolean getIsVisible() {
-        return isCollidable;
+        return isVisible;
     }
     //endregion getters
 
@@ -71,10 +59,10 @@ public abstract class Object {
     public boolean isColliding(Object o) {
         // axis aligned bounding box collsion (AABBC)
         if (
-            posX < o.posX + o.sizeX &&
-            posX + sizeX > o.posX &&
-            posY < o.posY + o.sizeY &&
-            sizeY + posY > o.posY
+            getX() < o.getX() + o.getWidth() &&
+            getX() + getWidth() > o.getX() &&
+            getY() < o.getY() + o.getHeight() &&
+            getHeight() + getY() > o.getY()
         ) {
             // Collision detected!
             return true;
