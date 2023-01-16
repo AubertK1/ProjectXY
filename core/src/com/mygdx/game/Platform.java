@@ -7,9 +7,8 @@ import com.badlogic.gdx.Gdx;
  * This will be used to create stages and platforms
  */
 public class Platform extends Object {
-    //this is the visual part of the platform
+    // this is the visual part of the platform
     Texture model;
-
 
     /**
      * 
@@ -24,10 +23,14 @@ public class Platform extends Object {
 
     /**
      * makes a centered platform
+     * 
      * @param texture
      */
     public Platform(Texture texture) {
-        super((Gdx.graphics.getWidth()/2f) - (texture.getWidth()/2), (Gdx.graphics.getHeight()/2f) - (texture.getHeight()/2), texture.getWidth(), texture.getHeight(), true, true);
+        super((Gdx.graphics.getWidth() / 2f) - (texture.getWidth() / 2),
+                (Gdx.graphics.getHeight() * .4f) - (texture.getHeight()),
+                texture.getWidth(), texture.getHeight(),
+                true, true);
         model = texture;
     }
 
