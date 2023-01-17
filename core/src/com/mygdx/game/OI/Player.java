@@ -1,9 +1,10 @@
-package com.mygdx.game;
+package com.mygdx.game.OI;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.mygdx.game.Fighter;
+import com.mygdx.game.Characters.Fighter;
+import com.mygdx.game.GameScreen;
 
 /**
  * The actual player. This is what is directly being affected by the user, and it uses inputs
@@ -11,7 +12,7 @@ import com.mygdx.game.Fighter;
  * The user controls the Player. the Fighter is simply the physical manifestation of the Player.
  */
 public class Player {
-    Fighter fighter;
+    public Fighter fighter;
     //if this is player 1, player 2, etc.
     int playerNum;
 

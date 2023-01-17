@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.Characters.Robot;
 import com.mygdx.game.Characters.Vampire;
+import com.mygdx.game.OI.Player;
 
 public class GameScreen {
     Player player1;
@@ -12,7 +13,7 @@ public class GameScreen {
     Platform stage;
     Texture background;
     //game gravity variable. This determines how fast the characters fall
-    static float GRAVITY = 600;
+    public static float GRAVITY = 600;
     public GameScreen() {
         //initializing everything
         background = new Texture("assets\\textures\\stockbg.jpg");
