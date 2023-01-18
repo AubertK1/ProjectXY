@@ -57,12 +57,11 @@ public abstract class Object {
     public boolean isColliding(Object o) {
         // axis aligned bounding box collsion (AABBC)
         if (
-
-        getX() < o.getX() + o.getWidth() &&
-                getX() + getWidth() > o.getX() &&
-                getY() < o.getY() + o.getHeight() &&
-                getHeight() + getY() > o.getY()) {
-
+            getX() < o.getX() + o.getWidth() &&
+            getX() + getWidth() > o.getX() &&
+            getY() < o.getY() + o.getHeight() &&
+            getHeight() + getY() > o.getY())         
+        {
             // Collision detected!
             return true;
 
