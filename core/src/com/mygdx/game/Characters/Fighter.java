@@ -1,10 +1,11 @@
 package com.mygdx.game.Characters;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.GameScreen;
 import com.mygdx.game.Hurtbox;
+import com.mygdx.game.Main;
 import com.mygdx.game.OI.Player;
 
 /**
@@ -18,15 +19,20 @@ public class Fighter {
     protected Texture model;
     Hurtbox hurtbox;
     //fighter's position stored as an x and y coordinate
-    public Vector2 position = new Vector2();
+    protected Vector2 position = new Vector2();
     //fighter's speed
-    public float speed = 300;
+    protected float speed = 300;
+
     //can the player fall through fall lower
-    public boolean canFall = true;
+    protected boolean canFall = true;
     //is the player jumping
-    public boolean isJumping = false;
-    public static int maxJumpFrames = 30;
-    private int remainingJumpFrames = maxJumpFrames;
+    protected boolean isJumping = false;
+    protected int verticalVelocity = 0;
+
+    protected static int maxJumps = 3;
+    protected int jumpsLeft = maxJumps;
+    //the next frame they'll be able to jump at
+    protected int nextJumpFrame = 0;
     
     public Fighter(Player player) {
         this.player = player;
@@ -75,36 +81,56 @@ public class Fighter {
 
     }
 
-    public void jump(float delaTime) {
-        canFall = false;
-        isJumping = true;
-        //during the starting frames...
-        if(remainingJumpFrames > 15) {
-            int x = remainingJumpFrames - 15;
-            //this is a workaround for now. Later I'm gonna have a gravity variable and apply that here instead
-            float jumpParabolaEq = ((-.06666f*(x*x)) + (2*x)); //this is so their jump slows at the end
-            position.y += delaTime * jumpParabolaEq * 125; //to edit jump height change the number at the end
-            remainingJumpFrames--;
-        }
-        //after halfway, you start falling again
-        else if (remainingJumpFrames > 0) {
+    public void jump(){
+        if(jumpsLeft > 0) {
+            stopJump();
+            isJumping = true;
             canFall = true;
-            remainingJumpFrames--;
-        }
-        //once it's done, everything is reset
-        else {
-            canFall = true;
-            isJumping = false;
-            remainingJumpFrames = maxJumpFrames;
+            verticalVelocity = 1660;
+            nextJumpFrame = GameScreen.getFrame() + 10;
+            jumpsLeft--;
         }
     }
+    public void stopJump(){
+        isJumping = false;
+    }
+    public void resetJumps(){
+        jumpsLeft = maxJumps;
+    }
 
-    /**
-     * renders the fighter's model onto the screen
-     * @param batch just put batch
-     */
+    public void update() {
+        float deltaTime = Main.getFrameRate();
+
+        //region gravity
+        if (canFall) {
+            verticalVelocity += GameScreen.GRAVITY;
+            if (verticalVelocity < -1000) verticalVelocity = -1000; //maximum downward velocity
+            position.y += deltaTime * verticalVelocity;
+        }
+        //endregion
+
+        //region collision
+        if (position.y >= 400) { //right now they're just set to stop at an arbitrary y value on the screen
+            canFall = true;
+        } else {
+            //this is all only for it they are touching the ground/platform
+            canFall = false;
+            stopJump();
+            resetJumps();
+        }
+        //endregion
+
+        //applying a jump cool down
+        if (GameScreen.getFrame() >= nextJumpFrame) {
+            isJumping = false;
+        }
+    }
+        /**
+         * renders the fighter's model onto the screen
+         * @param batch just put batch
+         */
     public void render(SpriteBatch batch) {
-        player.update(Gdx.graphics.getDeltaTime());
+        player.update();
         batch.draw(model, position.x, position.y);
     }
 
@@ -113,7 +139,7 @@ public class Fighter {
      * @param scale how much you want to times it by
      */
     public void render(SpriteBatch batch, float scale) {
-        player.update(Gdx.graphics.getDeltaTime());
+        player.update();
         float newWidth = model.getWidth()*scale;
         float newHeight = model.getHeight()*scale;
         batch.draw(model, position.x, position.y, newWidth, newHeight);
@@ -122,6 +148,21 @@ public class Fighter {
     public void setPosition(float x, float y) {
         position.x = x;
         position.y = y;
+    }
+    public Vector2 getPosition(){
+        return position;
+    }
+
+    public float getSpeed() {
+        return speed;
+    }
+
+    public boolean isJumping() {
+        return isJumping;
+    }
+
+    public boolean canFall() {
+        return canFall;
     }
 
     /**

@@ -7,13 +7,18 @@ import com.mygdx.game.Characters.Robot;
 import com.mygdx.game.Characters.Vampire;
 import com.mygdx.game.OI.Player;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 public class GameScreen {
-    Player player1;
-    Player player2;
+    private Player player1;
+    private Player player2;
+    private ArrayList<Player> players = new ArrayList<>();
     Platform stage;
     Texture background;
+    private static int FRAMECOUNT = 0;
     //game gravity variable. This determines how fast the characters fall
-    public static float GRAVITY = 600;
+    public static float GRAVITY = -115;
     public GameScreen() {
         //initializing everything
         background = new Texture("assets\\textures\\stockbg.jpg");
@@ -27,13 +32,24 @@ public class GameScreen {
 
         player2.setFighter(new Vampire(player2));
         player2.fighter.setPosition(Gdx.graphics.getWidth()/2f+100, Gdx.graphics.getHeight()/2f);
+
+        players.add(player1);
+        players.add(player2);
     }
 
+    public ArrayList<Player> getPlayers(){
+        return players;
+    }
+    public static int getFrame(){
+        return FRAMECOUNT;
+    }
     /**
      * renders everything on the screen
      * @param batch just put batch
      */
     public void render(SpriteBatch batch){
+        FRAMECOUNT++;
+
         batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.draw(stage.model, (Gdx.graphics.getWidth()/2f)-(stage.model.getWidth()/2f), (Gdx.graphics.getHeight()*.4f)-(stage.model.getHeight()));
         player1.renderFighter(batch, 3);
