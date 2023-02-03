@@ -1,27 +1,31 @@
 package com.mygdx.game.Characters;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.GameScreen;
-import com.mygdx.game.Hurtbox;
 import com.mygdx.game.Main;
+import com.mygdx.game.MovingObj;
 import com.mygdx.game.OI.Player;
 
 /**
- * All fighters will extend from this class. It declares the basic properties every fighter will have
- * (speed, health, damage, etc.) which may be changed in the fighter's separate class
+ * All fighters will extend from this class. It declares the basic properties
+ * every fighter will have
+ * (speed, health, damage, etc.) which may be changed in the fighter's separate
+ * class
  */
-public class Fighter {
-    //the fighter will be assigned to a player when chosen
+public class Fighter extends MovingObj{
+
+    // region properties
+
+    // the fighter will be assigned to a player when chosen
     Player player;
-    //visual model of fighter
+    // visual model of fighter
     protected Texture model;
-    Hurtbox hurtbox;
-    //fighter's position stored as an x and y coordinate
-    protected Vector2 position = new Vector2();
+
     //fighter's speed
-    protected float speed = 300;
+    protected float speed = 400;
 
     //can the player fall through fall lower
     protected boolean canFall = true;
@@ -33,51 +37,67 @@ public class Fighter {
     protected int jumpsLeft = maxJumps;
     //the next frame they'll be able to jump at
     protected int nextJumpFrame = 0;
-    
-    public Fighter(Player player) {
+
+    // endregion properties
+
+    public Fighter(float x, float y, float width, float height, boolean isCollidable, boolean isVisible, Player player) {
+        super(x, y, width, height, isCollidable, isVisible);
         this.player = player;
     }
-
 
     /**
      * These will be extended and based on the fighter
      */
-    //region light attacks
+    // region attacks
+
+    // region light attacks
     public void upLightAtk() {
     }
+
     public void neutralLightAtk() {
     }
+
     public void sideLightAtk() {
     }
+
     public void downLightAtk() {
     }
-    //endregion
+    // endregion
 
-    //region heavy attacks
-    public void upHeavyAtk(){
+    // region heavy attacks
+    public void upHeavyAtk() {
     }
-    public void neutralHeavyAtk(){
-    }
-    public void sideHeavyAtk(){
-    }
-    public void downHeavyAtk(){
-    }
-    //endregion
 
-    //region air attacks
-    public void upAirAtk(){
+    public void neutralHeavyAtk() {
     }
-    public void neutralAirAtk(){
-    }
-    public void sideAirAtk(){
-    }
-    public void downAirAtk(){
-    }
-    public void recoveryAtk(){
-    }
-    //endregion
 
-    public void block(){
+    public void sideHeavyAtk() {
+    }
+
+    public void downHeavyAtk() {
+    }
+    // endregion
+
+    // region air attacks
+    public void upAirAtk() {
+    }
+
+    public void neutralAirAtk() {
+    }
+
+    public void sideAirAtk() {
+    }
+
+    public void downAirAtk() {
+    }
+
+    public void recoveryAtk() {
+    }
+    // endregion
+
+    // endregion
+
+    public void block() {
 
     }
 
@@ -105,12 +125,15 @@ public class Fighter {
         if (canFall) {
             verticalVelocity += GameScreen.GRAVITY;
             if (verticalVelocity < -1000) verticalVelocity = -1000; //maximum downward velocity
-            position.y += deltaTime * verticalVelocity;
+            bounds.y += deltaTime * verticalVelocity;
         }
         //endregion
 
         //region collision
-        if (position.y >= 400) { //right now they're just set to stop at an arbitrary y value on the screen
+        if(GameScreen.getFrame() == 40)
+            System.out.print("");
+        if(this.isColliding(Main.gameScreen.stage) != BOTTOMCOLLISION){
+//        if (bounds.y >= 400) { //right now they're just set to stop at an arbitrary y value on the screen
             canFall = true;
         } else {
             //this is all only for it they are touching the ground/platform
@@ -130,27 +153,23 @@ public class Fighter {
          * @param batch just put batch
          */
     public void render(SpriteBatch batch) {
-        player.update();
-        batch.draw(model, position.x, position.y);
+        render(batch, 1);
     }
 
     /**
      * same function, but you can scale the fighter to make it larger
+     * 
      * @param scale how much you want to times it by
      */
     public void render(SpriteBatch batch, float scale) {
         player.update();
-        float newWidth = model.getWidth()*scale;
-        float newHeight = model.getHeight()*scale;
-        batch.draw(model, position.x, position.y, newWidth, newHeight);
+        float newWidth = model.getWidth() * scale;
+        float newHeight = model.getHeight() * scale;
+        batch.draw(model, bounds.x, bounds.y, newWidth, newHeight);
     }
 
-    public void setPosition(float x, float y) {
-        position.x = x;
-        position.y = y;
-    }
     public Vector2 getPosition(){
-        return position;
+        return new Vector2(bounds.x, bounds.y);
     }
 
     public float getSpeed() {
@@ -166,7 +185,8 @@ public class Fighter {
     }
 
     /**
-     * assigns this fighter to a player so that it can get its position updated
+     * assigns this fighter to a player so that it can get its bounds updated
+     * 
      * @param player the player this fighter belongs to
      */
     public void setPlayer(Player player) {

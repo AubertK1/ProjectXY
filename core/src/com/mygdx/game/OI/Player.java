@@ -3,6 +3,7 @@ package com.mygdx.game.OI;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 import com.mygdx.game.Characters.Fighter;
 import com.mygdx.game.GameScreen;
 import com.mygdx.game.Main;
@@ -76,14 +77,14 @@ public class Player {
 
         //registers player's input
         //key presses
-        if (KEY == 32) fighter.getPosition().x += deltaTime * fighter.getSpeed(); //32 = D
-        if (KEY == 29) fighter.getPosition().x -= deltaTime * fighter.getSpeed(); //29 = A
+        if (KEY == 32) fighter.setPosition(fighter.getX() + deltaTime * fighter.getSpeed(), fighter.getY()); //32 = D
+        if (KEY == 29) fighter.setPosition(fighter.getX() - deltaTime * fighter.getSpeed(), fighter.getY()); //29 = A
         if (KEY == 51){ //51 = W
             if(!fighter.isJumping()) {
                 fighter.jump();
             }
         }
-        if (KEY == 47 && fighter.canFall()) fighter.getPosition().y -= deltaTime * fighter.getSpeed(); //47 = S
+        if (KEY == 47 && fighter.canFall()) fighter.setPosition(fighter.getX(), fighter.getY() - deltaTime * (fighter.getSpeed() / 2f)); //47 = S
     }
 
     /**
