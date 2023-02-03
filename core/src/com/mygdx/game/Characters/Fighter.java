@@ -130,7 +130,7 @@ public class Fighter extends MovingObj{
         //endregion
 
         //region collision
-        if(GameScreen.getFrame() == 40)
+        if(GameScreen.getFrame() == 14)
             System.out.print("");
         if(this.isColliding(Main.gameScreen.stage) != BOTTOMCOLLISION){
 //        if (bounds.y >= 400) { //right now they're just set to stop at an arbitrary y value on the screen

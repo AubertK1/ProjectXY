@@ -9,10 +9,11 @@ import com.mygdx.game.OI.Player;
  */
 public class Robot extends Fighter{
 
-    public Robot(Player player) {
+    public Robot(float x, float y, Player player) {
         //runs the Fighter class's constructor, so it can set up anything in that constructor
-        super(player);
+        super(x, y, 1, 1, true, true, player);
         //setting the visual model of the robot
         model = new Texture("assets\\textures\\stockrobot.png");
+        setSize(model.getWidth(), model.getHeight());
     }
 }

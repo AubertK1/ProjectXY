@@ -27,7 +27,7 @@ public class Platform extends Object {
      * @param texture
      */
     public Platform(Texture texture) {
-        super((Gdx.graphics.getWidth() / 2f) - (texture.getWidth() / 2),
+        super((Gdx.graphics.getWidth() / 2f) - (texture.getWidth() / 2f),
                 (Gdx.graphics.getHeight() * .4f) - (texture.getHeight()),
                 texture.getWidth(), texture.getHeight(),
                 true, true);

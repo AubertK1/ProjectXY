@@ -20,7 +20,7 @@ public class Main extends ApplicationAdapter {
 	//main menu screen
 	MainMenu menu;
 	//game screen
-	GameScreen gameScreen;
+	public static GameScreen gameScreen;
 	//detects whether the game is currently being played or not
 	public static boolean isMatchRunning = false;
 
