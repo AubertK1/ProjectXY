@@ -97,8 +97,15 @@ public class Fighter extends MovingObj{
 
     // endregion
 
-    public void block() {
-
+    //region movement
+    public void moveLeft(){
+        setPosition(getX() - Main.getFrameRate() * getSpeed(), getY());
+    }
+    public void moveRight(){
+        setPosition(getX() + Main.getFrameRate() * getSpeed(), getY());
+    }
+    public void moveDown(){
+        setPosition(getX(), getY() - Main.getFrameRate() * (getSpeed() / 2f));
     }
 
     public void jump(){
@@ -117,6 +124,10 @@ public class Fighter extends MovingObj{
     public void resetJumps(){
         jumpsLeft = maxJumps;
     }
+    //endregion
+    public void block() {
+
+    }
 
     public void update() {
         float deltaTime = Main.getFrameRate();
@@ -130,16 +141,23 @@ public class Fighter extends MovingObj{
         //endregion
 
         //region collision
-        if(GameScreen.getFrame() == 14)
-            System.out.print("");
-        if(this.isColliding(Main.gameScreen.stage) != BOTTOMCOLLISION){
-//        if (bounds.y >= 400) { //right now they're just set to stop at an arbitrary y value on the screen
-            canFall = true;
-        } else {
-            //this is all only for it they are touching the ground/platform
+        if(this.isColliding(Main.gameScreen.stage) == BOTTOMCOLLISION){ //if touching a platform
             canFall = false;
             stopJump();
             resetJumps();
+        } else {
+            canFall = true;
+
+            if(isJumping && this.isColliding(Main.gameScreen.stage) == TOPCOLLISION){
+                stopJump();
+                verticalVelocity = 0;
+            }
+        }
+
+        if(this.isColliding(Main.gameScreen.stage) == LEFTCOLLISION || this.isColliding(Main.gameScreen.stage) == RIGHTCOLLISION){
+            stopJump();
+            resetJumps();
+            verticalVelocity = -200;
         }
         //endregion
 
@@ -153,19 +171,8 @@ public class Fighter extends MovingObj{
          * @param batch just put batch
          */
     public void render(SpriteBatch batch) {
-        render(batch, 1);
-    }
-
-    /**
-     * same function, but you can scale the fighter to make it larger
-     * 
-     * @param scale how much you want to times it by
-     */
-    public void render(SpriteBatch batch, float scale) {
         player.update();
-        float newWidth = model.getWidth() * scale;
-        float newHeight = model.getHeight() * scale;
-        batch.draw(model, bounds.x, bounds.y, newWidth, newHeight);
+        batch.draw(model, getX(), getY(), getWidth(), getHeight());
     }
 
     public Vector2 getPosition(){

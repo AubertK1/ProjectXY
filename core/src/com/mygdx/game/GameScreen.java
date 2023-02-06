@@ -26,11 +26,10 @@ public class GameScreen {
         player2 = new Player(2);
         // setting player 1's fighter (will be moved later so the player can choose)
         player1.setFighter(new Robot(Gdx.graphics.getWidth() / 2f - 100, Gdx.graphics.getHeight() / 2f, player1));
-        // setting player 1's fighter's spawn/starting position
-//        player1.fighter.setPosition();
+        player1.getFighter().setSize(player1.getFighter().getWidth() * 3, player1.getFighter().getHeight() * 3);
 
         player2.setFighter(new Vampire(Gdx.graphics.getWidth()/2f+100, Gdx.graphics.getHeight()/2f, player2));
-//        player2.fighter.setPosition(Gdx.graphics.getWidth()/2f+100, Gdx.graphics.getHeight()/2f);
+        player2.getFighter().setSize(player2.getFighter().getWidth() * 3, player2.getFighter().getHeight() * 3);
 
         players.add(player1);
         players.add(player2);
@@ -52,7 +51,7 @@ public class GameScreen {
         batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.draw(stage.model, (Gdx.graphics.getWidth() / 2f) - (stage.model.getWidth() / 2f),
                 (Gdx.graphics.getHeight() * .4f) - (stage.model.getHeight()));
-        player1.renderFighter(batch, 3);
-        player2.renderFighter(batch, 3);
+        player1.renderFighter(batch);
+        player2.renderFighter(batch);
     }
 }
