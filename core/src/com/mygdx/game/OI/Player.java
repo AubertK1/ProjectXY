@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.Characters.Fighter;
 import com.mygdx.game.GameScreen;
 import com.mygdx.game.Main;
+import com.mygdx.game.Object;
 
 /**
  * The actual player. This is what is directly being affected by the user, and it uses inputs
@@ -29,6 +30,9 @@ public class Player {
     public void setFighter(Fighter fighter){
         this.fighter = fighter;
         fighter.setPlayer(this);
+    }
+    public Fighter getFighter(){
+        return fighter;
     }
 
     /**
@@ -56,8 +60,6 @@ public class Player {
      * @param KEY The key being pressed
      */
     public void interact(int KEY){
-        float deltaTime = Main.getFrameRate();
-
         if(playerNum == 2) { //if this is player 2, convert the numbers
             switch (KEY) {
                 case 20:
@@ -77,14 +79,12 @@ public class Player {
 
         //registers player's input
         //key presses
-        if (KEY == 32) fighter.setPosition(fighter.getX() + deltaTime * fighter.getSpeed(), fighter.getY()); //32 = D
-        if (KEY == 29) fighter.setPosition(fighter.getX() - deltaTime * fighter.getSpeed(), fighter.getY()); //29 = A
+        if (KEY == 32 && fighter.isColliding(Main.gameScreen.stage) != Object.RIGHTCOLLISION) fighter.moveRight(); //32 = D
+        if (KEY == 29 && fighter.isColliding(Main.gameScreen.stage) != Object.LEFTCOLLISION) fighter.moveLeft(); //29 = A
         if (KEY == 51){ //51 = W
-            if(!fighter.isJumping()) {
-                fighter.jump();
-            }
+            if(!fighter.isJumping()) fighter.jump();
         }
-        if (KEY == 47 && fighter.canFall()) fighter.setPosition(fighter.getX(), fighter.getY() - deltaTime * (fighter.getSpeed() / 2f)); //47 = S
+        if (KEY == 47 && fighter.canFall()) fighter.moveDown(); //47 = S
     }
 
     /**
@@ -93,12 +93,5 @@ public class Player {
      */
     public void renderFighter(SpriteBatch batch){
         fighter.render(batch);
-    }
-    /**
-     * same function, but you can scale the fighter to make it larger
-     * @param scale how much you want to times it by
-     */
-    public void renderFighter(SpriteBatch batch, float scale){
-        fighter.render(batch, scale);
     }
 }
