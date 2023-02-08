@@ -1,7 +1,5 @@
 package com.mygdx.game.Characters;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.GameScreen;
@@ -20,18 +18,12 @@ public class Fighter extends MovingObj{
     // region properties
 
     // the fighter will be assigned to a player when chosen
-    Player player;
-    // visual model of fighter
-    protected Texture model;
+    private Player player;
 
-    //fighter's speed
-    protected float speed = 400;
-
-    //can the player fall through fall lower
+    //can the player fall lower
     protected boolean canFall = true;
     //is the player jumping
     protected boolean isJumping = false;
-    protected int verticalVelocity = 0;
 
     protected static int maxJumps = 3;
     protected int jumpsLeft = maxJumps;
@@ -43,6 +35,46 @@ public class Fighter extends MovingObj{
     public Fighter(float x, float y, float width, float height, boolean isCollidable, boolean isVisible, Player player) {
         super(x, y, width, height, isCollidable, isVisible);
         this.player = player;
+    }
+
+    public void update() {
+        float deltaTime = Main.getFrameRate();
+
+        //region gravity
+        if (canFall) {
+            vertVelocity += GameScreen.GRAVITY;
+            if (vertVelocity < -1000) vertVelocity = -1000; //maximum downward velocity
+            bounds.y += deltaTime * vertVelocity;
+        }
+        bounds.x += deltaTime * horVelocity;
+        slowDown();
+        //endregion
+
+        //region collision
+        if(this.isColliding(Main.gameScreen.stage) == BOTTOMCOLLISION){ //if touching a platform
+            canFall = false;
+            stopJump();
+            resetJumps();
+        } else {
+            canFall = true;
+
+            if(isJumping && this.isColliding(Main.gameScreen.stage) == TOPCOLLISION){
+                stopJump();
+                vertVelocity = 0;
+            }
+        }
+
+        if(this.isColliding(Main.gameScreen.stage) == LEFTCOLLISION || this.isColliding(Main.gameScreen.stage) == RIGHTCOLLISION){
+            stopJump();
+            resetJumps();
+            vertVelocity = -135;
+        }
+        //endregion
+
+        //applying a jump cool down
+        if (GameScreen.getFrame() >= nextJumpFrame) {
+            isJumping = false;
+        }
     }
 
     /**
@@ -99,13 +131,13 @@ public class Fighter extends MovingObj{
 
     //region movement
     public void moveLeft(){
-        setPosition(getX() - Main.getFrameRate() * getSpeed(), getY());
+        horVelocity = -400;
     }
     public void moveRight(){
-        setPosition(getX() + Main.getFrameRate() * getSpeed(), getY());
+        horVelocity = 400;
     }
     public void moveDown(){
-        setPosition(getX(), getY() - Main.getFrameRate() * (getSpeed() / 2f));
+        setPosition(getX(), getY() - Main.getFrameRate() * (getXVelocity() / 2f));
     }
 
     public void jump(){
@@ -113,7 +145,7 @@ public class Fighter extends MovingObj{
             stopJump();
             isJumping = true;
             canFall = true;
-            verticalVelocity = 1660;
+            vertVelocity = 1660;
             nextJumpFrame = GameScreen.getFrame() + 10;
             jumpsLeft--;
         }
@@ -125,62 +157,9 @@ public class Fighter extends MovingObj{
         jumpsLeft = maxJumps;
     }
     //endregion
+
     public void block() {
 
-    }
-
-    public void update() {
-        float deltaTime = Main.getFrameRate();
-
-        //region gravity
-        if (canFall) {
-            verticalVelocity += GameScreen.GRAVITY;
-            if (verticalVelocity < -1000) verticalVelocity = -1000; //maximum downward velocity
-            bounds.y += deltaTime * verticalVelocity;
-        }
-        //endregion
-
-        //region collision
-        if(this.isColliding(Main.gameScreen.stage) == BOTTOMCOLLISION){ //if touching a platform
-            canFall = false;
-            stopJump();
-            resetJumps();
-        } else {
-            canFall = true;
-
-            if(isJumping && this.isColliding(Main.gameScreen.stage) == TOPCOLLISION){
-                stopJump();
-                verticalVelocity = 0;
-            }
-        }
-
-        if(this.isColliding(Main.gameScreen.stage) == LEFTCOLLISION || this.isColliding(Main.gameScreen.stage) == RIGHTCOLLISION){
-            stopJump();
-            resetJumps();
-            verticalVelocity = -200;
-        }
-        //endregion
-
-        //applying a jump cool down
-        if (GameScreen.getFrame() >= nextJumpFrame) {
-            isJumping = false;
-        }
-    }
-        /**
-         * renders the fighter's model onto the screen
-         * @param batch just put batch
-         */
-    public void render(SpriteBatch batch) {
-        player.update();
-        batch.draw(model, getX(), getY(), getWidth(), getHeight());
-    }
-
-    public Vector2 getPosition(){
-        return new Vector2(bounds.x, bounds.y);
-    }
-
-    public float getSpeed() {
-        return speed;
     }
 
     public boolean isJumping() {
@@ -198,5 +177,14 @@ public class Fighter extends MovingObj{
      */
     public void setPlayer(Player player) {
         this.player = player;
+    }
+
+    /**
+     * renders the fighter's model onto the screen
+     * @param batch just put batch
+     */
+    public void render(SpriteBatch batch) {
+        player.update();
+        batch.draw(model, getX(), getY(), getWidth(), getHeight());
     }
 }

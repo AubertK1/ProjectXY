@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 
 import java.awt.*;
@@ -15,6 +16,11 @@ public abstract class Object {
     // determins if the object should be rendered during a render pass
     private boolean isVisible;
 
+    // visual model of the object
+    protected Texture model;
+
+    // endregion properties
+
     //region border conversions
     public static final int NOCOLLISION = -1;
     public static final int LEFTCOLLISION = 0;
@@ -22,7 +28,6 @@ public abstract class Object {
     public static final int RIGHTCOLLISION = 2;
     public static final int BOTTOMCOLLISION = 3;
     //endregion
-    // endregion properties
 
     public Object(float posX, float posY, float sizeX, float sizeY, boolean isCollidable, boolean isVisible) {
 
@@ -81,6 +86,7 @@ public abstract class Object {
      * @return the value of the side that the second object is touching on this object
      */
     public int isColliding(Object o) {
+        if(!isCollidable || !o.getIsCollidable()) return NOCOLLISION; //return if they can't collide
         // axis aligned bounding box collision (AABBC)
 
         //fixme Because of the refresh rate, sometimes the objects clip into each other before the collision is checked.

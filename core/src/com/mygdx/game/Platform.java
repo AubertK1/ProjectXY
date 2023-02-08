@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
  * This will be used to create stages and platforms
@@ -34,4 +35,7 @@ public class Platform extends Object {
         model = texture;
     }
 
+    public void render(SpriteBatch batch){
+        batch.draw(model, getX(), getY());
+    }
 }
