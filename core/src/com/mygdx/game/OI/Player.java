@@ -8,6 +8,7 @@ import com.mygdx.game.Characters.Fighter;
 import com.mygdx.game.GameScreen;
 import com.mygdx.game.Main;
 import com.mygdx.game.Object;
+import com.mygdx.game.Weapons.Weapon;
 
 /**
  * The actual player. This is what is directly being affected by the user, and it uses inputs
@@ -19,21 +20,12 @@ public class Player {
     //if this is player 1, player 2, etc.
     int playerNum;
 
+    protected Weapon equippedWeapon;
+
     public Player(int playerNum) {
         this.playerNum = playerNum;
     }
 
-    /**
-     * sets this player's fighter
-     * @param fighter
-     */
-    public void setFighter(Fighter fighter){
-        this.fighter = fighter;
-        fighter.setPlayer(this);
-    }
-    public Fighter getFighter(){
-        return fighter;
-    }
 
     /**
      * updates the visuals or anything that needs to be updated every frame
@@ -55,6 +47,13 @@ public class Player {
         }
     }
 
+    //region interactions
+    public void equipWeapon(Weapon weapon){
+        equippedWeapon = weapon;
+    }
+    //endregion
+
+
     /**
      * Takes in which key is being pressed and moves the fighter accordingly
      * @param KEY The key being pressed
@@ -62,29 +61,40 @@ public class Player {
     public void interact(int KEY){
         if(playerNum == 2) { //if this is player 2, convert the numbers
             switch (KEY) {
-                case 20:
-                    KEY = 47; //converting DOWN to S
+                case Input.Keys.DOWN:
+                    KEY = Input.Keys.S; //converting DOWN to S
                     break;
-                case 21:
-                    KEY = 29; //converting LEFT to A
+                case Input.Keys.LEFT:
+                    KEY = Input.Keys.A; //converting LEFT to A
                     break;
-                case 22:
-                    KEY = 32; //converting RIGHT to D
+                case Input.Keys.RIGHT:
+                    KEY = Input.Keys.D; //converting RIGHT to D
                     break;
-                case 19:
-                    KEY = 51; //converting UP to W
+                case Input.Keys.UP:
+                    KEY = Input.Keys.W; //converting UP to W
                     break;
             }
         }
 
         //registers player's input
         //key presses
-        if (KEY == 32 && fighter.isColliding(Main.gameScreen.stage) != Object.RIGHTCOLLISION) fighter.moveRight(); //32 = D
-        if (KEY == 29 && fighter.isColliding(Main.gameScreen.stage) != Object.LEFTCOLLISION) fighter.moveLeft(); //29 = A
-        if (KEY == 51){ //51 = W
+        if (KEY == Input.Keys.D && fighter.isColliding(Main.gameScreen.stage) != Object.RIGHTCOLLISION) fighter.moveRight(); //32 = D
+        if (KEY == Input.Keys.A && fighter.isColliding(Main.gameScreen.stage) != Object.LEFTCOLLISION) fighter.moveLeft(); //29 = A
+        if (KEY == Input.Keys.W){ //51 = W
             if(!fighter.isJumping()) fighter.jump();
         }
-        if (KEY == 47 && fighter.canFall()) fighter.moveDown(); //47 = S
+        if (KEY == Input.Keys.S && fighter.canFall()) fighter.moveDown(); //47 = S
+    }
+    /**
+     * sets this player's fighter
+     * @param fighter
+     */
+    public void setFighter(Fighter fighter){
+        this.fighter = fighter;
+        fighter.setPlayer(this);
+    }
+    public Fighter getFighter(){
+        return fighter;
     }
 
     /**

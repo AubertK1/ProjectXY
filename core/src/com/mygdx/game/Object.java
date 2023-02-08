@@ -81,6 +81,7 @@ public abstract class Object {
      * @return the value of the side that the second object is touching on this object
      */
     public int isColliding(Object o) {
+        if(!isCollidable || !o.getIsCollidable()) return NOCOLLISION; //return if they can't collide
         // axis aligned bounding box collision (AABBC)
 
         //fixme Because of the refresh rate, sometimes the objects clip into each other before the collision is checked.

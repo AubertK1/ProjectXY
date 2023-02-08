@@ -8,6 +8,7 @@ import com.mygdx.game.GameScreen;
 import com.mygdx.game.Main;
 import com.mygdx.game.MovingObj;
 import com.mygdx.game.OI.Player;
+import com.mygdx.game.Weapons.Weapon;
 
 /**
  * All fighters will extend from this class. It declares the basic properties
@@ -20,14 +21,14 @@ public class Fighter extends MovingObj{
     // region properties
 
     // the fighter will be assigned to a player when chosen
-    Player player;
+    private Player player;
     // visual model of fighter
     protected Texture model;
 
     //fighter's speed
     protected float speed = 400;
 
-    //can the player fall through fall lower
+    //can the player fall lower
     protected boolean canFall = true;
     //is the player jumping
     protected boolean isJumping = false;
@@ -125,6 +126,7 @@ public class Fighter extends MovingObj{
         jumpsLeft = maxJumps;
     }
     //endregion
+
     public void block() {
 
     }
@@ -157,7 +159,7 @@ public class Fighter extends MovingObj{
         if(this.isColliding(Main.gameScreen.stage) == LEFTCOLLISION || this.isColliding(Main.gameScreen.stage) == RIGHTCOLLISION){
             stopJump();
             resetJumps();
-            verticalVelocity = -200;
+            verticalVelocity = -135;
         }
         //endregion
 
