@@ -126,7 +126,7 @@ public class Main extends ApplicationAdapter {
 		return Gdx.graphics.getDeltaTime();
 	}
 	public int getAffectedPlayer(int KEY){
-		if(KEY == 19 || KEY == 20 || KEY == 21 || KEY == 22) return 1;
+		if(KEY == Input.Keys.DOWN || KEY == Input.Keys.LEFT || KEY == Input.Keys.RIGHT || KEY == Input.Keys.UP || KEY == Input.Keys.SLASH) return 1;
 		else return 0;
 	}
 }

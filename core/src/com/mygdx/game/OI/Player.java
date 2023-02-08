@@ -16,11 +16,11 @@ import com.mygdx.game.Weapons.Weapon;
  * The user controls the Player. the Fighter is simply the physical manifestation of the Player.
  */
 public class Player {
-    public Fighter fighter;
+    private Fighter fighter;
     //if this is player 1, player 2, etc.
     int playerNum;
 
-    protected Weapon equippedWeapon;
+    private Weapon equippedWeapon;
 
     public Player(int playerNum) {
         this.playerNum = playerNum;
@@ -50,6 +50,17 @@ public class Player {
     //region interactions
     public void equipWeapon(Weapon weapon){
         equippedWeapon = weapon;
+        weapon.setOwner(this);
+//        weapon.setIsCollidable(false);
+    }
+    public void throwWeapon(){
+        equippedWeapon.setOwner(null); //so that the weapon doesn't stick to the fighter anymore
+
+        float launchXVelo = -500;
+        if(fighter.getXVelocity() > 0) launchXVelo = 0 - launchXVelo; //switches the throw from right to left based on the fighter's movement
+        equippedWeapon.launch(launchXVelo + (fighter.getXVelocity() * 2), 1700); //throws further if the fighter's moving
+
+        equippedWeapon = null;
     }
     //endregion
 
@@ -73,17 +84,38 @@ public class Player {
                 case Input.Keys.UP:
                     KEY = Input.Keys.W; //converting UP to W
                     break;
+                case Input.Keys.SLASH:
+                    KEY = Input.Keys.F;
+                    break;
             }
         }
 
         //registers player's input
         //key presses
-        if (KEY == Input.Keys.D && fighter.isColliding(Main.gameScreen.stage) != Object.RIGHTCOLLISION) fighter.moveRight(); //32 = D
-        if (KEY == Input.Keys.A && fighter.isColliding(Main.gameScreen.stage) != Object.LEFTCOLLISION) fighter.moveLeft(); //29 = A
+        if (KEY == Input.Keys.D) {
+            if (fighter.isColliding(Main.gameScreen.stage) == Object.RIGHTCOLLISION) fighter.stop(); //32 = D
+            else fighter.moveRight();
+        }
+        if (KEY == Input.Keys.A) {
+            if (fighter.isColliding(Main.gameScreen.stage) == Object.LEFTCOLLISION) fighter.stop(); //29 = A
+            else fighter.moveLeft();
+        }
         if (KEY == Input.Keys.W){ //51 = W
             if(!fighter.isJumping()) fighter.jump();
         }
         if (KEY == Input.Keys.S && fighter.canFall()) fighter.moveDown(); //47 = S
+        if (KEY == Input.Keys.F){
+            if(equippedWeapon == null) {
+                Weapon interactedWeapon = null;
+                for (Weapon weapon : GameScreen.getWeapons()) {
+                    if (fighter.isColliding(weapon) != Object.NOCOLLISION) interactedWeapon = weapon;
+                }
+                if (interactedWeapon != null) equipWeapon(interactedWeapon); //47 = S
+            }
+            else {
+                throwWeapon();
+            }
+        }
     }
     /**
      * sets this player's fighter
