@@ -47,7 +47,8 @@ public class Main extends ApplicationAdapter {
 		InputProcessor screenProcessor = new InputProcessor() {
 			@Override
 			public boolean keyDown(int keycode) {
-				gameScreen.getPlayers().get(getAffectedPlayer(keycode)).interact(keycode);
+				int affectedPlayer = getAffectedPlayer(keycode);
+				if(affectedPlayer != -1) gameScreen.getPlayers().get(getAffectedPlayer(keycode)).interact(keycode);
 				return true;
 			}
 
@@ -126,7 +127,6 @@ public class Main extends ApplicationAdapter {
 		return Gdx.graphics.getDeltaTime();
 	}
 	public int getAffectedPlayer(int KEY){
-		if(KEY == Input.Keys.DOWN || KEY == Input.Keys.LEFT || KEY == Input.Keys.RIGHT || KEY == Input.Keys.UP || KEY == Input.Keys.SLASH) return 1;
-		else return 0;
+		return KeyBinds.findKeySetIndex(KEY);
 	}
 }

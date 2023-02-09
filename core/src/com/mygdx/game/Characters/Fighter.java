@@ -20,6 +20,8 @@ public class Fighter extends MovingObj{
     // the fighter will be assigned to a player when chosen
     private Player player;
 
+    protected float speed = 400;
+
     //can the player fall lower
     protected boolean canFall = true;
     //is the player jumping
@@ -131,13 +133,13 @@ public class Fighter extends MovingObj{
 
     //region movement
     public void moveLeft(){
-        horVelocity = -400;
+        horVelocity = -speed;
     }
     public void moveRight(){
-        horVelocity = 400;
+        horVelocity = speed;
     }
     public void moveDown(){
-        setPosition(getX(), getY() - Main.getFrameRate() * (getXVelocity() / 2f));
+        setPosition(getX(), getY() - Main.getFrameRate() * (speed / 2f));
     }
 
     public void jump(){
@@ -146,7 +148,7 @@ public class Fighter extends MovingObj{
             isJumping = true;
             canFall = true;
             vertVelocity = 1660;
-            nextJumpFrame = GameScreen.getFrame() + 10;
+            nextJumpFrame = GameScreen.getFrame() + 6;
             jumpsLeft--;
         }
     }

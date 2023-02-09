@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import com.mygdx.game.Characters.Fighter;
 import com.mygdx.game.GameScreen;
+import com.mygdx.game.KeyBinds;
 import com.mygdx.game.Main;
 import com.mygdx.game.Object;
 import com.mygdx.game.Weapons.Weapon;
@@ -66,48 +67,36 @@ public class Player {
 
     /**
      * Takes in which key is being pressed and moves the fighter accordingly
-     * @param KEY The key being pressed
+     * @param PRESSEDKEY The key being pressed
      */
-    public void interact(int KEY){
-        if(playerNum == 2) { //if this is player 2, convert the numbers
-            switch (KEY) {
-                case Input.Keys.DOWN:
-                    KEY = Input.Keys.S; //converting DOWN to S
-                    break;
-                case Input.Keys.LEFT:
-                    KEY = Input.Keys.A; //converting LEFT to A
-                    break;
-                case Input.Keys.RIGHT:
-                    KEY = Input.Keys.D; //converting RIGHT to D
-                    break;
-                case Input.Keys.UP:
-                    KEY = Input.Keys.W; //converting UP to W
-                    break;
-                case Input.Keys.SLASH:
-                    KEY = Input.Keys.F;
-                    break;
-            }
-        }
+    public void interact(int PRESSEDKEY){
+        //converts the key into its value in the default keyset
+        int KEY = KeyBinds.convertKey(PRESSEDKEY);
 
         //registers player's input
         //key presses
-        if (KEY == Input.Keys.D) {
+        if (KEY == KeyBinds.Keys.MOVERIGHT) {
             if (fighter.isColliding(Main.gameScreen.stage) == Object.RIGHTCOLLISION) fighter.stop(); //32 = D
+            else if(fighter.getXVelocity() < 0) fighter.stop();
             else fighter.moveRight();
         }
-        if (KEY == Input.Keys.A) {
+        if (KEY == KeyBinds.Keys.MOVELEFT) {
             if (fighter.isColliding(Main.gameScreen.stage) == Object.LEFTCOLLISION) fighter.stop(); //29 = A
+            else if(fighter.getXVelocity() > 0) fighter.stop();
             else fighter.moveLeft();
         }
-        if (KEY == Input.Keys.W){ //51 = W
+        if (KEY == KeyBinds.Keys.JUMP){ //51 = W
             if(!fighter.isJumping()) fighter.jump();
         }
-        if (KEY == Input.Keys.S && fighter.canFall()) fighter.moveDown(); //47 = S
-        if (KEY == Input.Keys.F){
+        if (KEY == KeyBinds.Keys.MOVEDOWN && fighter.canFall()) fighter.moveDown(); //47 = S
+        if (KEY == KeyBinds.Keys.INTERACT){
             if(equippedWeapon == null) {
                 Weapon interactedWeapon = null;
                 for (Weapon weapon : GameScreen.getWeapons()) {
-                    if (fighter.isColliding(weapon) != Object.NOCOLLISION) interactedWeapon = weapon;
+                    if (fighter.isColliding(weapon) != Object.NOCOLLISION && weapon.getOwner() == null){
+                        interactedWeapon = weapon;
+                        break;
+                    }
                 }
                 if (interactedWeapon != null) equipWeapon(interactedWeapon); //47 = S
             }
@@ -115,6 +104,8 @@ public class Player {
                 throwWeapon();
             }
         }
+        //fixme testing keybind changing. Delete later
+        if(KEY == KeyBinds.Keys.TEMP) KeyBinds.changeKeyBind(KeyBinds.findKeyFromDefaultKey(KeyBinds.Keys.JUMP, playerNum - 1), Input.Keys.SPACE);
     }
     /**
      * sets this player's fighter
