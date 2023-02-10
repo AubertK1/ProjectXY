@@ -14,6 +14,7 @@ public class KeyBinds {
             KeyBinds.Keys.MOVEDOWN,
             KeyBinds.Keys.MOVERIGHT,
             KeyBinds.Keys.INTERACT,
+            KeyBinds.Keys.ATTACK,
             KeyBinds.Keys.TEMP
     };
     /**
@@ -25,6 +26,7 @@ public class KeyBinds {
             Input.Keys.A,
             Input.Keys.S,
             Input.Keys.D,
+            Input.Keys.E,
             Input.Keys.F,
             Input.Keys.Y
     };
@@ -38,6 +40,7 @@ public class KeyBinds {
             Input.Keys.DOWN,
             Input.Keys.RIGHT,
             Input.Keys.PERIOD,
+            Input.Keys.CONTROL_RIGHT,
             Input.Keys.BACKSLASH
     };
 
@@ -93,6 +96,7 @@ public class KeyBinds {
         public static final int MOVEDOWN = Input.Keys.S;
         public static final int JUMP = Input.Keys.W;
         public static final int INTERACT = Input.Keys.F;
+        public static final int ATTACK = Input.Keys.E;
         public static final int TEMP = Input.Keys.Y;
     }
 }

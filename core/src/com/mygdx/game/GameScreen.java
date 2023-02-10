@@ -4,6 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mygdx.game.Characters.Robot;
 import com.mygdx.game.Characters.Vampire;
 import com.mygdx.game.OI.Player;
@@ -16,10 +20,10 @@ import java.util.ArrayList;
 public class GameScreen {
     private Player player1;
     private Player player2;
-    private ArrayList<Player> players = new ArrayList<>();
+    private static ArrayList<Player> players = new ArrayList<>();
     private static ArrayList<Weapon> weapons = new ArrayList<>();
 
-    public Platform stage;
+    public Platform platform;
     private Texture background;
 
     //spawn points
@@ -33,10 +37,19 @@ public class GameScreen {
     private static int FRAMECOUNT = 0;
     //game gravity variable. This determines how fast the characters fall
     public static float GRAVITY = -115;
+
+    //region UI
+    Skin skin = Main.skin;
+    Stage stage = Main.stage;
+    // Makes a new group
+    Group UI = new Group();
+
+    Label p1Label, p2Label;
+    //endregion
     public GameScreen() {
         // initializing everything
         background = new Texture("assets\\textures\\stockbg.jpg");
-        stage = new Platform(new Texture("assets\\textures\\stockstage.png"));
+        platform = new Platform(new Texture("assets\\textures\\stockstage.png"));
         player1 = new Player(1);
         player2 = new Player(2);
         // setting player 1's fighter (will be moved later so the player can choose)
@@ -49,9 +62,24 @@ public class GameScreen {
         players.add(player1);
         players.add(player2);
 
-        Weapon sword = new Sword(Gdx.graphics.getWidth() / 2f, stage.getY() + 500);
+        Weapon sword = new Sword(Gdx.graphics.getWidth() / 2f, platform.getY() + 500);
         sword.setSize(sword.getWidth() * 2, sword.getHeight() * 2);
         weapons.add(sword);
+
+        //region screen UI
+        UI.setPosition(100, 50);
+
+        p1Label = new Label("ROBOT: " + player1.getFighter().getHealth(), skin);
+        p1Label.setSize(100, 50);
+        p1Label.setPosition(0, 0);
+
+        p2Label = new Label("VAMPIRE: " + player2.getFighter().getHealth(), skin);
+        p2Label.setSize(p1Label.getWidth(), p1Label.getHeight());
+        p2Label.setPosition(p1Label.getX() + p1Label.getWidth() + 5, p1Label.getY());
+
+        UI.addActor(p1Label);
+        UI.addActor(p2Label);
+        //endregion
     }
     private void update(){
         FRAMECOUNT++;
@@ -65,9 +93,12 @@ public class GameScreen {
         for (Weapon weapon: weapons) {
             if(!gameBounds.contains(weapon.getX(), weapon.getY())) weapon.setPosition(spawnCenter.x, spawnCenter.y);
         }
+
+        p1Label.setText("ROBOT: " + player1.getFighter().getHealth());
+        p2Label.setText("VAMPIRE: " + player2.getFighter().getHealth());
     }
 
-    public ArrayList<Player> getPlayers(){
+    public static ArrayList<Player> getPlayers(){
         return players;
     }
     public static ArrayList<Weapon> getWeapons(){
@@ -75,6 +106,12 @@ public class GameScreen {
     }
     public static int getFrame(){
         return FRAMECOUNT;
+    }
+    public void startDrawing(){
+        stage.addActor(UI);
+    }
+    public void stopDrawing(){
+        UI.remove();
     }
     /**
      * renders everything on the screen
@@ -85,12 +122,11 @@ public class GameScreen {
         update();
 
         batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        stage.render(batch);
+        platform.render(batch);
         for (Weapon weapon: weapons) {
-            weapon.render(batch);
+            if(weapon.getOwner() == null) weapon.render(batch);
         }
-        player1.renderFighter(batch);
-        player2.renderFighter(batch);
-
+        player1.renderAssets(batch);
+        player2.renderAssets(batch);
     }
 }

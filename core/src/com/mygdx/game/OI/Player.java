@@ -62,6 +62,15 @@ public class Player {
 
         equippedWeapon = null;
     }
+    public void attack(Player attackedPlayer){
+        attack(attackedPlayer, 0);
+    }
+    public void attack(Player attackedPlayer, int bonusDamage){
+        attackedPlayer.takeDamage(fighter.getDamage() + bonusDamage);
+    }
+    public void takeDamage(int damage){
+        fighter.takeDamage(damage);
+    }
     //endregion
 
 
@@ -75,37 +84,60 @@ public class Player {
 
         //registers player's input
         //key presses
-        if (KEY == KeyBinds.Keys.MOVERIGHT) {
-            if (fighter.isColliding(Main.gameScreen.stage) == Object.RIGHTCOLLISION) fighter.stop(); //32 = D
-            else if(fighter.getXVelocity() < 0) fighter.stop();
-            else fighter.moveRight();
-        }
-        if (KEY == KeyBinds.Keys.MOVELEFT) {
-            if (fighter.isColliding(Main.gameScreen.stage) == Object.LEFTCOLLISION) fighter.stop(); //29 = A
-            else if(fighter.getXVelocity() > 0) fighter.stop();
-            else fighter.moveLeft();
-        }
-        if (KEY == KeyBinds.Keys.JUMP){ //51 = W
-            if(!fighter.isJumping()) fighter.jump();
-        }
-        if (KEY == KeyBinds.Keys.MOVEDOWN && fighter.canFall()) fighter.moveDown(); //47 = S
-        if (KEY == KeyBinds.Keys.INTERACT){
-            if(equippedWeapon == null) {
-                Weapon interactedWeapon = null;
-                for (Weapon weapon : GameScreen.getWeapons()) {
-                    if (fighter.isColliding(weapon) != Object.NOCOLLISION && weapon.getOwner() == null){
-                        interactedWeapon = weapon;
-                        break;
+        switch (KEY){
+            case (KeyBinds.Keys.MOVERIGHT):
+                if (fighter.isColliding(Main.gameScreen.platform) == Object.RIGHTCOLLISION) fighter.stop();
+                else if(fighter.getXVelocity() < 0) fighter.stop();
+                else fighter.moveRight();
+                break;
+            case (KeyBinds.Keys.MOVELEFT):
+                if (fighter.isColliding(Main.gameScreen.platform) == Object.LEFTCOLLISION) fighter.stop();
+                else if(fighter.getXVelocity() > 0) fighter.stop();
+                else fighter.moveLeft();
+                break;
+            case (KeyBinds.Keys.JUMP):
+                if(!fighter.isJumping()) fighter.jump();
+                break;
+            case (KeyBinds.Keys.MOVEDOWN):
+                if(fighter.canFall()) fighter.moveDown();
+                break;
+            case (KeyBinds.Keys.INTERACT):
+                if(equippedWeapon == null) {
+                    Weapon interactedWeapon = null;
+                    for (Weapon weapon : GameScreen.getWeapons()) {
+                        if (fighter.isColliding(weapon) != Object.NOCOLLISION && weapon.getOwner() == null){
+                            interactedWeapon = weapon;
+                            break;
+                        }
+                    }
+                    if (interactedWeapon != null) equipWeapon(interactedWeapon);
+                }
+                else {
+                    throwWeapon();
+                }
+                break;
+            case (KeyBinds.Keys.ATTACK):
+                if(equippedWeapon != null) {
+                    for (Player player2 : GameScreen.getPlayers()) {
+                        if (equippedWeapon.isColliding(player2.getFighter()) != Object.NOCOLLISION) {
+                            attack(player2, equippedWeapon.getDamage());
+                            break;
+                        }
                     }
                 }
-                if (interactedWeapon != null) equipWeapon(interactedWeapon); //47 = S
-            }
-            else {
-                throwWeapon();
-            }
+                else {
+                    for (Player player2 : GameScreen.getPlayers()) {
+                        if (fighter.isColliding(player2.getFighter()) != Object.NOCOLLISION) {
+                            attack(player2);
+                            break;
+                        }
+                    }
+                }
+                break;
+            case (KeyBinds.Keys.TEMP): //fixme testing keybind changing. Delete later
+                KeyBinds.changeKeyBind(KeyBinds.findKeyFromDefaultKey(KeyBinds.Keys.JUMP, playerNum - 1), Input.Keys.SPACE);
+                break;
         }
-        //fixme testing keybind changing. Delete later
-        if(KEY == KeyBinds.Keys.TEMP) KeyBinds.changeKeyBind(KeyBinds.findKeyFromDefaultKey(KeyBinds.Keys.JUMP, playerNum - 1), Input.Keys.SPACE);
     }
     /**
      * sets this player's fighter
@@ -123,7 +155,8 @@ public class Player {
      * renders the fighter's model
      * @param batch just put batch
      */
-    public void renderFighter(SpriteBatch batch){
+    public void renderAssets(SpriteBatch batch){
         fighter.render(batch);
+        if(equippedWeapon != null) equippedWeapon.render(batch);
     }
 }

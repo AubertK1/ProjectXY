@@ -107,6 +107,7 @@ public class Main extends ApplicationAdapter {
 		}
 		else{ //if match is being played show gamescreen
 			menu.stopDrawing();
+			gameScreen.startDrawing();
 			gameScreen.render(batch);
 		}
 
@@ -123,6 +124,7 @@ public class Main extends ApplicationAdapter {
 	public void dispose () {
 		batch.dispose();
 	}
+
 	public static float getFrameRate(){
 		return Gdx.graphics.getDeltaTime();
 	}

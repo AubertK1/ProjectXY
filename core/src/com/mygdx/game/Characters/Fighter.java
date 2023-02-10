@@ -1,7 +1,6 @@
 package com.mygdx.game.Characters;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.GameScreen;
 import com.mygdx.game.Main;
 import com.mygdx.game.MovingObj;
@@ -20,14 +19,23 @@ public class Fighter extends MovingObj{
     // the fighter will be assigned to a player when chosen
     private Player player;
 
-    protected float speed = 400;
-
-    //can the player fall lower
-    protected boolean canFall = true;
-    //is the player jumping
-    protected boolean isJumping = false;
-
+    //region stats
     protected static int maxJumps = 3;
+    protected float speed = 500;
+    protected int damage = 10;
+    protected int health = 100;
+    protected int fortitude = 15;
+    //endregion
+
+    //region states of being
+    protected boolean isAlive = true; //is the player alive
+    protected boolean canFall = true; //can the player fall lower
+    protected boolean isJumping = false; //is the player jumping
+    protected boolean isBlocking = false; //is the player blocking
+
+    protected boolean isFacingRight = true;
+    //endregion
+
     protected int jumpsLeft = maxJumps;
     //the next frame they'll be able to jump at
     protected int nextJumpFrame = 0;
@@ -53,20 +61,20 @@ public class Fighter extends MovingObj{
         //endregion
 
         //region collision
-        if(this.isColliding(Main.gameScreen.stage) == BOTTOMCOLLISION){ //if touching a platform
+        if(this.isColliding(Main.gameScreen.platform) == BOTTOMCOLLISION){ //if touching a platform
             canFall = false;
             stopJump();
             resetJumps();
         } else {
             canFall = true;
 
-            if(isJumping && this.isColliding(Main.gameScreen.stage) == TOPCOLLISION){
+            if(isJumping && this.isColliding(Main.gameScreen.platform) == TOPCOLLISION){
                 stopJump();
                 vertVelocity = 0;
             }
         }
 
-        if(this.isColliding(Main.gameScreen.stage) == LEFTCOLLISION || this.isColliding(Main.gameScreen.stage) == RIGHTCOLLISION){
+        if(this.isColliding(Main.gameScreen.platform) == LEFTCOLLISION || this.isColliding(Main.gameScreen.platform) == RIGHTCOLLISION){
             stopJump();
             resetJumps();
             vertVelocity = -135;
@@ -134,9 +142,11 @@ public class Fighter extends MovingObj{
     //region movement
     public void moveLeft(){
         horVelocity = -speed;
+        isFacingRight = false;
     }
     public void moveRight(){
         horVelocity = speed;
+        isFacingRight = true;
     }
     public void moveDown(){
         setPosition(getX(), getY() - Main.getFrameRate() * (speed / 2f));
@@ -161,7 +171,11 @@ public class Fighter extends MovingObj{
     //endregion
 
     public void block() {
+        isBlocking = true;
+    }
 
+    public void takeDamage(int damage){
+        health -= damage;
     }
 
     public boolean isJumping() {
@@ -170,6 +184,26 @@ public class Fighter extends MovingObj{
 
     public boolean canFall() {
         return canFall;
+    }
+
+    public boolean isBlocking() {
+        return isBlocking;
+    }
+
+    public boolean isFacingRight() {
+        return isFacingRight;
+    }
+
+    public int getHealth(){
+        return health;
+    }
+
+    public int getFortitude() {
+        return fortitude;
+    }
+
+    public int getDamage() {
+        return damage;
     }
 
     /**

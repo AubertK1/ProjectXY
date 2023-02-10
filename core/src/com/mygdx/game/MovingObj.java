@@ -20,6 +20,18 @@ public abstract class MovingObj extends Object {
         super(posX, posY, sizeX, sizeY, isCollidable, isVisible);
     }
 
+    public void applyPhysics(){
+        float frameRate = Main.getFrameRate();
+
+        if (canFall) {
+            vertVelocity += GameScreen.GRAVITY;
+            if (vertVelocity < -1000) vertVelocity = -1000; //maximum downward velocity
+            bounds.y += frameRate * vertVelocity;
+        }
+        bounds.x += frameRate * horVelocity;
+        slowDown();
+    }
+
     public void slowDown(){
         if(horVelocity > 0){ //if moving right...
             horVelocity -= 20;
