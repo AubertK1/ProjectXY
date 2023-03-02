@@ -52,6 +52,12 @@ public abstract class Object {
     public void setVisible(boolean isVisible) {
         this.isVisible = isVisible;
     }
+
+    public void sizeToWidth(float width){
+        float oldWidth = getWidth();
+        float scale = width / oldWidth;
+        setSize(width, getHeight() * scale);
+    }
     //endregion
     // region getters
     public float getX() {
@@ -93,13 +99,14 @@ public abstract class Object {
         //fixme so either we make this function detect a FUTURE collision or (as I just did temporarily) we assign
         //fixme an arbitrary "mercy range" where the objects are technically in each other by a few pixels but we don't count it.
         //fixme Here I put the "mercy range" at 5 so I removed 5 from the x range of both objects
+        final int mercyRange = 3;
         //puts the x values of both objects on the same horizontal plane, so I can check if they will overlap
-        Line2D thisXRange = new Line2D.Float(getX() + 5, 0, getX() + getWidth() - 5, 0);
-        Line2D oXRange = new Line2D.Float(o.getX() + 5, 0, o.getX() + o.getWidth() - 5, 0);
+        Line2D thisXRange = new Line2D.Float(getX() + mercyRange, 0, getX() + getWidth() - mercyRange, 0);
+        Line2D oXRange = new Line2D.Float(o.getX() + mercyRange, 0, o.getX() + o.getWidth() - mercyRange, 0);
 
         //puts the y values of both objects on the same vertical plane, so I can check if they will overlap
-        Line2D thisYRange = new Line2D.Float(0, getY() + 5, 0, getY() + getHeight() - 5);
-        Line2D oYRange = new Line2D.Float(0, o.getY() + 5, 0, o.getY() + o.getHeight() - 5);
+        Line2D thisYRange = new Line2D.Float(0, getY() + mercyRange, 0, getY() + getHeight() - mercyRange);
+        Line2D oYRange = new Line2D.Float(0, o.getY() + mercyRange, 0, o.getY() + o.getHeight() - mercyRange);
 
         //this midpoint is so to detect which side of the object this is on, so that it can only check for that collision
         Point thisMidpoint = new Point((int) ((thisXRange.getP2().getX()+thisXRange.getP1().getX())/2), (int) ((thisYRange.getP2().getY()+thisYRange.getP1().getY())/2));

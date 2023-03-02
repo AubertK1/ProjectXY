@@ -2,6 +2,7 @@ package com.mygdx.game.Characters;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.GameScreen;
+import com.mygdx.game.HitData;
 import com.mygdx.game.Main;
 import com.mygdx.game.MovingObj;
 import com.mygdx.game.OI.Player;
@@ -23,7 +24,8 @@ public class Fighter extends MovingObj{
     protected static int maxJumps = 3;
     protected float speed = 500;
     protected int damage = 10;
-    protected int health = 100;
+    protected int maxHealth = 100;
+    protected int health = maxHealth;
     protected int fortitude = 15;
     //endregion
 
@@ -93,47 +95,63 @@ public class Fighter extends MovingObj{
     // region attacks
 
     // region light attacks
-    public void upLightAtk() {
+    public HitData upLightAtk() {
+        return new HitData();
     }
 
-    public void neutralLightAtk() {
+    public HitData neutralLightAtk() {
+        return new HitData().set(5, 2, 1.1f, TOPCOLLISION);
     }
 
-    public void sideLightAtk() {
+    public HitData sideLightAtk() {
+        int direction = RIGHTCOLLISION;
+        if (horVelocity < 0) direction = LEFTCOLLISION;
+        else if (horVelocity == 0) direction = isFacingRight() ? RIGHTCOLLISION : LEFTCOLLISION;
+        return new HitData().set(5, 2, 1.1f, direction);
     }
 
-    public void downLightAtk() {
+    public HitData downLightAtk() {
+        return new HitData();
     }
     // endregion
 
     // region heavy attacks
-    public void upHeavyAtk() {
+    public HitData upHeavyAtk() {
+        return new HitData();
     }
 
-    public void neutralHeavyAtk() {
+    public HitData neutralHeavyAtk() {
+        return new HitData();
     }
 
-    public void sideHeavyAtk() {
+    public HitData sideHeavyAtk() {
+        return new HitData();
     }
 
-    public void downHeavyAtk() {
+    public HitData downHeavyAtk() {
+        return new HitData();
     }
     // endregion
 
     // region air attacks
-    public void upAirAtk() {
+    public HitData upAirAtk() {
+        return new HitData();
     }
 
-    public void neutralAirAtk() {
+    public HitData neutralAirAtk() {
+        return new HitData();
     }
 
-    public void sideAirAtk() {
+    public HitData sideAirAtk() {
+        return new HitData();
     }
 
-    public void downAirAtk() {
+    public HitData downAirAtk() {
+        return new HitData();
     }
 
-    public void recoveryAtk() {
+    public HitData recoveryAtk() {
+        return new HitData();
     }
     // endregion
 
@@ -177,6 +195,30 @@ public class Fighter extends MovingObj{
     public void takeDamage(int damage){
         health -= damage;
     }
+    public void knockBack(int direction, float multiplier, boolean preferRight){
+        float baseHorKB = 1120;
+        float baseVertKB = -GameScreen.GRAVITY + baseHorKB;
+
+        canFall = true;
+        switch (direction){
+            case LEFTCOLLISION:
+                horVelocity = -baseHorKB * multiplier * .74f;
+                vertVelocity = baseVertKB * multiplier * .9f;
+                break;
+            case RIGHTCOLLISION:
+                horVelocity = baseHorKB * multiplier * .74f;
+                vertVelocity = baseVertKB * multiplier * 1;
+                break;
+            case TOPCOLLISION:
+                horVelocity = (preferRight ? baseHorKB : -baseHorKB) * multiplier * .35f;
+                vertVelocity = baseVertKB * multiplier;
+                break;
+            case BOTTOMCOLLISION:
+                horVelocity = baseHorKB * multiplier * .35f;
+                vertVelocity = -baseVertKB * multiplier;
+                break;
+        }
+    }
 
     public boolean isJumping() {
         return isJumping;
@@ -206,6 +248,15 @@ public class Fighter extends MovingObj{
         return damage;
     }
 
+    public void reset(){
+        health = maxHealth;
+
+        horVelocity = 0;
+        vertVelocity = 0;
+
+        setPosition(GameScreen.spawnCenter.x, GameScreen.spawnCenter.y);
+    }
+
     /**
      * assigns this fighter to a player so that it can get its bounds updated
      * 
@@ -221,6 +272,8 @@ public class Fighter extends MovingObj{
      */
     public void render(SpriteBatch batch) {
         player.update();
-        batch.draw(model, getX(), getY(), getWidth(), getHeight());
+        //this draws the fighter flipped depending on which way it is facing
+        boolean flip = !isFacingRight();
+        batch.draw(model, flip ? getX() + getWidth() : getX(), getY(), flip ? -getWidth() : getWidth(), getHeight());
     }
 }
