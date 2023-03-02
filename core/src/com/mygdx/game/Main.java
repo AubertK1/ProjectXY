@@ -1,7 +1,6 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -21,7 +20,7 @@ public class Main extends ApplicationAdapter {
 	//main menu screen
 	MainMenu menu;
 	//game screen
-	GameScreen gameScreen;
+	public static GameScreen gameScreen;
 	//detects whether the game is currently being played or not
 	public static boolean isMatchRunning = false;
 
@@ -43,7 +42,54 @@ public class Main extends ApplicationAdapter {
 		gameScreen = new GameScreen();
 
 		//this is so the user can click on the screen
-		Gdx.input.setInputProcessor(stage);
+		InputMultiplexer multiplexer = new InputMultiplexer();
+		//This handles any interactions with the screen/keyboard
+		InputProcessor screenProcessor = new InputProcessor() {
+			@Override
+			public boolean keyDown(int keycode) {
+				int affectedPlayer = getAffectedPlayer(keycode);
+				if(affectedPlayer != -1) gameScreen.getPlayers().get(getAffectedPlayer(keycode)).interact(keycode);
+				return true;
+			}
+
+			@Override
+			public boolean keyUp(int keycode) {
+				return false;
+			}
+
+			@Override
+			public boolean keyTyped(char character) {
+				return false;
+			}
+
+			@Override
+			public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+				return false;
+			}
+
+			@Override
+			public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+				return false;
+			}
+
+			@Override
+			public boolean touchDragged(int screenX, int screenY, int pointer) {
+				return false;
+			}
+
+			@Override
+			public boolean mouseMoved(int screenX, int screenY) {
+				return false;
+			}
+
+			@Override
+			public boolean scrolled(float amountX, float amountY) {
+				return false;
+			}
+		};
+		multiplexer.addProcessor(stage);
+		multiplexer.addProcessor(screenProcessor);
+		Gdx.input.setInputProcessor(multiplexer);
 	}
 
 	/**
@@ -61,6 +107,7 @@ public class Main extends ApplicationAdapter {
 		}
 		else{ //if match is being played show gamescreen
 			menu.stopDrawing();
+			gameScreen.startDrawing();
 			gameScreen.render(batch);
 		}
 
@@ -76,5 +123,12 @@ public class Main extends ApplicationAdapter {
 	@Override
 	public void dispose () {
 		batch.dispose();
+	}
+
+	public static float getFrameRate(){
+		return Gdx.graphics.getDeltaTime();
+	}
+	public int getAffectedPlayer(int KEY){
+		return KeyBinds.findKeySetIndex(KEY);
 	}
 }
