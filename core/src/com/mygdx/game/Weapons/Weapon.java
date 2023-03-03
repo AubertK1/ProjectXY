@@ -1,7 +1,5 @@
 package com.mygdx.game.Weapons;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.mygdx.game.GameScreen;
 import com.mygdx.game.HitData;
 import com.mygdx.game.Main;
@@ -75,10 +73,24 @@ public class Weapon extends MovingObj {
      */
     public void render(SpriteBatch batch) {
         update();
-        if(owner == null) batch.draw(model, getX(), getY(), getWidth(), getHeight());
-        else { //this draws the weapon flipped depending on which way the fighter is facing
-            boolean flip = owner.getFighter().isFacingRight();
-            batch.draw(model, flip ? getX() + getWidth() : getX(), getY(), flip ? -getWidth() : getWidth(), getHeight());
+
+        if(currentAnimation == null) { //if no animation...
+            if (owner == null) batch.draw(model, getX(), getY(), getWidth(), getHeight());
+            else { //this draws the weapon flipped depending on which way the fighter is facing
+                boolean flip = owner.getFighter().isFacingRight();
+                batch.draw(model, flip ? getX() + getWidth() : getX(), getY(), flip ? -getWidth() : getWidth(), getHeight());
+            }
+        }
+        else {
+            stateTime += Main.getFrameRate();
+            modelFrame = currentAnimation.getKeyFrame(stateTime, true);
+            if(currentAnimation != idleAnimation && currentAnimation.isAnimationFinished(stateTime)) currentAnimation = idleAnimation;
+
+            if (owner == null) batch.draw(modelFrame, getX(), getY(), getWidth(), getHeight());
+            else { //this draws the weapon flipped depending on which way the fighter is facing
+                boolean flip = owner.getFighter().isFacingRight();
+                batch.draw(modelFrame, flip ? getX() + getWidth() : getX(), getY(), flip ? -getWidth() : getWidth(), getHeight());
+            }
         }
     }
 }

@@ -1,6 +1,8 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
 import java.awt.*;
@@ -20,6 +22,15 @@ public abstract class Object {
     protected Texture model;
 
     // endregion properties
+
+    //region animation data
+    protected Animation<TextureRegion> currentAnimation; // Must declare frame type (TextureRegion)
+    protected Animation<TextureRegion> idleAnimation; // Must declare frame type (TextureRegion)
+    protected TextureRegion modelFrame;
+    protected Texture idleSheet;
+
+    public float stateTime = 0;
+    //endregion
 
     //region border conversions
     public static final int NOCOLLISION = -1;
@@ -85,6 +96,27 @@ public abstract class Object {
     }
     // endregion getters
 
+    public Animation<TextureRegion> animate(Texture animationSheet){
+        return animate(animationSheet, 1, 2, .5f);
+    }
+    public Animation<TextureRegion> animate(Texture animationSheet, int SHEET_ROWS, int SHEET_COLS, float frameDuration){
+        TextureRegion[][] tmp = TextureRegion.split(animationSheet,
+                animationSheet.getWidth() / SHEET_COLS, animationSheet.getHeight() / SHEET_ROWS);
+
+        TextureRegion[] animFrames = new TextureRegion[SHEET_COLS * SHEET_ROWS];
+        int index = 0;
+        for (int i = 0; i < SHEET_ROWS; i++) {
+            for (int j = 0; j < SHEET_COLS; j++) {
+            animFrames[index++] = tmp[i][j];
+            }
+        }
+
+        return new Animation<>(frameDuration, animFrames);
+    }
+    public void swapAnimation(Animation<TextureRegion> newAnimation){
+        currentAnimation = newAnimation;
+        stateTime = 0;
+    }
     /**
      * checks if this object is colliding with object o
      *
