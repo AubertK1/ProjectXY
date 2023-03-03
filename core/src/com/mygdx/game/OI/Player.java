@@ -106,10 +106,13 @@ public class Player {
         }
         //endregion
 
-        float avgKBMultiplier = fighterHitData.knockbackMultiplier;
-        if(equippedWeapon != null) avgKBMultiplier = (fighterHitData.knockbackMultiplier + weaponHitData.knockbackMultiplier) / 2f;
-        HitData attack = new HitData().set(fighterHitData.damage + weaponHitData.damage + bonusDamage, HitData.IGNORE, avgKBMultiplier, fighterHitData.direction);
-        attackedPlayer.takeDamage(attack, fighter.isFacingRight());
+        if(attackedPlayer != null) {
+            float avgKBMultiplier = fighterHitData.knockbackMultiplier;
+            if (equippedWeapon != null)
+                avgKBMultiplier = (fighterHitData.knockbackMultiplier + weaponHitData.knockbackMultiplier) / 2f;
+            HitData attack = new HitData().set(fighterHitData.damage + weaponHitData.damage + bonusDamage, HitData.IGNORE, avgKBMultiplier, fighterHitData.direction);
+            attackedPlayer.takeDamage(attack, fighter.isFacingRight());
+        }
     }
     public void takeDamage(HitData hitData, boolean preferRight){
         fighter.takeDamage(hitData.damage);
@@ -166,6 +169,9 @@ public class Player {
                             attack(player2);
                             break;
                         }
+                        else if(player2 == GameScreen.getPlayers().get(GameScreen.getPlayers().size() - 1)){
+                            attack(null);
+                        }
                     }
                 }
                 else {
@@ -173,6 +179,9 @@ public class Player {
                         if (fighter.isColliding(player2.getFighter()) != Object.NOCOLLISION) {
                             attack(player2);
                             break;
+                        }
+                        else if(player2 == GameScreen.getPlayers().get(GameScreen.getPlayers().size() - 1)){
+                            attack(null);
                         }
                     }
                 }
