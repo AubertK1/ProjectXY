@@ -1,6 +1,9 @@
 package com.mygdx.game.Characters;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.game.GameScreen;
 import com.mygdx.game.HitData;
 import com.mygdx.game.Main;
@@ -43,6 +46,11 @@ public class Fighter extends MovingObj{
     protected int nextJumpFrame = 0;
 
     // endregion properties
+
+    //region animation
+    Texture runSheet;
+    Animation<TextureRegion> runAnimation;
+    //endregion
 
     public Fighter(float x, float y, float width, float height, boolean isCollidable, boolean isVisible, Player player) {
         super(x, y, width, height, isCollidable, isVisible);
@@ -161,10 +169,14 @@ public class Fighter extends MovingObj{
     public void moveLeft(){
         horVelocity = -speed;
         isFacingRight = false;
+
+        if(runSheet != null) swapAnimation(runAnimation);
     }
     public void moveRight(){
         horVelocity = speed;
         isFacingRight = true;
+
+        if(runSheet != null) swapAnimation(runAnimation);
     }
     public void moveDown(){
         setPosition(getX(), getY() - Main.getFrameRate() * (speed / 2f));
@@ -272,8 +284,20 @@ public class Fighter extends MovingObj{
      */
     public void render(SpriteBatch batch) {
         player.update();
-        //this draws the fighter flipped depending on which way it is facing
-        boolean flip = !isFacingRight();
-        batch.draw(model, flip ? getX() + getWidth() : getX(), getY(), flip ? -getWidth() : getWidth(), getHeight());
+
+        if(currentAnimation == null) { //if no animation...
+            //this draws the fighter flipped depending on which way it is facing
+            boolean flip = !isFacingRight();
+            batch.draw(model, flip ? getX() + getWidth() : getX(), getY(), flip ? -getWidth() : getWidth(), getHeight());
+        }
+        else { //if has an animation
+            stateTime += Main.getFrameRate();
+            modelFrame = currentAnimation.getKeyFrame(stateTime, true);
+            if(currentAnimation != idleAnimation && currentAnimation.isAnimationFinished(stateTime)) currentAnimation = idleAnimation;
+
+            //this draws the fighter flipped depending on which way it is facing
+            boolean flip = !isFacingRight();
+            batch.draw(modelFrame, flip ? getX() + getWidth() : getX(), getY(), flip ? -getWidth() : getWidth(), getHeight());
+        }
     }
 }

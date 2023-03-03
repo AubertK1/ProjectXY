@@ -1,7 +1,9 @@
 package com.mygdx.game.Weapons;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.game.GameScreen;
 import com.mygdx.game.HitData;
 import com.mygdx.game.Main;
@@ -11,6 +13,7 @@ import com.mygdx.game.Main;
  */
 public class Sword extends MeleeWeapon{
     Texture hitSheet = new Texture("assets\\stock-textures\\swordhitsheet2.png");
+    protected Animation<TextureRegion> hitAnimation;
 
     public Sword(float x, float y) {
         super(x, y, 1, 1, true, true);
@@ -18,13 +21,17 @@ public class Sword extends MeleeWeapon{
         model = new Texture("assets\\stock-textures\\stocksword.png");
         setSize(model.getWidth(), model.getHeight());
 
+/*
         idleAnimation = animate(idleSheet = new Texture("assets\\stock-textures\\SwordSheet2.png"), 2, 2, .15f);
         currentAnimation = idleAnimation;
+*/
+        swapAnimation(idleAnimation = animate(idleSheet = new Texture("assets\\stock-textures\\SwordSheet2.png"), 2, 2, .15f));
+        hitAnimation = animate(hitSheet, 2, 2, .075f);
     }
 
     @Override
     public HitData hit() {
-        swapAnimation(animate(hitSheet, 2, 2, .075f));
+        swapAnimation(hitAnimation);
         return super.hit();
     }
 }

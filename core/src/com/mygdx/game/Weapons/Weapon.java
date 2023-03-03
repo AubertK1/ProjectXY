@@ -81,7 +81,7 @@ public class Weapon extends MovingObj {
                 batch.draw(model, flip ? getX() + getWidth() : getX(), getY(), flip ? -getWidth() : getWidth(), getHeight());
             }
         }
-        else {
+        else { //if has an animation
             stateTime += Main.getFrameRate();
             modelFrame = currentAnimation.getKeyFrame(stateTime, true);
             if(currentAnimation != idleAnimation && currentAnimation.isAnimationFinished(stateTime)) currentAnimation = idleAnimation;

@@ -114,6 +114,8 @@ public abstract class Object {
         return new Animation<>(frameDuration, animFrames);
     }
     public void swapAnimation(Animation<TextureRegion> newAnimation){
+        if(currentAnimation == newAnimation) return;
+
         currentAnimation = newAnimation;
         stateTime = 0;
     }
