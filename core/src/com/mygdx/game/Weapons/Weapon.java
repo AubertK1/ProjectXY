@@ -92,5 +92,11 @@ public class Weapon extends MovingObj {
                 batch.draw(modelFrame, flip ? getX() + getWidth() : getX(), getY(), flip ? -getWidth() : getWidth(), getHeight());
             }
         }
+
+        if(Main.inDebugMode) {
+            batch.end();
+            renderHitBox();
+            batch.begin();
+        }
     }
 }

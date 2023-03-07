@@ -37,5 +37,11 @@ public class Platform extends Object {
 
     public void render(SpriteBatch batch){
         batch.draw(model, getX(), getY(), getWidth(), getHeight());
+
+        if(Main.inDebugMode) {
+            batch.end();
+            renderHitBox();
+            batch.begin();
+        }
     }
 }

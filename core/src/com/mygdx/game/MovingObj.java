@@ -26,9 +26,11 @@ public abstract class MovingObj extends Object {
         if (canFall) {
             vertVelocity += GameScreen.GRAVITY;
             if (vertVelocity < -1000) vertVelocity = -1000; //maximum downward velocity
-            bounds.y += frameRate * vertVelocity;
+//            textureBounds.y += frameRate * vertVelocity;
+            setPosition(getX(), getY() + (frameRate * vertVelocity));
         }
-        bounds.x += frameRate * horVelocity;
+//        textureBounds.x += frameRate * horVelocity;
+        setPosition(getX() + (frameRate * horVelocity), getY());
         slowDown();
     }
 

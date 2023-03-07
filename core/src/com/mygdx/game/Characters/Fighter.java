@@ -64,9 +64,11 @@ public class Fighter extends MovingObj{
         if (canFall) {
             vertVelocity += GameScreen.GRAVITY;
             if (vertVelocity < -1000) vertVelocity = -1000; //maximum downward velocity
-            bounds.y += deltaTime * vertVelocity;
+//            textureBounds.y += frameRate * vertVelocity;
+            setPosition(getX(), getY() + (deltaTime * vertVelocity));
         }
-        bounds.x += deltaTime * horVelocity;
+//        textureBounds.x += frameRate * horVelocity;
+        setPosition(getX() + (deltaTime * horVelocity), getY());
         slowDown();
         //endregion
 
@@ -298,6 +300,12 @@ public class Fighter extends MovingObj{
             //this draws the fighter flipped depending on which way it is facing
             boolean flip = !isFacingRight();
             batch.draw(modelFrame, flip ? getX() + getWidth() : getX(), getY(), flip ? -getWidth() : getWidth(), getHeight());
+        }
+
+        if(Main.inDebugMode) {
+            batch.end();
+            renderHitBox();
+            batch.begin();
         }
     }
 }

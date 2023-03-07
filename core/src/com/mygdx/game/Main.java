@@ -24,6 +24,8 @@ public class Main extends ApplicationAdapter {
 	//detects whether the game is currently being played or not
 	public static boolean isMatchRunning = false;
 
+	public static boolean inDebugMode = true;
+
 	/**
 	 * This class sets up the screen. It's only called ONCE (when the game is loaded)
 	 */

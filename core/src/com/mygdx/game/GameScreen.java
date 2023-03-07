@@ -10,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mygdx.game.Characters.Cyborg;
 import com.mygdx.game.Characters.Robot;
-import com.mygdx.game.Characters.Vampire;
 import com.mygdx.game.OI.Player;
 import com.mygdx.game.Weapons.Sword;
 import com.mygdx.game.Weapons.Weapon;
@@ -57,7 +56,7 @@ public class GameScreen {
         player1 = new Player(1);
         player2 = new Player(2);
         // setting player 1's fighter (will be moved later so the player can choose)
-        player1.setFighter(new Vampire(spawn1.x, spawn1.y, player1));
+        player1.setFighter(new Cyborg(spawn1.x, spawn1.y, player1));
         player1.getFighter().setSize(player1.getFighter().getWidth() * 2.5f, player1.getFighter().getHeight() * 2.5f);
 
         player2.setFighter(new Robot(spawn2.x, spawn2.y, player2));

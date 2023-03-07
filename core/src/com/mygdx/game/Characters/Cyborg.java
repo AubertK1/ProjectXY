@@ -11,6 +11,7 @@ public class Cyborg extends Fighter{
         //setting the visual model of the robot
         model = new Texture("assets\\textures\\Violet_Cyborg.png");
         setSize(model.getWidth(), model.getHeight());
+        setHBSize(model.getWidth(), model.getHeight());
 
         swapAnimation(idleAnimation = animate(idleSheet = new Texture("assets\\textures\\Violet_Cyborg_Idle_Sheet.png"), 2, 2, .15f));
 
