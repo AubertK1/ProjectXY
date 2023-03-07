@@ -19,12 +19,9 @@ public class Sword extends MeleeWeapon{
         super(x, y, 1, 1, true, true);
         //setting the visual model of the robot
         model = new Texture("assets\\stock-textures\\stocksword.png");
+        setHitbox(0, 0, 32, 32);
         setSize(model.getWidth(), model.getHeight());
 
-/*
-        idleAnimation = animate(idleSheet = new Texture("assets\\stock-textures\\SwordSheet2.png"), 2, 2, .15f);
-        currentAnimation = idleAnimation;
-*/
         swapAnimation(idleAnimation = animate(idleSheet = new Texture("assets\\stock-textures\\SwordSheet2.png"), 2, 2, .15f));
         hitAnimation = animate(hitSheet, 2, 2, .075f);
     }

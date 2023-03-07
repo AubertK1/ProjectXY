@@ -104,6 +104,17 @@ public abstract class Object {
         float scale = width / oldWidth;
         setSize(width, getHeight() * scale);
     }
+
+    public void scale(float scale){
+        setSize(textureBounds.width * scale, textureBounds.height * scale);
+
+        HBLeftOffset *= scale;
+        HBRightOffset *= scale;
+        HBTopOffset *= scale;
+        HBBottomOffset *= scale;
+        setHBPosition(HBLeftOffset, HBBottomOffset);
+        setHBSize(hitboxBounds.width * scale, hitboxBounds.height * scale);
+    }
     //endregion
     // region getters
     public float getX() {
@@ -129,10 +140,10 @@ public abstract class Object {
         return textureBounds.height;
     }
     public float getHBWidth() {
-        return textureBounds.width;
+        return hitboxBounds.width;
     }
     public float getHBHeight() {
-        return textureBounds.height;
+        return hitboxBounds.height;
     }
 
     public boolean getIsCollidable() {

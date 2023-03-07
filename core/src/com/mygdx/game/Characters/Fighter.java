@@ -268,6 +268,8 @@ public class Fighter extends MovingObj{
         horVelocity = 0;
         vertVelocity = 0;
 
+        resetJumps();
+
         setPosition(GameScreen.spawnCenter.x, GameScreen.spawnCenter.y);
     }
 

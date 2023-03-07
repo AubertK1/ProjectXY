@@ -23,8 +23,8 @@ public class Weapon extends MovingObj {
 
     public void update() {
         if(owner != null){
-            if(!owner.getFighter().isFacingRight()) setPosition(owner.getFighter().getX() - getWidth(), owner.getFighter().getY() + (owner.getFighter().getHeight() * 0.36f));
-            else setPosition(owner.getFighter().getX() + owner.getFighter().getWidth(), owner.getFighter().getY() + (owner.getFighter().getHeight() * 0.36f));
+            if(!owner.getFighter().isFacingRight()) setPosition(owner.getFighter().getHBX() - getHBWidth(), owner.getFighter().getHBY() + (owner.getFighter().getHBHeight() * 0.36f));
+            else setPosition(owner.getFighter().getHBX() + owner.getFighter().getHBWidth(), owner.getFighter().getHBY() + (owner.getFighter().getHBHeight() * 0.36f));
             return;
         }
 

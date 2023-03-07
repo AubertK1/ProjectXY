@@ -23,8 +23,8 @@ public class Main extends ApplicationAdapter {
 	public static GameScreen gameScreen;
 	//detects whether the game is currently being played or not
 	public static boolean isMatchRunning = false;
-
-	public static boolean inDebugMode = true;
+	//shows hitboxes
+	public static boolean inDebugMode = false;
 
 	/**
 	 * This class sets up the screen. It's only called ONCE (when the game is loaded)
