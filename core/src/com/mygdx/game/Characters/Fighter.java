@@ -41,10 +41,13 @@ public class Fighter extends MovingObj{
 
     // endregion properties
 
-    //region animation
+    //region animations
     DualAnimation runAnimation;
     DualAnimation jumpAnimation;
     DualAnimation fallAnimation;
+    //attacks
+    DualAnimation nLightAnimation;
+    DualAnimation sLightAnimation;
     //endregion
 
     public Fighter(float x, float y, float width, float height, boolean isCollidable, boolean isVisible, Player player) {
@@ -105,6 +108,7 @@ public class Fighter extends MovingObj{
     }
 
     public HitData neutralLightAtk() {
+        swapAnimation(nLightAnimation);
         return new HitData().set(5, 2, 1.1f, TOPCOLLISION);
     }
 
@@ -286,19 +290,18 @@ public class Fighter extends MovingObj{
     public void render(SpriteBatch batch) {
         player.update();
 
+        //this draws the fighter flipped depending on which way it is facing
+        boolean flip = !isFacingRight();
         if(currentAnimation == null) { //if no animation...
             //this draws the fighter flipped depending on which way it is facing
-            boolean flip = !isFacingRight();
             batch.draw(model, flip ? getX() + getWidth() : getX(), getY(), flip ? -getWidth() : getWidth(), getHeight());
         }
         else { //if has an animation
             stateTime += Main.getFrameRate();
             modelFrame = currentAnimation.getKeyFrame(stateTime, true);
-            applyHitbox(currentAnimation.getKeyHitBox(stateTime));
+            applyHitbox(currentAnimation.getKeyHitBox(stateTime), flip);
             if(currentAnimation != idleAnimation && currentAnimation.isAnimationFinished(stateTime)) currentAnimation = idleAnimation;
 
-            //this draws the fighter flipped depending on which way it is facing
-            boolean flip = !isFacingRight();
             batch.draw(modelFrame, flip ? getX() + getWidth() : getX(), getY(), flip ? -getWidth() : getWidth(), getHeight());
         }
 

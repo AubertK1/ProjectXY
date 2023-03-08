@@ -18,7 +18,8 @@ public class DualAnimation extends Animation<TextureRegion> {
 
     public void setHitboxes(Rectangle... hitboxOffsets){
         for (int i = 0; i < hitboxes.length; i++) {
-            hitboxes[i].set(hitboxOffsets[i]);
+            if(i < hitboxOffsets.length) hitboxes[i].set(hitboxOffsets[i]);
+            else hitboxes[i].set(hitboxOffsets[hitboxOffsets.length-1]);
         }
     }
 

@@ -15,7 +15,7 @@ public abstract class Object {
     // region properties
     protected Rectangle textureBounds;
     protected Rectangle hurtboxBounds;
-    protected Rectangle hitboxBounds = new Rectangle(0,0,0,0);
+    protected Rectangle hitbox = new Rectangle(0,0,0,0);
 
     // hitbox side minus texture side. How far the HB's side is away from the texture's side
     private float HBLeftOffset = 0, HBRightOffset = 0, HBTopOffset = 0, HBBottomOffset = 0;
@@ -163,6 +163,13 @@ public abstract class Object {
     public float getScale(){
         return scale;
     }
+
+    public Rectangle getHurtboxBounds(){
+        return hurtboxBounds;
+    }
+    public Rectangle getHitboxBounds(){
+        return hitbox;
+    }
     // endregion getters
 
     public void renderHurtBox(){
@@ -170,7 +177,7 @@ public abstract class Object {
         shapeRenderer.setColor(new Color(Color.GREEN));
         shapeRenderer.rect(hurtboxBounds.x, hurtboxBounds.y, hurtboxBounds.width, hurtboxBounds.height);
         shapeRenderer.setColor(new Color(Color.ORANGE));
-        shapeRenderer.rect(hitboxBounds.x, hitboxBounds.y, hitboxBounds.width, hitboxBounds.height);
+        shapeRenderer.rect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
         shapeRenderer.end();
     }
     public Animation<TextureRegion> animate(Texture animationSheet){
@@ -197,8 +204,9 @@ public abstract class Object {
         stateTime = 0;
     }
 
-    public Rectangle applyHitbox(Rectangle hitboxBounds){
-        return this.hitboxBounds = new Rectangle(getX() + (hitboxBounds.getX() * scale), getY() + (hitboxBounds.getY() * scale),
+    public Rectangle applyHitbox(Rectangle hitboxBounds, boolean flip){
+        return this.hitbox = new Rectangle(getX() + ((flip ? (getWidth() / scale) - hitboxBounds.getX() - hitboxBounds.getWidth() : hitboxBounds.getX()) * scale),
+                getY() + (hitboxBounds.getY() * scale),
                 hitboxBounds.getWidth() * scale, hitboxBounds.getHeight() * scale);
     }
     /**
@@ -209,40 +217,15 @@ public abstract class Object {
      */
     public int isCollidingWith(Object o) {
         if(!isCollidable || !o.getIsCollidable()) return NOCOLLISION; //return if they can't collide
-        // axis aligned bounding box collision (AABBC)
 
-        //fixme Because of the refresh rate, sometimes the objects clip into each other before the collision is checked.
-        //fixme so either we make this function detect a FUTURE collision or (as I just did temporarily) we assign
-        //fixme an arbitrary "mercy range" where the objects are technically in each other by a few pixels but we don't count it.
-        //fixme Here I put the "mercy range" at 5 so I removed 5 from the x range of both objects
-        int mercyRange = 3;
-        //puts the x values of both objects on the same horizontal plane, so I can check if they will overlap
-        Line2D thisXRange = new Line2D.Float(getHBX() + mercyRange, 0, getHBX() + getHBWidth() - mercyRange, 0);
-        Line2D oXRange = new Line2D.Float(o.getHBX() + mercyRange, 0, o.getHBX() + o.getHBWidth() - mercyRange, 0);
-
-        //puts the y values of both objects on the same vertical plane, so I can check if they will overlap
-        Line2D thisYRange = new Line2D.Float(0, getHBY() + mercyRange, 0, getHBY() + getHBHeight() - mercyRange);
-        Line2D oYRange = new Line2D.Float(0, o.getHBY() + mercyRange, 0, o.getHBY() + o.getHBHeight() - mercyRange);
-
-        //this midpoint is so to detect which side of the object this is on, so that it can only check for that collision
-        Point thisMidpoint = new Point((int) ((thisXRange.getP2().getX()+thisXRange.getP1().getX())/2), (int) ((thisYRange.getP2().getY()+thisYRange.getP1().getY())/2));
-        Point oMidpoint = new Point((int) ((oXRange.getP2().getX()+oXRange.getP1().getX())/2), (int) ((oYRange.getP2().getY()+oYRange.getP1().getY())/2));
-
-        //check if these objects would even overlap horizontally...will be false if they would pass by each other horizontally
-        if(thisXRange.intersectsLine(oXRange)){
-            if(thisMidpoint.y > oMidpoint.y && getHBY() < o.getHBY() + o.getHBHeight()) return BOTTOMCOLLISION; //if this object is being collided from the bottom
-            else if(thisMidpoint.y < oMidpoint.y && getHBY() + getHBHeight()> o.getHBY()) return TOPCOLLISION; //if this object is being collided from the top
-        }
-
-        //check if these objects would even overlap vertically...will be false if they would pass by each other vertically
-        if(thisYRange.intersectsLine(oYRange)){
-            if(thisMidpoint.x > oMidpoint.x && getHBX() < o.getHBX() + o.getHBWidth()) return LEFTCOLLISION; //if this object is being collided from the left
-            else if(thisMidpoint.x < oMidpoint.x && getHBX() + getHBWidth() > o.getHBX()) return RIGHTCOLLISION; //if this object is being collided from the right
-        }
-
-        return NOCOLLISION;
+        return isColliding(this, o);
     }
-/*
+
+    public static int isColliding(Object o1, Object o2){
+        if(!o1.getIsCollidable() || !o2.getIsCollidable()) return NOCOLLISION; //return if they can't collide
+
+        return isColliding(o1.getHurtboxBounds(), o2.getHurtboxBounds());
+    }
     public static int isColliding(Rectangle r1, Rectangle r2) {
         //fixme Because of the refresh rate, sometimes the objects clip into each other before the collision is checked.
         //fixme so either we make this function detect a FUTURE collision or (as I just did temporarily) we assign
@@ -254,8 +237,8 @@ public abstract class Object {
         Line2D oXRange = new Line2D.Float(r2.getX() + mercyRange, 0, r2.getX() + r2.getWidth() - mercyRange, 0);
 
         //puts the y values of both objects on the same vertical plane, so I can check if they will overlap
-        Line2D thisYRange = new Line2D.Float(0, getHBY() + mercyRange, 0, getHBY() + getHBHeight() - mercyRange);
-        Line2D oYRange = new Line2D.Float(0, o.getHBY() + mercyRange, 0, o.getHBY() + o.getHBHeight() - mercyRange);
+        Line2D thisYRange = new Line2D.Float(0, r1.getY() + mercyRange, 0, r1.getY() + r1.getHeight() - mercyRange);
+        Line2D oYRange = new Line2D.Float(0, r2.getY() + mercyRange, 0, r2.getY() + r2.getHeight() - mercyRange);
 
         //this midpoint is so to detect which side of the object this is on, so that it can only check for that collision
         Point thisMidpoint = new Point((int) ((thisXRange.getP2().getX()+thisXRange.getP1().getX())/2), (int) ((thisYRange.getP2().getY()+thisYRange.getP1().getY())/2));
@@ -263,18 +246,17 @@ public abstract class Object {
 
         //check if these objects would even overlap horizontally...will be false if they would pass by each other horizontally
         if(thisXRange.intersectsLine(oXRange)){
-            if(thisMidpoint.y > oMidpoint.y && getHBY() < o.getHBY() + o.getHBHeight()) return BOTTOMCOLLISION; //if this object is being collided from the bottom
-            else if(thisMidpoint.y < oMidpoint.y && getHBY() + getHBHeight()> o.getHBY()) return TOPCOLLISION; //if this object is being collided from the top
+            if(thisMidpoint.y > oMidpoint.y && r1.getY() < r2.getY() + r2.getHeight()) return BOTTOMCOLLISION; //if this object is being collided from the bottom
+            else if(thisMidpoint.y < oMidpoint.y && r1.getY() + r1.getHeight()> r2.getY()) return TOPCOLLISION; //if this object is being collided from the top
         }
 
         //check if these objects would even overlap vertically...will be false if they would pass by each other vertically
         if(thisYRange.intersectsLine(oYRange)){
-            if(thisMidpoint.x > oMidpoint.x && getHBX() < o.getHBX() + o.getHBWidth()) return LEFTCOLLISION; //if this object is being collided from the left
-            else if(thisMidpoint.x < oMidpoint.x && getHBX() + getHBWidth() > o.getHBX()) return RIGHTCOLLISION; //if this object is being collided from the right
+            if(thisMidpoint.x > oMidpoint.x && r1.getX() < r2.getX() + r2.getWidth()) return LEFTCOLLISION; //if this object is being collided from the left
+            else if(thisMidpoint.x < oMidpoint.x && r1.getX() + r1.getWidth() > r2.getX()) return RIGHTCOLLISION; //if this object is being collided from the right
         }
 
         return NOCOLLISION;
     }
-*/
 
 }
