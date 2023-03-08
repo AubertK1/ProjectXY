@@ -4,10 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import com.mygdx.game.*;
 import com.mygdx.game.Characters.Fighter;
-import com.mygdx.game.GameScreen;
-import com.mygdx.game.KeyBinds;
-import com.mygdx.game.Main;
 import com.mygdx.game.Object;
 import com.mygdx.game.Weapons.Weapon;
 
@@ -47,11 +45,19 @@ public class Player {
         }
     }
 
+    public void resetAssets(){
+        fighter.reset();
+        if (equippedWeapon != null){
+            Weapon weapon = equippedWeapon;
+            throwWeapon();
+            weapon.spawn(); //fixme remove later when weapon spawning is improved
+        }
+    }
+
     //region interactions
     public void equipWeapon(Weapon weapon){
         equippedWeapon = weapon;
         weapon.setOwner(this);
-//        weapon.setIsCollidable(false);
     }
     public void throwWeapon(){
         equippedWeapon.setOwner(null); //so that the weapon doesn't stick to the fighter anymore
@@ -66,13 +72,53 @@ public class Player {
         attack(attackedPlayer, 0);
     }
     public void attack(Player attackedPlayer, int bonusDamage){
-        attackedPlayer.takeDamage(fighter.getDamage() + bonusDamage);
+        int KEY = -10;
+        HitData fighterHitData = new HitData();
+        HitData weaponHitData = new HitData();
+        //region finding which direction to attack
+        if(playerNum == 1) { //if player 1...
+            if (Gdx.input.isKeyPressed(Input.Keys.D)) KEY = KeyBinds.convertKey(Input.Keys.D);
+            else if (Gdx.input.isKeyPressed(Input.Keys.A)) KEY = KeyBinds.convertKey(Input.Keys.A);
+            else if (Gdx.input.isKeyPressed(Input.Keys.S)) KEY = KeyBinds.convertKey(Input.Keys.S);
+        }
+        else if(playerNum == 2) { //if player 2...
+            // keypresses
+            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) KEY = KeyBinds.convertKey(Input.Keys.RIGHT);
+            else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) KEY = KeyBinds.convertKey(Input.Keys.LEFT);
+            else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) KEY = KeyBinds.convertKey(Input.Keys.DOWN);
+        }
+        //endregion
+        //region attacking in the direction
+        switch (KEY) {
+            case (-10): //if no direction
+                fighterHitData = fighter.neutralLightAtk();
+                if(equippedWeapon != null) weaponHitData = equippedWeapon.hit();
+                break;
+            case (KeyBinds.Keys.MOVERIGHT):
+            case (KeyBinds.Keys.MOVELEFT):
+                fighterHitData = fighter.sideLightAtk();
+                if(equippedWeapon != null) weaponHitData = equippedWeapon.hit();
+                break;
+            case (KeyBinds.Keys.MOVEDOWN):
+                fighterHitData = fighter.downLightAtk();
+                if(equippedWeapon != null) weaponHitData = equippedWeapon.hit();
+                break;
+        }
+        //endregion
+
+        if(attackedPlayer != null) {
+            float avgKBMultiplier = fighterHitData.knockbackMultiplier;
+            if (equippedWeapon != null)
+                avgKBMultiplier = (fighterHitData.knockbackMultiplier + weaponHitData.knockbackMultiplier) / 2f;
+            HitData attack = new HitData().set(fighterHitData.damage + weaponHitData.damage + bonusDamage, HitData.IGNORE, avgKBMultiplier, fighterHitData.direction);
+            attackedPlayer.takeDamage(attack, fighter.isFacingRight());
+        }
     }
-    public void takeDamage(int damage){
-        fighter.takeDamage(damage);
+    public void takeDamage(HitData hitData, boolean preferRight){
+        fighter.takeDamage(hitData.damage);
+        fighter.knockBack(hitData.direction, hitData.knockbackMultiplier, preferRight);
     }
     //endregion
-
 
     /**
      * Takes in which key is being pressed and moves the fighter accordingly
@@ -120,8 +166,11 @@ public class Player {
                 if(equippedWeapon != null) {
                     for (Player player2 : GameScreen.getPlayers()) {
                         if (equippedWeapon.isColliding(player2.getFighter()) != Object.NOCOLLISION) {
-                            attack(player2, equippedWeapon.getDamage());
+                            attack(player2);
                             break;
+                        }
+                        else if(player2 == GameScreen.getPlayers().get(GameScreen.getPlayers().size() - 1)){
+                            attack(null);
                         }
                     }
                 }
@@ -130,6 +179,9 @@ public class Player {
                         if (fighter.isColliding(player2.getFighter()) != Object.NOCOLLISION) {
                             attack(player2);
                             break;
+                        }
+                        else if(player2 == GameScreen.getPlayers().get(GameScreen.getPlayers().size() - 1)){
+                            attack(null);
                         }
                     }
                 }

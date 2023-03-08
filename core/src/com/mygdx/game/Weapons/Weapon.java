@@ -1,7 +1,7 @@
 package com.mygdx.game.Weapons;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.mygdx.game.GameScreen;
+import com.mygdx.game.HitData;
 import com.mygdx.game.Main;
 import com.mygdx.game.MovingObj;
 import com.mygdx.game.OI.Player;
@@ -23,14 +23,8 @@ public class Weapon extends MovingObj {
 
     public void update() {
         if(owner != null){
-            if(!owner.getFighter().isFacingRight()) setPosition(owner.getFighter().getX() - getWidth(), owner.getFighter().getY() + 20);
-            else if(owner.getFighter().isFacingRight()){
-//                Sprite flippedModel = new Sprite(model);
-//                flippedModel.flip(true, false);
-//                Drawable m2 = (Drawable) flippedModel;
-//                model = flippedModel;
-                setPosition(owner.getFighter().getX() + owner.getFighter().getWidth(), owner.getFighter().getY() + 20);
-            }
+            if(!owner.getFighter().isFacingRight()) setPosition(owner.getFighter().getHBX() - getHBWidth(), owner.getFighter().getHBY() + (owner.getFighter().getHBHeight() * 0.36f));
+            else setPosition(owner.getFighter().getHBX() + owner.getFighter().getHBWidth(), owner.getFighter().getHBY() + (owner.getFighter().getHBHeight() * 0.36f));
             return;
         }
 
@@ -48,6 +42,9 @@ public class Weapon extends MovingObj {
         //endregion
     }
 
+    public HitData hit(){
+        return new HitData().set(10, 2, 1.4f, NOCOLLISION);
+    }
     public void launch(float hVelo, float vVelo){
         vertVelocity = vVelo;
         horVelocity = hVelo;
@@ -64,17 +61,42 @@ public class Weapon extends MovingObj {
         return damage;
     }
 
+    public void spawn(){
+        horVelocity = 0;
+        vertVelocity = 0;
+        setPosition(GameScreen.spawnCenter.x, GameScreen.spawnCenter.y);
+    }
+
     /**
      * renders the fighter's model onto the screen
      * @param batch just put batch
      */
     public void render(SpriteBatch batch) {
         update();
-        if(owner == null) batch.draw(model, getX(), getY(), getWidth(), getHeight());
-        else { //this draws the weapon flipped depending on which way the fighter is facing
-            boolean flip = owner.getFighter().isFacingRight();
-            batch.draw(model, flip ? getX() + getWidth() : getX(), getY(), flip ? -getWidth() : getWidth(), getHeight());
+
+        if(currentAnimation == null) { //if no animation...
+            if (owner == null) batch.draw(model, getX(), getY(), getWidth(), getHeight());
+            else { //this draws the weapon flipped depending on which way the fighter is facing
+                boolean flip = owner.getFighter().isFacingRight();
+                batch.draw(model, flip ? getX() + getWidth() : getX(), getY(), flip ? -getWidth() : getWidth(), getHeight());
+            }
         }
-//        batch.draw(model, getX(), getY(), getWidth(), getHeight(), (int) getX(), (int) getY(), (int) getWidth(), (int) getHeight(), owner.getFighter().isFacingRight(), false);
+        else { //if has an animation
+            stateTime += Main.getFrameRate();
+            modelFrame = currentAnimation.getKeyFrame(stateTime, true);
+            if(currentAnimation != idleAnimation && currentAnimation.isAnimationFinished(stateTime)) currentAnimation = idleAnimation;
+
+            if (owner == null) batch.draw(modelFrame, getX(), getY(), getWidth(), getHeight());
+            else { //this draws the weapon flipped depending on which way the fighter is facing
+                boolean flip = owner.getFighter().isFacingRight();
+                batch.draw(modelFrame, flip ? getX() + getWidth() : getX(), getY(), flip ? -getWidth() : getWidth(), getHeight());
+            }
+        }
+
+        if(Main.inDebugMode) {
+            batch.end();
+            renderHitBox();
+            batch.begin();
+        }
     }
 }

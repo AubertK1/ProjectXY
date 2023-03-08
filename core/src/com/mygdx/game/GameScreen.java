@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.mygdx.game.Characters.Cyborg;
 import com.mygdx.game.Characters.Robot;
 import com.mygdx.game.Characters.Vampire;
 import com.mygdx.game.OI.Player;
@@ -27,9 +28,9 @@ public class GameScreen {
     private Texture background;
 
     //spawn points
-    Vector2 spawn1 = new Vector2(Gdx.graphics.getWidth() / 2f - 200, Gdx.graphics.getHeight() / 2f);
-    Vector2 spawn2 = new Vector2(Gdx.graphics.getWidth() / 2f + 200, Gdx.graphics.getHeight() / 2f);
-    Vector2 spawnCenter = new Vector2(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2f);
+    public static Vector2 spawn1 = new Vector2(Gdx.graphics.getWidth() / 2f - 200, Gdx.graphics.getHeight() / 2f);
+    public static Vector2 spawn2 = new Vector2(Gdx.graphics.getWidth() / 2f + 200, Gdx.graphics.getHeight() / 2f);
+    public static Vector2 spawnCenter = new Vector2(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2f);
 
     Rectangle gameBounds = new Rectangle(-600, -600, Gdx.graphics.getWidth() + 1200, Gdx.graphics.getHeight() + 1200);
 
@@ -48,22 +49,26 @@ public class GameScreen {
     //endregion
     public GameScreen() {
         // initializing everything
-        background = new Texture("assets\\textures\\stockbg.jpg");
-        platform = new Platform(new Texture("assets\\textures\\stockstage.png"));
+        background = new Texture("assets\\textures\\Night_Time_Background.png");
+        platform = new Platform(new Texture("assets\\textures\\Floating_Platform.png"));
+        platform.sizeToWidth(900);
+        platform.setHBSize(platform.getWidth(), platform.getHeight());
+        platform.setPosition((Gdx.graphics.getWidth() / 2f) - (platform.getWidth() / 2f),
+                (Gdx.graphics.getHeight() * .4f) - (platform.getHeight()));
         player1 = new Player(1);
         player2 = new Player(2);
         // setting player 1's fighter (will be moved later so the player can choose)
-        player1.setFighter(new Robot(spawn1.x, spawn1.y, player1));
-        player1.getFighter().setSize(player1.getFighter().getWidth() * 3, player1.getFighter().getHeight() * 3);
+        player1.setFighter(new Cyborg(spawn1.x, spawn1.y, player1));
+        player1.getFighter().scale(2.5f);
 
-        player2.setFighter(new Vampire(spawn2.x, spawn2.y, player2));
-        player2.getFighter().setSize(player2.getFighter().getWidth() * 3, player2.getFighter().getHeight() * 3);
+        player2.setFighter(new Robot(spawn2.x, spawn2.y, player2));
+        player2.getFighter().scale(2.5f);
 
         players.add(player1);
         players.add(player2);
 
-        Weapon sword = new Sword(Gdx.graphics.getWidth() / 2f, platform.getY() + 500);
-        sword.setSize(sword.getWidth() * 2, sword.getHeight() * 2);
+        Weapon sword = new Sword(spawnCenter.x, spawnCenter.y);
+        sword.scale(2);
         weapons.add(sword);
 
         //region screen UI
@@ -86,7 +91,7 @@ public class GameScreen {
 
         //checking if anything goes out of bounds
         for (Player player: players) {
-            if(!gameBounds.contains(player.getFighter().getX(), player.getFighter().getY())) player.getFighter().setPosition(spawnCenter.x, spawnCenter.y);
+            if(!gameBounds.contains(player.getFighter().getX(), player.getFighter().getY())) player.resetAssets();
         }
 
         //fixme Remove this later
