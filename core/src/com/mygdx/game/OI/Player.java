@@ -132,12 +132,12 @@ public class Player {
         //key presses
         switch (KEY){
             case (KeyBinds.Keys.MOVERIGHT):
-                if (fighter.isColliding(Main.gameScreen.platform) == Object.RIGHTCOLLISION) fighter.stop();
+                if (fighter.isCollidingWith(Main.gameScreen.platform) == Object.RIGHTCOLLISION) fighter.stop();
                 else if(fighter.getXVelocity() < 0) fighter.stop();
                 else fighter.moveRight();
                 break;
             case (KeyBinds.Keys.MOVELEFT):
-                if (fighter.isColliding(Main.gameScreen.platform) == Object.LEFTCOLLISION) fighter.stop();
+                if (fighter.isCollidingWith(Main.gameScreen.platform) == Object.LEFTCOLLISION) fighter.stop();
                 else if(fighter.getXVelocity() > 0) fighter.stop();
                 else fighter.moveLeft();
                 break;
@@ -151,7 +151,7 @@ public class Player {
                 if(equippedWeapon == null) {
                     Weapon interactedWeapon = null;
                     for (Weapon weapon : GameScreen.getWeapons()) {
-                        if (fighter.isColliding(weapon) != Object.NOCOLLISION && weapon.getOwner() == null){
+                        if (fighter.isCollidingWith(weapon) != Object.NOCOLLISION && weapon.getOwner() == null){
                             interactedWeapon = weapon;
                             break;
                         }
@@ -165,7 +165,7 @@ public class Player {
             case (KeyBinds.Keys.ATTACK):
                 if(equippedWeapon != null) {
                     for (Player player2 : GameScreen.getPlayers()) {
-                        if (equippedWeapon.isColliding(player2.getFighter()) != Object.NOCOLLISION) {
+                        if (equippedWeapon.isCollidingWith(player2.getFighter()) != Object.NOCOLLISION) {
                             attack(player2);
                             break;
                         }
@@ -176,7 +176,7 @@ public class Player {
                 }
                 else {
                     for (Player player2 : GameScreen.getPlayers()) {
-                        if (fighter.isColliding(player2.getFighter()) != Object.NOCOLLISION) {
+                        if (fighter.isCollidingWith(player2.getFighter()) != Object.NOCOLLISION) {
                             attack(player2);
                             break;
                         }
