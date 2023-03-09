@@ -10,9 +10,9 @@ public class KeyBinds {
      */
     final static int[] defaultKeys = new int[]{
             KeyBinds.Keys.JUMP,
-            KeyBinds.Keys.MOVELEFT,
-            KeyBinds.Keys.MOVEDOWN,
-            KeyBinds.Keys.MOVERIGHT,
+            KeyBinds.Keys.LEFT,
+            KeyBinds.Keys.DOWN,
+            KeyBinds.Keys.RIGHT,
             KeyBinds.Keys.INTERACT,
             KeyBinds.Keys.ATTACK,
             KeyBinds.Keys.TEMP
@@ -91,9 +91,9 @@ public class KeyBinds {
     }
 
     public static class Keys{
-        public static final int MOVELEFT = Input.Keys.A;
-        public static final int MOVERIGHT = Input.Keys.D;
-        public static final int MOVEDOWN = Input.Keys.S;
+        public static final int LEFT = Input.Keys.A;
+        public static final int RIGHT = Input.Keys.D;
+        public static final int DOWN = Input.Keys.S;
         public static final int JUMP = Input.Keys.W;
         public static final int INTERACT = Input.Keys.F;
         public static final int ATTACK = Input.Keys.E;

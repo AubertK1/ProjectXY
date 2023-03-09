@@ -1,13 +1,7 @@
 package com.mygdx.game.Characters;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.mygdx.game.GameScreen;
-import com.mygdx.game.HitData;
-import com.mygdx.game.Main;
-import com.mygdx.game.MovingObj;
+import com.mygdx.game.*;
 import com.mygdx.game.OI.Player;
 
 /**
@@ -47,9 +41,13 @@ public class Fighter extends MovingObj{
 
     // endregion properties
 
-    //region animation
-    Texture runSheet;
-    Animation<TextureRegion> runAnimation;
+    //region animations
+    DualAnimation runAnimation;
+    DualAnimation jumpAnimation;
+    DualAnimation fallAnimation;
+    //attacks
+    DualAnimation nLightAnimation;
+    DualAnimation sLightAnimation;
     //endregion
 
     public Fighter(float x, float y, float width, float height, boolean isCollidable, boolean isVisible, Player player) {
@@ -73,20 +71,20 @@ public class Fighter extends MovingObj{
         //endregion
 
         //region collision
-        if(this.isColliding(Main.gameScreen.platform) == BOTTOMCOLLISION){ //if touching a platform
+        if(this.isCollidingWith(Main.gameScreen.platform) == BOTTOMCOLLISION){ //if touching a platform
             canFall = false;
             stopJump();
             resetJumps();
         } else {
             canFall = true;
 
-            if(isJumping && this.isColliding(Main.gameScreen.platform) == TOPCOLLISION){
+            if(isJumping && this.isCollidingWith(Main.gameScreen.platform) == TOPCOLLISION){
                 stopJump();
                 vertVelocity = 0;
             }
         }
 
-        if(this.isColliding(Main.gameScreen.platform) == LEFTCOLLISION || this.isColliding(Main.gameScreen.platform) == RIGHTCOLLISION){
+        if(this.isCollidingWith(Main.gameScreen.platform) == LEFTCOLLISION || this.isCollidingWith(Main.gameScreen.platform) == RIGHTCOLLISION){
             stopJump();
             resetJumps();
             vertVelocity = -135;
@@ -110,6 +108,7 @@ public class Fighter extends MovingObj{
     }
 
     public HitData neutralLightAtk() {
+        swapAnimation(nLightAnimation);
         return new HitData().set(5, 2, 1.1f, TOPCOLLISION);
     }
 
@@ -172,13 +171,13 @@ public class Fighter extends MovingObj{
         horVelocity = -speed;
         isFacingRight = false;
 
-        if(runSheet != null) swapAnimation(runAnimation);
+        if(runAnimation != null) swapAnimation(runAnimation);
     }
     public void moveRight(){
         horVelocity = speed;
         isFacingRight = true;
 
-        if(runSheet != null) swapAnimation(runAnimation);
+        if(runAnimation != null) swapAnimation(runAnimation);
     }
     public void moveDown(){
         setPosition(getX(), getY() - Main.getFrameRate() * (speed / 2f));
@@ -192,6 +191,8 @@ public class Fighter extends MovingObj{
             vertVelocity = 1660;
             nextJumpFrame = GameScreen.getFrame() + 6;
             jumpsLeft--;
+
+            if(jumpAnimation != null) swapAnimation(jumpAnimation);
         }
     }
     public void stopJump(){
@@ -289,24 +290,24 @@ public class Fighter extends MovingObj{
     public void render(SpriteBatch batch) {
         player.update();
 
+        //this draws the fighter flipped depending on which way it is facing
+        boolean flip = !isFacingRight();
         if(currentAnimation == null) { //if no animation...
             //this draws the fighter flipped depending on which way it is facing
-            boolean flip = !isFacingRight();
             batch.draw(model, flip ? getX() + getWidth() : getX(), getY(), flip ? -getWidth() : getWidth(), getHeight());
         }
         else { //if has an animation
             stateTime += Main.getFrameRate();
             modelFrame = currentAnimation.getKeyFrame(stateTime, true);
+            applyHitbox(currentAnimation.getKeyHitBox(stateTime), flip);
             if(currentAnimation != idleAnimation && currentAnimation.isAnimationFinished(stateTime)) currentAnimation = idleAnimation;
 
-            //this draws the fighter flipped depending on which way it is facing
-            boolean flip = !isFacingRight();
             batch.draw(modelFrame, flip ? getX() + getWidth() : getX(), getY(), flip ? -getWidth() : getWidth(), getHeight());
         }
 
         if(Main.inDebugMode) {
             batch.end();
-            renderHitBox();
+            renderHurtBox();
             batch.begin();
         }
     }

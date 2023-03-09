@@ -31,12 +31,12 @@ public class Weapon extends MovingObj {
         applyPhysics();
 
         //region collisions
-        if(this.isColliding(Main.gameScreen.platform) == BOTTOMCOLLISION){ //if touching a platform
+        if(this.isCollidingWith(Main.gameScreen.platform) == BOTTOMCOLLISION){ //if touching a platform
             canFall = false;
         } else {
             canFall = true;
         }
-        if(this.isColliding(Main.gameScreen.platform) == LEFTCOLLISION || this.isColliding(Main.gameScreen.platform) == RIGHTCOLLISION){
+        if(this.isCollidingWith(Main.gameScreen.platform) == LEFTCOLLISION || this.isCollidingWith(Main.gameScreen.platform) == RIGHTCOLLISION){
             stop();
         }
         //endregion
@@ -95,7 +95,7 @@ public class Weapon extends MovingObj {
 
         if(Main.inDebugMode) {
             batch.end();
-            renderHitBox();
+            renderHurtBox();
             batch.begin();
         }
     }

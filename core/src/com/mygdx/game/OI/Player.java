@@ -94,12 +94,12 @@ public class Player {
                 fighterHitData = fighter.neutralLightAtk();
                 if(equippedWeapon != null) weaponHitData = equippedWeapon.hit();
                 break;
-            case (KeyBinds.Keys.MOVERIGHT):
-            case (KeyBinds.Keys.MOVELEFT):
+            case (KeyBinds.Keys.RIGHT):
+            case (KeyBinds.Keys.LEFT):
                 fighterHitData = fighter.sideLightAtk();
                 if(equippedWeapon != null) weaponHitData = equippedWeapon.hit();
                 break;
-            case (KeyBinds.Keys.MOVEDOWN):
+            case (KeyBinds.Keys.DOWN):
                 fighterHitData = fighter.downLightAtk();
                 if(equippedWeapon != null) weaponHitData = equippedWeapon.hit();
                 break;
@@ -131,27 +131,27 @@ public class Player {
         //registers player's input
         //key presses
         switch (KEY){
-            case (KeyBinds.Keys.MOVERIGHT):
-                if (fighter.isColliding(Main.gameScreen.platform) == Object.RIGHTCOLLISION) fighter.stop();
+            case (KeyBinds.Keys.RIGHT):
+                if (fighter.isCollidingWith(Main.gameScreen.platform) == Object.RIGHTCOLLISION) fighter.stop();
                 else if(fighter.getXVelocity() < 0) fighter.stop();
                 else fighter.moveRight();
                 break;
-            case (KeyBinds.Keys.MOVELEFT):
-                if (fighter.isColliding(Main.gameScreen.platform) == Object.LEFTCOLLISION) fighter.stop();
+            case (KeyBinds.Keys.LEFT):
+                if (fighter.isCollidingWith(Main.gameScreen.platform) == Object.LEFTCOLLISION) fighter.stop();
                 else if(fighter.getXVelocity() > 0) fighter.stop();
                 else fighter.moveLeft();
                 break;
             case (KeyBinds.Keys.JUMP):
                 if(!fighter.isJumping()) fighter.jump();
                 break;
-            case (KeyBinds.Keys.MOVEDOWN):
+            case (KeyBinds.Keys.DOWN):
                 if(fighter.canFall()) fighter.moveDown();
                 break;
             case (KeyBinds.Keys.INTERACT):
                 if(equippedWeapon == null) {
                     Weapon interactedWeapon = null;
                     for (Weapon weapon : GameScreen.getWeapons()) {
-                        if (fighter.isColliding(weapon) != Object.NOCOLLISION && weapon.getOwner() == null){
+                        if (fighter.isCollidingWith(weapon) != Object.NOCOLLISION && weapon.getOwner() == null){
                             interactedWeapon = weapon;
                             break;
                         }
@@ -165,7 +165,7 @@ public class Player {
             case (KeyBinds.Keys.ATTACK):
                 if(equippedWeapon != null) {
                     for (Player player2 : GameScreen.getPlayers()) {
-                        if (equippedWeapon.isColliding(player2.getFighter()) != Object.NOCOLLISION) {
+                        if (equippedWeapon.isCollidingWith(player2.getFighter()) != Object.NOCOLLISION) {
                             attack(player2);
                             break;
                         }
@@ -176,7 +176,7 @@ public class Player {
                 }
                 else {
                     for (Player player2 : GameScreen.getPlayers()) {
-                        if (fighter.isColliding(player2.getFighter()) != Object.NOCOLLISION) {
+                        if (fighter.isCollidingWith(player2.getFighter()) != Object.NOCOLLISION) {
                             attack(player2);
                             break;
                         }

@@ -40,7 +40,7 @@ public class Platform extends Object {
 
         if(Main.inDebugMode) {
             batch.end();
-            renderHitBox();
+            renderHurtBox();
             batch.begin();
         }
     }

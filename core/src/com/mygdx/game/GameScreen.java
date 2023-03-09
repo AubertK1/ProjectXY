@@ -10,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mygdx.game.Characters.Cyborg;
 import com.mygdx.game.Characters.Robot;
-import com.mygdx.game.Characters.Vampire;
 import com.mygdx.game.OI.Player;
 import com.mygdx.game.Weapons.Sword;
 import com.mygdx.game.Weapons.Weapon;
@@ -50,11 +49,11 @@ public class GameScreen {
     public GameScreen() {
         // initializing everything
         background = new Texture("assets\\textures\\Night_Time_Background.png");
-        platform = new Platform(new Texture("assets\\textures\\Floating_Platform.png"));
-        platform.sizeToWidth(900);
-        platform.setHBSize(platform.getWidth(), platform.getHeight());
-        platform.setPosition((Gdx.graphics.getWidth() / 2f) - (platform.getWidth() / 2f),
-                (Gdx.graphics.getHeight() * .4f) - (platform.getHeight()));
+        platform = new Platform(new Texture("assets\\textures\\Platforms\\Floating_Platform.png"));
+        platform.setHurtbox(43, 35, 122, 45);
+        platform.scale(8);
+        platform.setPositionFromHB((Gdx.graphics.getWidth() / 2f) - (platform.getHBWidth() / 2f),
+                (Gdx.graphics.getHeight() * .26f) - (platform.getHBHeight() / 2f));
         player1 = new Player(1);
         player2 = new Player(2);
         // setting player 1's fighter (will be moved later so the player can choose)
