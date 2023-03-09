@@ -6,6 +6,8 @@ public class HitData {
     public float knockbackMultiplier = 1;
     public int direction = Object.TOPCOLLISION;
 
+    public float hitStun = 0;
+
     //region shortcuts
     public static int IGNORE = -20000;  //if you are using a set function and don't want to change a certain variable
     public static int CLEAR = 0; //if you want to reset the value of a variable back to 0;

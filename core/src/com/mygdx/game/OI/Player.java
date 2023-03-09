@@ -68,28 +68,41 @@ public class Player {
 
         equippedWeapon = null;
     }
+    public void checkAttack(){
+        if(equippedWeapon == null) {
+            for (Player player2 : GameScreen.getPlayers()) {
+                if (Object.isColliding(getFighter().getHitboxBounds(), player2.getFighter().getHurtboxBounds()) != Object.NOCOLLISION) {
+                    attack(player2);
+                    break;
+                }
+                else if(player2 == GameScreen.getPlayers().get(GameScreen.getPlayers().size() - 1)){
+                    attack(null);
+                }
+            }
+        }
+    }
     public void attack(Player attackedPlayer){
         attack(attackedPlayer, 0);
     }
     public void attack(Player attackedPlayer, int bonusDamage){
-        int KEY = -10;
+        int directionKey = -10;
         HitData fighterHitData = new HitData();
         HitData weaponHitData = new HitData();
         //region finding which direction to attack
         if(playerNum == 1) { //if player 1...
-            if (Gdx.input.isKeyPressed(Input.Keys.D)) KEY = KeyBinds.convertKey(Input.Keys.D);
-            else if (Gdx.input.isKeyPressed(Input.Keys.A)) KEY = KeyBinds.convertKey(Input.Keys.A);
-            else if (Gdx.input.isKeyPressed(Input.Keys.S)) KEY = KeyBinds.convertKey(Input.Keys.S);
+            if (Gdx.input.isKeyPressed(Input.Keys.D)) directionKey = KeyBinds.convertKey(Input.Keys.D);
+            else if (Gdx.input.isKeyPressed(Input.Keys.A)) directionKey = KeyBinds.convertKey(Input.Keys.A);
+            else if (Gdx.input.isKeyPressed(Input.Keys.S)) directionKey = KeyBinds.convertKey(Input.Keys.S);
         }
         else if(playerNum == 2) { //if player 2...
             // keypresses
-            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) KEY = KeyBinds.convertKey(Input.Keys.RIGHT);
-            else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) KEY = KeyBinds.convertKey(Input.Keys.LEFT);
-            else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) KEY = KeyBinds.convertKey(Input.Keys.DOWN);
+            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) directionKey = KeyBinds.convertKey(Input.Keys.RIGHT);
+            else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) directionKey = KeyBinds.convertKey(Input.Keys.LEFT);
+            else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) directionKey = KeyBinds.convertKey(Input.Keys.DOWN);
         }
         //endregion
         //region attacking in the direction
-        switch (KEY) {
+        switch (directionKey) {
             case (-10): //if no direction
                 fighterHitData = fighter.neutralLightAtk();
                 if(equippedWeapon != null) weaponHitData = equippedWeapon.hit();
@@ -163,28 +176,7 @@ public class Player {
                 }
                 break;
             case (KeyBinds.Keys.ATTACK):
-                if(equippedWeapon != null) {
-                    for (Player player2 : GameScreen.getPlayers()) {
-                        if (equippedWeapon.isCollidingWith(player2.getFighter()) != Object.NOCOLLISION) {
-                            attack(player2);
-                            break;
-                        }
-                        else if(player2 == GameScreen.getPlayers().get(GameScreen.getPlayers().size() - 1)){
-                            attack(null);
-                        }
-                    }
-                }
-                else {
-                    for (Player player2 : GameScreen.getPlayers()) {
-                        if (fighter.isCollidingWith(player2.getFighter()) != Object.NOCOLLISION) {
-                            attack(player2);
-                            break;
-                        }
-                        else if(player2 == GameScreen.getPlayers().get(GameScreen.getPlayers().size() - 1)){
-                            attack(null);
-                        }
-                    }
-                }
+                checkAttack();
                 break;
             case (KeyBinds.Keys.TEMP): //fixme testing keybind changing. Delete later
                 KeyBinds.changeKeyBind(KeyBinds.findKeyFromDefaultKey(KeyBinds.Keys.JUMP, playerNum - 1), Input.Keys.SPACE);

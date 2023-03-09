@@ -31,8 +31,9 @@ public class Fighter extends MovingObj{
     protected boolean canFall = true; //can the player fall lower
     protected boolean isJumping = false; //is the player jumping
     protected boolean isBlocking = false; //is the player blocking
-
     protected boolean isFacingRight = true;
+
+    protected boolean isInHitStun = false;
     //endregion
 
     protected int jumpsLeft = maxJumps;
@@ -48,6 +49,10 @@ public class Fighter extends MovingObj{
     //attacks
     DualAnimation nLightAnimation;
     DualAnimation sLightAnimation;
+    //endregion
+
+    //region attacks
+    boolean isAttacking = false;
     //endregion
 
     public Fighter(float x, float y, float width, float height, boolean isCollidable, boolean isVisible, Player player) {
