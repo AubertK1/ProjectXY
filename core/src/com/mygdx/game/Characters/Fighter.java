@@ -52,7 +52,13 @@ public class Fighter extends MovingObj{
     //endregion
 
     //region attacks
-    boolean isAttacking = false;
+    protected boolean isAttacking = false;
+    public enum Attack {
+        NOATTACK,
+        NLIGHT, SLIGHT, DLIGHT
+    }
+    protected Attack currentATK = Attack.NOATTACK;
+
     //endregion
 
     public Fighter(float x, float y, float width, float height, boolean isCollidable, boolean isVisible, Player player) {
@@ -112,16 +118,19 @@ public class Fighter extends MovingObj{
         return new HitData();
     }
 
-    public HitData neutralLightAtk() {
+    public void neutralLightAtk() {
         swapAnimation(nLightAnimation);
-        return new HitData().set(5, 2, 1.1f, TOPCOLLISION);
+        boolean hit = player.checkHit() != null;
+        currentATK = Attack.NLIGHT;
+        if(hit) player.strike(new HitData().set(5, 2, 1.1f, TOPCOLLISION, 0));
     }
 
     public HitData sideLightAtk() {
+        currentATK = Attack.SLIGHT;
         int direction = RIGHTCOLLISION;
         if (horVelocity < 0) direction = LEFTCOLLISION;
         else if (horVelocity == 0) direction = isFacingRight() ? RIGHTCOLLISION : LEFTCOLLISION;
-        return new HitData().set(5, 2, 1.1f, direction);
+        return new HitData().set(5, 2, 1.1f, direction, 0);
     }
 
     public HitData downLightAtk() {
@@ -277,6 +286,10 @@ public class Fighter extends MovingObj{
         resetJumps();
 
         setPosition(GameScreen.spawnCenter.x, GameScreen.spawnCenter.y);
+    }
+
+    public Attack getCurrentATK(){
+        return currentATK;
     }
 
     /**

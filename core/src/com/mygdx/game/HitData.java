@@ -16,11 +16,12 @@ public class HitData {
     public HitData() {
     }
 
-    public HitData set(int damage, int fortDamage, float knockbackMultiplier, int direction){
+    public HitData set(int damage, int fortDamage, float knockbackMultiplier, int direction, float hitStun){
         if(damage != IGNORE) this.damage = damage;
         if(fortDamage != IGNORE) this.fortDamage = fortDamage;
         if(knockbackMultiplier != IGNORE) this.knockbackMultiplier = knockbackMultiplier;
         if(direction != IGNORE) this.direction = direction;
+        if(hitStun != IGNORE) this.hitStun = hitStun;
 
         return this;
     }
@@ -29,6 +30,7 @@ public class HitData {
         fortDamage = 0;
         knockbackMultiplier = 0;
         direction = 0;
+        hitStun = 0;
 
         return this;
     }
