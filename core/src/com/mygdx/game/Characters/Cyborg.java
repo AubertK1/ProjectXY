@@ -22,11 +22,13 @@ public class Cyborg extends Fighter{
         fallAnimation = animate(new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_Falling_Sheet.png"), 2, 2, .15f);
 
         //region attack animations
-        nLightAnimation = animate(new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_Falling_Sheet.png"), 2, 2, .15f);
-        nLightAnimation.setHitboxes(new Rectangle(31, 17, 2, 6),
-                new Rectangle(31, 17, 4, 6),
-                new Rectangle(31, 17, 6, 6),
-                new Rectangle(31, 17, 10, 6));
+        nLightAnimation = animate(new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_Attack1_Sheet.png"), 2, 3, .15f);
+        nLightAnimation.setHitboxes(new Rectangle(0, 0, 0, 0),
+                new Rectangle(0, 19, 5, 8),
+                new Rectangle(4, 22, 27, 6),
+                new Rectangle(12, 20, 25, 7),
+                new Rectangle(23, 20, 15, 7),
+                new Rectangle(24, 20, 14, 8));
         //endregion
         //endregion
     }

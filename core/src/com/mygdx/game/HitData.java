@@ -6,7 +6,7 @@ public class HitData {
     public float knockbackMultiplier = 1;
     public int direction = Object.TOPCOLLISION;
 
-    public float hitStun = 0;
+    public int hitStunDuration = 0;
 
     //region shortcuts
     public static int IGNORE = -20000;  //if you are using a set function and don't want to change a certain variable
@@ -16,12 +16,12 @@ public class HitData {
     public HitData() {
     }
 
-    public HitData set(int damage, int fortDamage, float knockbackMultiplier, int direction, float hitStun){
+    public HitData set(int damage, int fortDamage, float knockbackMultiplier, int direction, int hitStun){
         if(damage != IGNORE) this.damage = damage;
         if(fortDamage != IGNORE) this.fortDamage = fortDamage;
         if(knockbackMultiplier != IGNORE) this.knockbackMultiplier = knockbackMultiplier;
         if(direction != IGNORE) this.direction = direction;
-        if(hitStun != IGNORE) this.hitStun = hitStun;
+        if(hitStun != IGNORE) this.hitStunDuration = hitStun;
 
         return this;
     }
@@ -30,7 +30,7 @@ public class HitData {
         fortDamage = 0;
         knockbackMultiplier = 0;
         direction = 0;
-        hitStun = 0;
+        hitStunDuration = 0;
 
         return this;
     }

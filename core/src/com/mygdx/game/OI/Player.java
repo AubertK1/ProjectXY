@@ -123,66 +123,19 @@ public class Player {
         }
         //endregion
     }
-/*
-    public void attack(Player attackedPlayer){
-        attack(attackedPlayer, 0);
-    }
-    public void attack(Player attackedPlayer, int bonusDamage){
-        int directionKey = -10;
-        HitData fighterHitData = new HitData();
-        HitData weaponHitData = new HitData();
-        //region finding which direction to attack
-        if(playerNum == 1) { //if player 1...
-            if (Gdx.input.isKeyPressed(Input.Keys.D)) directionKey = KeyBinds.convertKey(Input.Keys.D);
-            else if (Gdx.input.isKeyPressed(Input.Keys.A)) directionKey = KeyBinds.convertKey(Input.Keys.A);
-            else if (Gdx.input.isKeyPressed(Input.Keys.S)) directionKey = KeyBinds.convertKey(Input.Keys.S);
-        }
-        else if(playerNum == 2) { //if player 2...
-            // keypresses
-            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) directionKey = KeyBinds.convertKey(Input.Keys.RIGHT);
-            else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) directionKey = KeyBinds.convertKey(Input.Keys.LEFT);
-            else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) directionKey = KeyBinds.convertKey(Input.Keys.DOWN);
-        }
-        //endregion
-        //region attacking in the direction
-        switch (directionKey) {
-            case (-10): //if no direction
-                fighterHitData = fighter.neutralLightAtk();
-                if(equippedWeapon != null) weaponHitData = equippedWeapon.hit();
-                break;
-            case (KeyBinds.Keys.RIGHT):
-            case (KeyBinds.Keys.LEFT):
-                fighterHitData = fighter.sideLightAtk();
-                if(equippedWeapon != null) weaponHitData = equippedWeapon.hit();
-                break;
-            case (KeyBinds.Keys.DOWN):
-                fighterHitData = fighter.downLightAtk();
-                if(equippedWeapon != null) weaponHitData = equippedWeapon.hit();
-                break;
-        }
-        //endregion
-
-        if(attackedPlayer != null) {
-            float avgKBMultiplier = fighterHitData.knockbackMultiplier;
-            if (equippedWeapon != null)
-                avgKBMultiplier = (fighterHitData.knockbackMultiplier + weaponHitData.knockbackMultiplier) / 2f;
-            HitData attack = new HitData().set(fighterHitData.damage + weaponHitData.damage + bonusDamage,
-                    HitData.IGNORE, avgKBMultiplier, fighterHitData.direction, fighterHitData.hitStun);
-            attackedPlayer.takeDamage(attack, fighter.isFacingRight());
-        }
-    }
-*/
-    public void strike(HitData fighterHitData){
+    public void strike(Player struckPlayer, HitData fighterHitData){
         float avgKBMultiplier = fighterHitData.knockbackMultiplier;
         if (equippedWeapon != null)
             avgKBMultiplier = (fighterHitData.knockbackMultiplier);
-        HitData attack = new HitData().set(fighterHitData.damage,
-                HitData.IGNORE, avgKBMultiplier, fighterHitData.direction, fighterHitData.hitStun);
-        checkHit().takeDamage(attack, fighter.isFacingRight());
+        HitData attackData = new HitData().set(fighterHitData.damage,
+                HitData.IGNORE, avgKBMultiplier, fighterHitData.direction, fighterHitData.hitStunDuration);
+
+        struckPlayer.takeDamage(attackData, fighter.isFacingRight());
     }
     public void takeDamage(HitData hitData, boolean preferRight){
         fighter.takeDamage(hitData.damage);
         fighter.knockBack(hitData.direction, hitData.knockbackMultiplier, preferRight);
+        fighter.stun(hitData.hitStunDuration);
     }
     //endregion
 

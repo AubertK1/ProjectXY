@@ -39,6 +39,7 @@ public class Fighter extends MovingObj{
     protected int jumpsLeft = maxJumps;
     //the next frame they'll be able to jump at
     protected int nextJumpFrame = 0;
+    protected int nextUnstunFrame = 0;
 
     // endregion properties
 
@@ -52,13 +53,12 @@ public class Fighter extends MovingObj{
     //endregion
 
     //region attacks
-    protected boolean isAttacking = false;
     public enum Attack {
         NOATTACK,
         NLIGHT, SLIGHT, DLIGHT
     }
     protected Attack currentATK = Attack.NOATTACK;
-
+    protected boolean attackAlreadyHit = false;
     //endregion
 
     public Fighter(float x, float y, float width, float height, boolean isCollidable, boolean isVisible, Player player) {
@@ -70,13 +70,14 @@ public class Fighter extends MovingObj{
         float deltaTime = Main.getFrameRate();
 
         //region gravity
-        if (canFall) {
-            vertVelocity += GameScreen.GRAVITY;
-            if (vertVelocity < -1000) vertVelocity = -1000; //maximum downward velocity
-//            textureBounds.y += frameRate * vertVelocity;
-            setPosition(getX(), getY() + (deltaTime * vertVelocity));
+        if(!isInHitStun) {
+            if (canFall) {
+                vertVelocity += GameScreen.GRAVITY;
+                if (vertVelocity < -1000) vertVelocity = -1000; //maximum downward velocity
+            }
+            else if (vertVelocity < 0) vertVelocity = 0;
         }
-//        textureBounds.x += frameRate * horVelocity;
+        setPosition(getX(), getY() + (deltaTime * vertVelocity));
         setPosition(getX() + (deltaTime * horVelocity), getY());
         slowDown();
         //endregion
@@ -106,6 +107,8 @@ public class Fighter extends MovingObj{
         if (GameScreen.getFrame() >= nextJumpFrame) {
             isJumping = false;
         }
+        if(currentATK == Attack.NOATTACK) attackAlreadyHit = false;
+        if(GameScreen.getFrame() >= nextUnstunFrame) isInHitStun = false;
     }
 
     /**
@@ -119,10 +122,38 @@ public class Fighter extends MovingObj{
     }
 
     public void neutralLightAtk() {
+        if(nLightAnimation.isAnimationFinished(stateTime)){
+            currentATK = Attack.NOATTACK;
+            stateTime = 0;
+            return;
+        }
         swapAnimation(nLightAnimation);
-        boolean hit = player.checkHit() != null;
+        Player struckPlayer = player.checkHit();
+        boolean hit = struckPlayer != null;
         currentATK = Attack.NLIGHT;
-        if(hit) player.strike(new HitData().set(5, 2, 1.1f, TOPCOLLISION, 0));
+        int atkFrame = nLightAnimation.getKeyFrameIndex(stateTime);
+        if(hit){
+            int damage = attackAlreadyHit ? 0 : 5;
+            switch (atkFrame){
+                case 1:
+                    player.strike(struckPlayer, new HitData().set(damage, 2, .01f, TOPCOLLISION, 0));
+                    break;
+                case 2:
+                    player.strike(struckPlayer, new HitData().set(damage, 2, .03f, TOPCOLLISION, 0));
+                    break;
+                case 3:
+                    player.strike(struckPlayer, new HitData().set(damage, 2, .02f, TOPCOLLISION, 0));
+                    break;
+                case 4:
+                    player.strike(struckPlayer, new HitData().set(damage, 2, .04f, TOPCOLLISION, 0));
+                    break;
+                case 5:
+                    player.strike(struckPlayer, new HitData().set(damage, 2, 1.1f, TOPCOLLISION, 0));
+                    break;
+            }
+            attackAlreadyHit = true;
+//            player.strike(struckPlayer, new HitData().set(damage, 2, 1.1f, TOPCOLLISION, 0));
+        }
     }
 
     public HitData sideLightAtk() {
@@ -185,13 +216,13 @@ public class Fighter extends MovingObj{
         horVelocity = -speed;
         isFacingRight = false;
 
-        if(runAnimation != null) swapAnimation(runAnimation);
+        if(runAnimation != null && currentATK == Attack.NOATTACK) swapAnimation(runAnimation);
     }
     public void moveRight(){
         horVelocity = speed;
         isFacingRight = true;
 
-        if(runAnimation != null) swapAnimation(runAnimation);
+        if(runAnimation != null && currentATK == Attack.NOATTACK) swapAnimation(runAnimation);
     }
     public void moveDown(){
         setPosition(getX(), getY() - Main.getFrameRate() * (speed / 2f));
@@ -247,6 +278,10 @@ public class Fighter extends MovingObj{
                 vertVelocity = -baseVertKB * multiplier;
                 break;
         }
+    }
+    public void stun(int duration){
+        isInHitStun = true;
+        nextUnstunFrame = GameScreen.getFrame() + duration;
     }
 
     public boolean isJumping() {
