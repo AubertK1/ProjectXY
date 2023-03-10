@@ -16,6 +16,7 @@ public abstract class Object {
     protected Rectangle textureBounds;
     protected Rectangle hurtboxBounds;
     protected Rectangle hitbox = new Rectangle(0,0,0,0);
+    protected Point hitboxFP = new Point(-1, -1);
 
     // hitbox side minus texture side. How far the HB's side is away from the texture's side
     private float HBLeftOffset = 0, HBRightOffset = 0, HBTopOffset = 0, HBBottomOffset = 0;
@@ -178,6 +179,10 @@ public abstract class Object {
         shapeRenderer.rect(hurtboxBounds.x, hurtboxBounds.y, hurtboxBounds.width, hurtboxBounds.height);
         shapeRenderer.setColor(new Color(Color.ORANGE));
         shapeRenderer.rect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+        if(hitboxFP.x != -1) {
+            shapeRenderer.setColor(new Color(Color.RED));
+            shapeRenderer.rect((float) hitboxFP.getX()-2, (float) hitboxFP.getY()-2, 4, 4);
+        }
         shapeRenderer.end();
     }
     public Animation<TextureRegion> animate(Texture animationSheet){
@@ -198,16 +203,29 @@ public abstract class Object {
         return new DualAnimation(frameDuration, animFrames);
     }
     public void swapAnimation(DualAnimation newAnimation){
-        if(newAnimation == null || currentAnimation == newAnimation) return;
+        swapAnimation(newAnimation, false);
+    }
+    public void swapAnimation(DualAnimation newAnimation, boolean forceReset){
+        if(!forceReset && (newAnimation == null || currentAnimation == newAnimation)) return;
 
         currentAnimation = newAnimation;
         stateTime = 0;
     }
 
-    public Rectangle applyHitbox(Rectangle hitboxBounds, boolean flip){
-        return this.hitbox = new Rectangle(getX() + ((flip ? (getWidth() / scale) - hitboxBounds.getX() - hitboxBounds.getWidth() : hitboxBounds.getX()) * scale),
+    public void applyHitbox(Rectangle hitboxBounds, boolean flip){
+        this.hitbox.set(getX() + ((flip ? (getWidth() / scale) - hitboxBounds.getX() - hitboxBounds.getWidth() : hitboxBounds.getX()) * scale),
                 getY() + (hitboxBounds.getY() * scale),
                 hitboxBounds.getWidth() * scale, hitboxBounds.getHeight() * scale);
+    }
+    public void applyFocalPoint(Point focalPoint, boolean flip){
+        if(focalPoint.getX() == -1 && focalPoint.getY() == -1) {
+            this.hitboxFP.setLocation(-1, -1);
+            return;
+        }
+        this.hitboxFP.setLocation(
+                getX() + ((flip ? (getWidth() / scale) - focalPoint.getX(): focalPoint.getX()) * scale),
+                getY() + (focalPoint.getY() * scale)
+        );
     }
     /**
      * checks if this object is colliding with object o

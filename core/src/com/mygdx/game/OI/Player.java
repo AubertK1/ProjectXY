@@ -9,6 +9,8 @@ import com.mygdx.game.Characters.Fighter;
 import com.mygdx.game.Object;
 import com.mygdx.game.Weapons.Weapon;
 
+import java.awt.*;
+
 /**
  * The actual player. This is what is directly being affected by the user, and it uses inputs
  * to call the Fighter class methods.
@@ -137,6 +139,9 @@ public class Player {
         fighter.knockBack(hitData.direction, hitData.knockbackMultiplier, preferRight);
         fighter.stun(hitData.hitStunDuration);
     }
+    public void pull(Player pulledPlayer, Point point, float time){
+        pulledPlayer.getFighter().pullTo(point, time);
+    }
     //endregion
 
     /**
@@ -153,15 +158,18 @@ public class Player {
             case (KeyBinds.Keys.RIGHT):
                 if (fighter.isCollidingWith(Main.gameScreen.platform) == Object.RIGHTCOLLISION) fighter.stop();
                 else if(fighter.getXVelocity() < 0) fighter.stop();
+                else if (fighter.isAttacking());
                 else fighter.moveRight();
                 break;
             case (KeyBinds.Keys.LEFT):
                 if (fighter.isCollidingWith(Main.gameScreen.platform) == Object.LEFTCOLLISION) fighter.stop();
                 else if(fighter.getXVelocity() > 0) fighter.stop();
+                else if (fighter.isAttacking());
                 else fighter.moveLeft();
                 break;
             case (KeyBinds.Keys.JUMP):
-                if(!fighter.isJumping()) fighter.jump();
+                if (fighter.isAttacking());
+                else if(!fighter.isJumping()) fighter.jump();
                 break;
             case (KeyBinds.Keys.DOWN):
                 if(fighter.canFall()) fighter.moveDown();
