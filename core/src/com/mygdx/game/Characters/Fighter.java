@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.*;
 import com.mygdx.game.OI.Player;
 
+import java.awt.*;
+
 /**
  * All fighters will extend from this class. It declares the basic properties
  * every fighter will have
@@ -15,7 +17,7 @@ public class Fighter extends MovingObj{
     // region properties
 
     // the fighter will be assigned to a player when chosen
-    private Player player;
+    protected Player player;
 
     //region stats
     protected static int maxJumps = 3;
@@ -31,13 +33,15 @@ public class Fighter extends MovingObj{
     protected boolean canFall = true; //can the player fall lower
     protected boolean isJumping = false; //is the player jumping
     protected boolean isBlocking = false; //is the player blocking
-
     protected boolean isFacingRight = true;
+
+    protected boolean isInHitStun = false;
     //endregion
 
     protected int jumpsLeft = maxJumps;
     //the next frame they'll be able to jump at
     protected int nextJumpFrame = 0;
+    protected int nextUnstunFrame = 0;
 
     // endregion properties
 
@@ -50,6 +54,15 @@ public class Fighter extends MovingObj{
     DualAnimation sLightAnimation;
     //endregion
 
+    //region attacks
+    public enum Attack {
+        NOATTACK,
+        NLIGHT, SLIGHT, DLIGHT
+    }
+    protected Attack currentATK = Attack.NOATTACK;
+    protected boolean attackAlreadyHit = false;
+    //endregion
+
     public Fighter(float x, float y, float width, float height, boolean isCollidable, boolean isVisible, Player player) {
         super(x, y, width, height, isCollidable, isVisible);
         this.player = player;
@@ -59,13 +72,15 @@ public class Fighter extends MovingObj{
         float deltaTime = Main.getFrameRate();
 
         //region gravity
-        if (canFall) {
-            vertVelocity += GameScreen.GRAVITY;
-            if (vertVelocity < -1000) vertVelocity = -1000; //maximum downward velocity
-//            textureBounds.y += frameRate * vertVelocity;
-            setPosition(getX(), getY() + (deltaTime * vertVelocity));
+        if(!isInHitStun) {
+            if (canFall) {
+                vertVelocity += GameScreen.GRAVITY;
+                if(vertVelocity < 0 && !isAttacking()) swapAnimation(fallAnimation);
+                if (vertVelocity < -1000) vertVelocity = -1000; //maximum downward velocity
+            }
+            else if (vertVelocity < 0) vertVelocity = 0;
         }
-//        textureBounds.x += frameRate * horVelocity;
+        setPosition(getX(), getY() + (deltaTime * vertVelocity));
         setPosition(getX() + (deltaTime * horVelocity), getY());
         slowDown();
         //endregion
@@ -95,6 +110,8 @@ public class Fighter extends MovingObj{
         if (GameScreen.getFrame() >= nextJumpFrame) {
             isJumping = false;
         }
+        if(currentATK == Attack.NOATTACK) attackAlreadyHit = false;
+        if(GameScreen.getFrame() >= nextUnstunFrame) isInHitStun = false;
     }
 
     /**
@@ -103,64 +120,55 @@ public class Fighter extends MovingObj{
     // region attacks
 
     // region light attacks
-    public HitData upLightAtk() {
-        return new HitData();
+    public void upLightAtk() {
+
     }
 
-    public HitData neutralLightAtk() {
-        swapAnimation(nLightAnimation);
-        return new HitData().set(5, 2, 1.1f, TOPCOLLISION);
+    public void neutralLightAtk() {
+
     }
 
-    public HitData sideLightAtk() {
-        int direction = RIGHTCOLLISION;
-        if (horVelocity < 0) direction = LEFTCOLLISION;
-        else if (horVelocity == 0) direction = isFacingRight() ? RIGHTCOLLISION : LEFTCOLLISION;
-        return new HitData().set(5, 2, 1.1f, direction);
+    public void sideLightAtk() {
+
     }
 
-    public HitData downLightAtk() {
-        return new HitData();
+    public void downLightAtk() {
+         
     }
     // endregion
 
     // region heavy attacks
-    public HitData upHeavyAtk() {
-        return new HitData();
+    public void upHeavyAtk() {
+         
     }
 
-    public HitData neutralHeavyAtk() {
-        return new HitData();
+    public void neutralHeavyAtk() {
+         
     }
 
-    public HitData sideHeavyAtk() {
-        return new HitData();
+    public void sideHeavyAtk() {
+         
     }
 
-    public HitData downHeavyAtk() {
-        return new HitData();
+    public void downHeavyAtk() {
+         
     }
     // endregion
 
     // region air attacks
-    public HitData upAirAtk() {
-        return new HitData();
+    public void upAirAtk() {
     }
 
-    public HitData neutralAirAtk() {
-        return new HitData();
+    public void neutralAirAtk() {
     }
 
-    public HitData sideAirAtk() {
-        return new HitData();
+    public void sideAirAtk() {
     }
 
-    public HitData downAirAtk() {
-        return new HitData();
+    public void downAirAtk() {
     }
 
-    public HitData recoveryAtk() {
-        return new HitData();
+    public void recoveryAtk() {
     }
     // endregion
 
@@ -171,13 +179,13 @@ public class Fighter extends MovingObj{
         horVelocity = -speed;
         isFacingRight = false;
 
-        if(runAnimation != null) swapAnimation(runAnimation);
+        if(runAnimation != null && currentATK == Attack.NOATTACK && vertVelocity == 0) swapAnimation(runAnimation);
     }
     public void moveRight(){
         horVelocity = speed;
         isFacingRight = true;
 
-        if(runAnimation != null) swapAnimation(runAnimation);
+        if(runAnimation != null && currentATK == Attack.NOATTACK && vertVelocity == 0) swapAnimation(runAnimation);
     }
     public void moveDown(){
         setPosition(getX(), getY() - Main.getFrameRate() * (speed / 2f));
@@ -192,7 +200,7 @@ public class Fighter extends MovingObj{
             nextJumpFrame = GameScreen.getFrame() + 6;
             jumpsLeft--;
 
-            if(jumpAnimation != null) swapAnimation(jumpAnimation);
+            if(jumpAnimation != null) swapAnimation(jumpAnimation, true);
         }
     }
     public void stopJump(){
@@ -200,6 +208,15 @@ public class Fighter extends MovingObj{
     }
     public void resetJumps(){
         jumpsLeft = maxJumps;
+    }
+
+    public void pullTo(Point point, float time){
+        if(point.x == -1) return;
+        float deltaX = point.x - (hurtboxBounds.x + (hurtboxBounds.width / 2f));
+        float deltaY = point.y - (hurtboxBounds.y + (hurtboxBounds.height / 2f));
+
+        horVelocity = deltaX / time;
+        vertVelocity = deltaY / time;
     }
     //endregion
 
@@ -234,6 +251,10 @@ public class Fighter extends MovingObj{
                 break;
         }
     }
+    public void stun(int duration){
+        isInHitStun = true;
+        nextUnstunFrame = GameScreen.getFrame() + duration;
+    }
 
     public boolean isJumping() {
         return isJumping;
@@ -263,6 +284,10 @@ public class Fighter extends MovingObj{
         return damage;
     }
 
+    public boolean isAttacking(){
+        return !(currentATK == Attack.NOATTACK);
+    }
+
     public void reset(){
         health = maxHealth;
 
@@ -272,6 +297,10 @@ public class Fighter extends MovingObj{
         resetJumps();
 
         setPosition(GameScreen.spawnCenter.x, GameScreen.spawnCenter.y);
+    }
+
+    public Attack getCurrentATK(){
+        return currentATK;
     }
 
     /**
@@ -300,6 +329,7 @@ public class Fighter extends MovingObj{
             stateTime += Main.getFrameRate();
             modelFrame = currentAnimation.getKeyFrame(stateTime, true);
             applyHitbox(currentAnimation.getKeyHitBox(stateTime), flip);
+            applyFocalPoint(currentAnimation.getKeyFocalPoint(stateTime), flip);
             if(currentAnimation != idleAnimation && currentAnimation.isAnimationFinished(stateTime)) currentAnimation = idleAnimation;
 
             batch.draw(modelFrame, flip ? getX() + getWidth() : getX(), getY(), flip ? -getWidth() : getWidth(), getHeight());

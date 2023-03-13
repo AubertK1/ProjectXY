@@ -43,7 +43,7 @@ public class Weapon extends MovingObj {
     }
 
     public HitData hit(){
-        return new HitData().set(10, 2, 1.4f, NOCOLLISION);
+        return new HitData().set(10, 2, 1.4f, NOCOLLISION, 0);
     }
     public void launch(float hVelo, float vVelo){
         vertVelocity = vVelo;
