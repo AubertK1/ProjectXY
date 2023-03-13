@@ -71,6 +71,41 @@ public class Fighter extends MovingObj{
     public void update() {
         float deltaTime = Main.getFrameRate();
 
+        //region collisions
+        int i = 0;
+        boolean canFallChanged = false;
+        for (Platform platform: GameScreen.getPlatforms()) { //platform collisions
+            if (this.isCollidingWith(platform) == BOTTOMCOLLISION) { //if landing on a platform
+                canFall = false;
+                canFallChanged = true;
+                stopJump();
+                resetJumps();
+            } else if (!canFallChanged && i == GameScreen.getPlatforms().size()-1){
+                canFall = true;
+            }
+
+            if (this.isCollidingWith(platform) == TOPCOLLISION) { //if hitting a platform from the bottom
+                stopJump();
+                vertVelocity = 0;
+            }
+
+            if (this.isCollidingWith(platform) == LEFTCOLLISION) { //if hitting a platform from the side
+                if(horVelocity < 0) horVelocity = 0;
+                stopJump();
+                resetJumps();
+                vertVelocity = -135;
+            }
+            if (this.isCollidingWith(platform) == RIGHTCOLLISION) { //if hitting a platform from the side
+                if(horVelocity > 0) horVelocity = 0;
+                stopJump();
+                resetJumps();
+                vertVelocity = -135;
+            }
+
+            i++;
+        }
+        //endregion
+
         //region gravity
         if(!isInHitStun) {
             if (canFall) {
@@ -83,27 +118,6 @@ public class Fighter extends MovingObj{
         setPosition(getX(), getY() + (deltaTime * vertVelocity));
         setPosition(getX() + (deltaTime * horVelocity), getY());
         slowDown();
-        //endregion
-
-        //region collision
-        if(this.isCollidingWith(Main.gameScreen.platform) == BOTTOMCOLLISION){ //if touching a platform
-            canFall = false;
-            stopJump();
-            resetJumps();
-        } else {
-            canFall = true;
-
-            if(isJumping && this.isCollidingWith(Main.gameScreen.platform) == TOPCOLLISION){
-                stopJump();
-                vertVelocity = 0;
-            }
-        }
-
-        if(this.isCollidingWith(Main.gameScreen.platform) == LEFTCOLLISION || this.isCollidingWith(Main.gameScreen.platform) == RIGHTCOLLISION){
-            stopJump();
-            resetJumps();
-            vertVelocity = -135;
-        }
         //endregion
 
         //applying a jump cool down
@@ -317,7 +331,7 @@ public class Fighter extends MovingObj{
      * @param batch just put batch
      */
     public void render(SpriteBatch batch) {
-        player.update();
+        update();
 
         //this draws the fighter flipped depending on which way it is facing
         boolean flip = !isFacingRight();
