@@ -16,7 +16,7 @@ public class MainMenu {
     public MainMenu() {
         myGroup.setPosition(0,0);
 
-        String myString = "CLICK HERE";
+        String myString = "PLAY";
         final TextButton myTextbutton = new TextButton(myString,skin);
         myTextbutton.setPosition(550,550);
         myTextbutton.setSize(200,200);
