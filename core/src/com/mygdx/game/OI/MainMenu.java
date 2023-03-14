@@ -18,7 +18,7 @@ public class MainMenu {
 
         String myString = "PLAY";
         final TextButton myTextbutton = new TextButton(myString,skin);
-        myTextbutton.setPosition(100,550);
+        myTextbutton.setPosition(25,550);
         myTextbutton.setSize(200,200);
         myTextbutton.addListener(new ChangeListener() {
             @Override
