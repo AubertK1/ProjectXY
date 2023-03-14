@@ -30,7 +30,6 @@ public class Fighter extends MovingObj{
 
     //region states of being
     protected boolean isAlive = true; //is the player alive
-    protected boolean canFall = true; //can the player fall lower
     protected boolean isJumping = false; //is the player jumping
     protected boolean isBlocking = false; //is the player blocking
     protected boolean isFacingRight = true;
@@ -107,17 +106,9 @@ public class Fighter extends MovingObj{
         //endregion
 
         //region gravity
-        if(!isInHitStun) {
-            if (canFall) {
-                vertVelocity += GameScreen.GRAVITY;
-                if(vertVelocity < 0 && !isAttacking()) swapAnimation(fallAnimation);
-                if (vertVelocity < -1000) vertVelocity = -1000; //maximum downward velocity
-            }
-            else if (vertVelocity < 0) vertVelocity = 0;
-        }
-        setPosition(getX(), getY() + (deltaTime * vertVelocity));
-        setPosition(getX() + (deltaTime * horVelocity), getY());
-        slowDown();
+        applyPhysics();
+        if(vertVelocity < -100 && !isAttacking()) swapAnimation(fallAnimation);
+
         //endregion
 
         //applying a jump cool down

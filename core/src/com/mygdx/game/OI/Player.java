@@ -86,6 +86,7 @@ public class Player {
     }
     public void continueAttack(){
         switch (fighter.getCurrentATK()){
+            case NOATTACK: return;
             case NLIGHT: fighter.neutralLightAtk();
                 break;
             case SLIGHT: fighter.sideLightAtk();

@@ -52,19 +52,6 @@ public class Weapon extends MovingObj {
         //endregion
 
         applyPhysics();
-
-/*
-        //region collisions
-        if(this.isCollidingWith(Main.gameScreen.mainPlatform) == BOTTOMCOLLISION){ //if touching a platform
-            canFall = false;
-        } else {
-            canFall = true;
-        }
-        if(this.isCollidingWith(Main.gameScreen.mainPlatform) == LEFTCOLLISION || this.isCollidingWith(Main.gameScreen.mainPlatform) == RIGHTCOLLISION){
-            stop();
-        }
-        //endregion
-*/
     }
 
     public HitData hit(){
