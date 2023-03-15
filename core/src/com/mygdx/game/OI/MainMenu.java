@@ -34,7 +34,19 @@ public class MainMenu {
         aTextbutton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                myTextbutton.setText("click");
+                aTextbutton.setText("click");
+                Main.isMatchRunning = true;
+            }
+        });
+
+        String bString = "Controls";
+        final TextButton bTextbutton = new TextButton(myString,skin);
+        myTextbutton.setPosition(25,100);
+        myTextbutton.setSize(200,200);
+        bTextbutton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                bTextbutton.setText("click");
                 Main.isMatchRunning = true;
             }
         });
