@@ -27,8 +27,20 @@ public class MainMenu {
                 Main.isMatchRunning = true;
             }
         });
-
+        String aString = "SELECT CHARACTER";
+        final TextButton aTextbutton = new TextButton(aString,skin);
+        aTextbutton.setPosition(25,300);
+        aTextbutton.setSize(200,200);
+        aTextbutton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                myTextbutton.setText("click");
+                Main.isMatchRunning = true;
+            }
+        });
         myGroup.addActor(myTextbutton);
+
+
     }
     public void startDrawing(){
         stage.addActor(myGroup);
@@ -36,4 +48,6 @@ public class MainMenu {
     public void stopDrawing(){
         myGroup.remove();
     }
+
+
 }
