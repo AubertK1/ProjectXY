@@ -100,7 +100,7 @@ public class Main extends ApplicationAdapter {
 	@Override
 	public void render () {
 		//sets the background color. Later we'll set a background image over this
-		ScreenUtils.clear(new Color(0x3fc9e8ff));
+		ScreenUtils.clear(new Color(0x961d1dff));
 		batch.begin();
 
 		//if match is not being played, show main menu screen
