@@ -39,7 +39,7 @@ public class MainMenu {
             }
         });
         myGroup.addActor(myTextbutton);
-
+        myGroup.addActor(aTextbutton);
 
     }
     public void startDrawing(){
