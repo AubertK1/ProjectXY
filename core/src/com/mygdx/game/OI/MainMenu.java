@@ -16,8 +16,7 @@ public class MainMenu extends MenuScreen {
         play.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                play.setText("click");
-                Main.isMatchRunning = true;
+                Main.changeScreen("GameScreen");
             }
         });
 
@@ -26,8 +25,8 @@ public class MainMenu extends MenuScreen {
         controls.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                controls.setText("click");
-                Main.isMatchRunning = false;
+                Main.changeScreen("ControlScreen");
+
             }
         });
 
