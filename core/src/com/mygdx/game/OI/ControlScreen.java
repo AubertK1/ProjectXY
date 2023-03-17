@@ -1,7 +1,36 @@
 package com.mygdx.game.OI;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.mygdx.game.Main;
+
 public class ControlScreen extends MenuScreen{
     public ControlScreen() {
+        final TextButton play = createButton("BACK",25,550,200,200);
+        play.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+               Main.changeScreen("MainMenu");
+            }
+        });
 
+        final TextButton controls = createButton("DEFAULT",25,325,200,200);
+
+        controls.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+
+            }
+        });
+
+        final TextButton changeControls = createButton("CHANGE KEYBINDS",25,100,200,200);
+
+        controls.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+
+            }
+        });
     }
 }
