@@ -11,13 +11,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mygdx.game.Characters.Cyborg;
 import com.mygdx.game.Characters.Robot;
 import com.mygdx.game.OI.Player;
+import com.mygdx.game.OI.Screen;
 import com.mygdx.game.Weapons.Sword;
 import com.mygdx.game.Weapons.Weapon;
 
 import java.awt.*;
 import java.util.ArrayList;
 
-public class GameScreen {
+public class GameScreen extends Screen {
     private Player player1;
     private Player player2;
     private static ArrayList<Player> players = new ArrayList<>();
@@ -40,10 +41,8 @@ public class GameScreen {
     public static float GRAVITY = -115;
 
     //region UI
-    Skin skin = Main.skin;
-    Stage stage = Main.stage;
-    // Makes a new group
-    Group UI = new Group();
+
+
 
     Label p1Label, p2Label;
     //endregion
