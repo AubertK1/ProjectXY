@@ -31,7 +31,6 @@ public class Player {
      * updates the visuals or anything that needs to be updated every frame
      */
     public void update() {
-        fighter.update();
         continueAttack();
 
         //registers player's input for all inputs that can be held
@@ -87,6 +86,7 @@ public class Player {
     }
     public void continueAttack(){
         switch (fighter.getCurrentATK()){
+            case NOATTACK: return;
             case NLIGHT: fighter.neutralLightAtk();
                 break;
             case SLIGHT: fighter.sideLightAtk();
@@ -156,13 +156,13 @@ public class Player {
         //key presses
         switch (KEY){
             case (KeyBinds.Keys.RIGHT):
-                if (fighter.isCollidingWith(Main.gameScreen.platform) == Object.RIGHTCOLLISION) fighter.stop();
+                if (fighter.isCollidingWith(Main.gameScreen.mainPlatform) == Object.RIGHTCOLLISION) fighter.stop();
                 else if(fighter.getXVelocity() < 0) fighter.stop();
                 else if (fighter.isAttacking());
                 else fighter.moveRight();
                 break;
             case (KeyBinds.Keys.LEFT):
-                if (fighter.isCollidingWith(Main.gameScreen.platform) == Object.LEFTCOLLISION) fighter.stop();
+                if (fighter.isCollidingWith(Main.gameScreen.mainPlatform) == Object.LEFTCOLLISION) fighter.stop();
                 else if(fighter.getXVelocity() > 0) fighter.stop();
                 else if (fighter.isAttacking());
                 else fighter.moveLeft();
@@ -214,6 +214,8 @@ public class Player {
      * @param batch just put batch
      */
     public void renderAssets(SpriteBatch batch){
+        update();
+
         fighter.render(batch);
         if(equippedWeapon != null) equippedWeapon.render(batch);
     }

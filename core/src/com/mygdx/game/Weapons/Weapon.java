@@ -1,9 +1,6 @@
 package com.mygdx.game.Weapons;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.mygdx.game.GameScreen;
-import com.mygdx.game.HitData;
-import com.mygdx.game.Main;
-import com.mygdx.game.MovingObj;
+import com.mygdx.game.*;
 import com.mygdx.game.OI.Player;
 
 /**
@@ -28,18 +25,33 @@ public class Weapon extends MovingObj {
             return;
         }
 
-        applyPhysics();
-
         //region collisions
-        if(this.isCollidingWith(Main.gameScreen.platform) == BOTTOMCOLLISION){ //if touching a platform
-            canFall = false;
-        } else {
-            canFall = true;
-        }
-        if(this.isCollidingWith(Main.gameScreen.platform) == LEFTCOLLISION || this.isCollidingWith(Main.gameScreen.platform) == RIGHTCOLLISION){
-            stop();
+        int i = 0;
+        boolean canFallChanged = false;
+        for (Platform platform: GameScreen.getPlatforms()) { //platform collisions
+            if (this.isCollidingWith(platform) == BOTTOMCOLLISION) { //if landing on a platform
+                canFall = false;
+                canFallChanged = true;
+            } else if (!canFallChanged && i == GameScreen.getPlatforms().size()-1){
+                canFall = true;
+            }
+
+            if (this.isCollidingWith(platform) == TOPCOLLISION) { //if hitting a platform from the bottom
+                vertVelocity = 0;
+            }
+
+            if (this.isCollidingWith(platform) == LEFTCOLLISION) { //if hitting a platform from the side
+                if(horVelocity < 0) horVelocity = 0;
+            }
+            if (this.isCollidingWith(platform) == RIGHTCOLLISION) { //if hitting a platform from the side
+                if(horVelocity > 0) horVelocity = 0;
+            }
+
+            i++;
         }
         //endregion
+
+        applyPhysics();
     }
 
     public HitData hit(){

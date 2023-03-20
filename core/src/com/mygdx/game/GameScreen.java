@@ -22,8 +22,9 @@ public class GameScreen {
     private Player player2;
     private static ArrayList<Player> players = new ArrayList<>();
     private static ArrayList<Weapon> weapons = new ArrayList<>();
+    private static ArrayList<Platform> platforms = new ArrayList<>();
 
-    public Platform platform;
+    public Platform mainPlatform;
     private Texture background;
 
     //spawn points
@@ -49,11 +50,21 @@ public class GameScreen {
     public GameScreen() {
         // initializing everything
         background = new Texture("assets\\textures\\Night_Time_Background.png");
-        platform = new Platform(new Texture("assets\\textures\\Platforms\\Floating_Platform.png"));
-        platform.setHurtbox(43, 35, 122, 45);
-        platform.scale(8);
-        platform.setPositionFromHB((Gdx.graphics.getWidth() / 2f) - (platform.getHBWidth() / 2f),
-                (Gdx.graphics.getHeight() * .26f) - (platform.getHBHeight() / 2f));
+
+        Texture mainPTex = new Texture("assets\\textures\\Platforms\\Floating_Platform.png");
+        mainPlatform = new Platform((Gdx.graphics.getWidth() / 2f) - (mainPTex.getWidth() / 2f),
+                (Gdx.graphics.getHeight() * .4f) - (mainPTex.getHeight()), mainPTex);
+        mainPlatform.setHurtbox(43, 35, 122, 45);
+        mainPlatform.scale(8);
+        mainPlatform.setPositionFromHB((Gdx.graphics.getWidth() / 2f) - (mainPlatform.getHBWidth() / 2f),
+                (Gdx.graphics.getHeight() * .26f) - (mainPlatform.getHBHeight() / 2f));
+        platforms.add(mainPlatform);
+
+        Platform platform2 = new Platform(200, 600, new Texture("assets\\textures\\Platforms\\Neon_Platform_Sheet.png"), 5, 2);
+        platform2.setHurtbox(39, 8, 135, 89);
+        platform2.scale(2);
+        platforms.add(platform2);
+
         player1 = new Player(1);
         player2 = new Player(2);
         // setting player 1's fighter (will be moved later so the player can choose)
@@ -108,6 +119,9 @@ public class GameScreen {
     public static ArrayList<Weapon> getWeapons(){
         return weapons;
     }
+    public static ArrayList<Platform> getPlatforms(){
+        return platforms;
+    }
     public static int getFrame(){
         return FRAMECOUNT;
     }
@@ -126,7 +140,10 @@ public class GameScreen {
         update();
 
         batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        platform.render(batch);
+//        mainPlatform.render(batch);
+        for (Platform platform: platforms) {
+            platform.render(batch);
+        }
         for (Weapon weapon: weapons) {
             if(weapon.getOwner() == null) weapon.render(batch);
         }
