@@ -25,6 +25,7 @@ public class Cyborg extends Fighter{
         fallAnimation = animate(new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_Falling_Sheet.png"), 2, 2, .15f);
 
         //region attack animations
+        //region side light
         sLightAnimation = animate(new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_Attack1_Sheet.png"), 2, 3, .085f);
         sLightAnimation.setHitboxes(new Rectangle(0, 0, 0, 0),
                 new Rectangle(0, 19, 5, 8),
@@ -39,6 +40,24 @@ public class Cyborg extends Fighter{
                 new Point(38, 25),
                 new Point(-1, -1));
         //endregion
+        //region neutral light
+        nLightAnimation = animate(new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_Attack2_Sheet.png"), 1, 7, .085f);
+        nLightAnimation.setHitboxes(new Rectangle(0, 0, 0, 0),
+                new Rectangle(0, 0, 0, 0),
+                new Rectangle(23, 20, 9, 10),
+                new Rectangle(23, 20, 13, 10),
+                new Rectangle(27, 18, 17, 12),
+                new Rectangle(27, 20, 22, 8),
+                new Rectangle(27, 20, 21, 8));
+        nLightAnimation.setFocalPoints(new Point(-1, -1),
+                new Point(-1, -1),
+                new Point(26, 28),
+                new Point(33, 25),
+                new Point(38, 23),
+                new Point(43, 20),
+                new Point(-1, -1));
+        //endregion
+        //endregion
         //endregion
     }
 
@@ -48,40 +67,69 @@ public class Cyborg extends Fighter{
     }
 
     public void neutralLightAtk() {
-//        currentATK = Attack.NLIGHT;
-
-    }
-
-    public void sideLightAtk() {
-        if(sLightAnimation.isAnimationFinished(stateTime)){
+        if(nLightAnimation.isAnimationFinished(stateTime)){
+            //ending the attack and resetting values
             currentATK = Attack.NOATTACK;
             stateTime = 0;
             return;
         }
+        currentATK = Attack.NLIGHT;
+        swapAnimation(nLightAnimation);
+        Player struckPlayer = player.checkHit();
+        boolean hit = struckPlayer != null;
+        int atkFrame = nLightAnimation.getKeyFrameIndex(stateTime);
+        int direction = isFacingRight ? UPRIGHT : UPLEFT;
+        if(hit){
+            int damage = attackAlreadyHit ? 0 : 5;
+            float deltaT = nLightAnimation.getFrameDuration();
+            switch (atkFrame){
+                case 1:
+                    player.strike(struckPlayer, new HitData().set(damage, 2, 0, direction, 3));
+                    break;
+                case 2:
+                case 3:
+                case 4:
+                    player.strike(struckPlayer, new HitData().set(damage, 2, 0, direction, 3));
+                    player.pull(struckPlayer, hitboxFocalPoint, deltaT);
+                    break;
+                case 5:
+                    player.strike(struckPlayer, new HitData().set(damage, 2, 1.1f, direction, 10));
+                    break;
+            }
+            attackAlreadyHit = true;
+        }
+    }
+
+    public void sideLightAtk() {
+        if(sLightAnimation.isAnimationFinished(stateTime)){
+            //ending the attack and resetting values
+            currentATK = Attack.NOATTACK;
+            stateTime = 0;
+            return;
+        }
+        currentATK = Attack.SLIGHT;
         swapAnimation(sLightAnimation);
         Player struckPlayer = player.checkHit();
         boolean hit = struckPlayer != null;
-        currentATK = Attack.SLIGHT;
         int atkFrame = sLightAnimation.getKeyFrameIndex(stateTime);
-        int direction = isFacingRight ? RIGHTCOLLISION : LEFTCOLLISION;
-        if(isFacingRight) moveRight();
-        else moveLeft();
+        int direction = isFacingRight ? RIGHT : LEFT;
+        if(isFacingRight) moveRight(); else moveLeft();
         horVelocity *= .7f;
         if(hit){
             int damage = attackAlreadyHit ? 0 : 5;
             float deltaT = sLightAnimation.getFrameDuration();
             switch (atkFrame){
                 case 1:
-                    player.strike(struckPlayer, new HitData().set(damage, 2, .00f, direction, 0));
+                    player.strike(struckPlayer, new HitData().set(damage, 2, 0, direction, 10));
                     break;
                 case 2:
                 case 3:
                 case 4:
-                    player.strike(struckPlayer, new HitData().set(damage, 2, .00f, direction, 0));
-                    player.pull(struckPlayer, hitboxFP, deltaT);
+                    player.strike(struckPlayer, new HitData().set(damage, 2, 0, direction, 10));
+                    player.pull(struckPlayer, hitboxFocalPoint, deltaT);
                     break;
                 case 5:
-                    player.strike(struckPlayer, new HitData().set(damage, 2, 1.1f, direction, 0));
+                    player.strike(struckPlayer, new HitData().set(damage, 2, 1.1f, direction, 10));
                     break;
             }
             attackAlreadyHit = true;

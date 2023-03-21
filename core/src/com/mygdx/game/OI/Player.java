@@ -132,9 +132,9 @@ public class Player {
         HitData attackData = new HitData().set(fighterHitData.damage,
                 HitData.IGNORE, avgKBMultiplier, fighterHitData.direction, fighterHitData.hitStunDuration);
 
-        struckPlayer.takeDamage(attackData, fighter.isFacingRight());
+        struckPlayer.getStruck(attackData, fighter.isFacingRight());
     }
-    public void takeDamage(HitData hitData, boolean preferRight){
+    public void getStruck(HitData hitData, boolean preferRight){
         fighter.takeDamage(hitData.damage);
         fighter.knockBack(hitData.direction, hitData.knockbackMultiplier, preferRight);
         fighter.stun(hitData.hitStunDuration);
@@ -149,6 +149,8 @@ public class Player {
      * @param PRESSEDKEY The key being pressed
      */
     public void interact(int PRESSEDKEY){
+        if(fighter.isStunned()) return;
+        
         //converts the key into its value in the default keyset
         int KEY = KeyBinds.convertKey(PRESSEDKEY);
 

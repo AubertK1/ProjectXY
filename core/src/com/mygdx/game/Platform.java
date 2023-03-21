@@ -1,7 +1,6 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -52,7 +51,7 @@ public class Platform extends Object {
 
         if(Main.inDebugMode) {
             batch.end();
-            renderHurtBox();
+            renderOutlines();
             batch.begin();
         }
     }

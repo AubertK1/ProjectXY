@@ -107,7 +107,7 @@ public class Weapon extends MovingObj {
 
         if(Main.inDebugMode) {
             batch.end();
-            renderHurtBox();
+            renderOutlines();
             batch.begin();
         }
     }

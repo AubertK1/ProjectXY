@@ -51,6 +51,7 @@ public class Fighter extends MovingObj{
     //attacks
     DualAnimation nLightAnimation;
     DualAnimation sLightAnimation;
+    DualAnimation dLightAnimation;
     //endregion
 
     //region attacks
@@ -238,25 +239,42 @@ public class Fighter extends MovingObj{
 
         canFall = true;
         switch (direction){
-            case LEFTCOLLISION:
+            case LEFT:
+                horVelocity = -baseHorKB * multiplier * 1f;
+                vertVelocity = baseVertKB * multiplier * .65f;
+                break;
+            case RIGHT:
+                horVelocity = baseHorKB * multiplier * 1f;
+                vertVelocity = baseVertKB * multiplier * .65F;
+                break;
+            case UPLEFT:
                 horVelocity = -baseHorKB * multiplier * .74f;
                 vertVelocity = baseVertKB * multiplier * .9f;
                 break;
-            case RIGHTCOLLISION:
+            case UPRIGHT:
                 horVelocity = baseHorKB * multiplier * .74f;
-                vertVelocity = baseVertKB * multiplier * 1;
+                vertVelocity = baseVertKB * multiplier * .9f;
                 break;
-            case TOPCOLLISION:
+            case DOWNLEFT:
+                horVelocity = -baseHorKB * multiplier * .74f;
+                vertVelocity = -baseVertKB * multiplier * .9f;
+                break;
+            case DOWNRIGHT:
+                horVelocity = baseHorKB * multiplier * .74f;
+                vertVelocity = -baseVertKB * multiplier * .9f;
+                break;
+            case UP:
                 horVelocity = (preferRight ? baseHorKB : -baseHorKB) * multiplier * .35f;
                 vertVelocity = baseVertKB * multiplier;
                 break;
-            case BOTTOMCOLLISION:
+            case DOWN:
                 horVelocity = baseHorKB * multiplier * .35f;
                 vertVelocity = -baseVertKB * multiplier;
                 break;
         }
     }
     public void stun(int duration){
+        if(duration == 0) return;
         isInHitStun = true;
         nextUnstunFrame = GameScreen.getFrame() + duration;
     }
@@ -287,6 +305,9 @@ public class Fighter extends MovingObj{
 
     public int getDamage() {
         return damage;
+    }
+    public boolean isStunned() {
+        return isInHitStun;
     }
 
     public boolean isAttacking(){
@@ -342,7 +363,7 @@ public class Fighter extends MovingObj{
 
         if(Main.inDebugMode) {
             batch.end();
-            renderHurtBox();
+            renderOutlines();
             batch.begin();
         }
     }
