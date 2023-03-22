@@ -230,11 +230,18 @@ public class Fighter extends MovingObj{
         isBlocking = true;
     }
 
+    public void endAttack(){
+        //ending the attack and resetting values
+        attackAlreadyHit = false;
+        currentATK = Attack.NOATTACK;
+        stateTime = 0;
+    }
+
     public void takeDamage(int damage){
         health -= damage;
     }
     public void knockBack(int direction, float multiplier, boolean preferRight){
-        float baseHorKB = 1120;
+        float baseHorKB = 800;
         float baseVertKB = -GameScreen.GRAVITY + baseHorKB;
 
         canFall = true;
@@ -273,8 +280,9 @@ public class Fighter extends MovingObj{
                 break;
         }
     }
-    public void stun(int duration){
+    public void getStunned(int duration){
         if(duration == 0) return;
+        if(!isInHitStun) stop();
         isInHitStun = true;
         nextUnstunFrame = GameScreen.getFrame() + duration;
     }

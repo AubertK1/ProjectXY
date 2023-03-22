@@ -34,17 +34,12 @@ public class Player {
         continueAttack();
 
         //registers player's input for all inputs that can be held
-        if(playerNum == 1) { //if player 1...
-            if (Gdx.input.isKeyPressed(Input.Keys.D)) interact(Input.Keys.D);
-            if (Gdx.input.isKeyPressed(Input.Keys.A)) interact(Input.Keys.A);
-            if (Gdx.input.isKeyPressed(Input.Keys.S) && fighter.canFall()) interact(Input.Keys.S);
-        }
-        else if(playerNum == 2) { //if player 2...
-            // keypresses
-            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) interact(Input.Keys.RIGHT);
-            if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) interact(Input.Keys.LEFT);
-            if (Gdx.input.isKeyPressed(Input.Keys.DOWN) && fighter.canFall()) interact(Input.Keys.DOWN);
-        }
+        if (KeyBinds.isKeyPressed(KeyBinds.Keys.DOWN, playerNum - 1))
+            interact(KeyBinds.findKeyFromDefaultKey(KeyBinds.Keys.DOWN, playerNum - 1));
+        else if (KeyBinds.isKeyPressed(KeyBinds.Keys.LEFT, playerNum - 1))
+            interact(KeyBinds.findKeyFromDefaultKey(KeyBinds.Keys.LEFT, playerNum - 1));
+        else if (KeyBinds.isKeyPressed(KeyBinds.Keys.RIGHT, playerNum - 1))
+            interact(KeyBinds.findKeyFromDefaultKey(KeyBinds.Keys.RIGHT, playerNum - 1));
     }
 
     public void resetAssets(){
@@ -96,19 +91,13 @@ public class Player {
         }
     }
     public void startAttack(){
+        if(fighter.isAttacking()) return;
         int directionKey = -10;
         //region finding which direction to attack
-        if(playerNum == 1) { //if player 1...
-            if (Gdx.input.isKeyPressed(Input.Keys.D)) directionKey = KeyBinds.convertKey(Input.Keys.D);
-            else if (Gdx.input.isKeyPressed(Input.Keys.A)) directionKey = KeyBinds.convertKey(Input.Keys.A);
-            else if (Gdx.input.isKeyPressed(Input.Keys.S)) directionKey = KeyBinds.convertKey(Input.Keys.S);
-        }
-        else if(playerNum == 2) { //if player 2...
-            // keypresses
-            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) directionKey = KeyBinds.convertKey(Input.Keys.RIGHT);
-            else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) directionKey = KeyBinds.convertKey(Input.Keys.LEFT);
-            else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) directionKey = KeyBinds.convertKey(Input.Keys.DOWN);
-        }
+        if (KeyBinds.isKeyPressed(KeyBinds.Keys.DOWN, playerNum - 1)) directionKey = KeyBinds.Keys.DOWN;
+        else if (KeyBinds.isKeyPressed(KeyBinds.Keys.JUMP, playerNum - 1)) directionKey = -10;
+        else if (KeyBinds.isKeyPressed(KeyBinds.Keys.LEFT, playerNum - 1)) directionKey = KeyBinds.Keys.LEFT;
+        else if (KeyBinds.isKeyPressed(KeyBinds.Keys.RIGHT, playerNum - 1)) directionKey = KeyBinds.Keys.RIGHT;
         //endregion
         //region attacking in the direction
         switch (directionKey) {
@@ -137,7 +126,7 @@ public class Player {
     public void getStruck(HitData hitData, boolean preferRight){
         fighter.takeDamage(hitData.damage);
         fighter.knockBack(hitData.direction, hitData.knockbackMultiplier, preferRight);
-        fighter.stun(hitData.hitStunDuration);
+        fighter.getStunned(hitData.hitStunDuration);
     }
     public void pull(Player pulledPlayer, Point point, float time){
         pulledPlayer.getFighter().pullTo(point, time);

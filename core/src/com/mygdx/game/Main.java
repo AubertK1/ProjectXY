@@ -24,7 +24,7 @@ public class Main extends ApplicationAdapter {
 	//detects whether the game is currently being played or not
 	public static boolean isMatchRunning = false;
 	//shows hitboxes
-	public static boolean inDebugMode = true;
+	public static boolean inDebugMode = false;
 
 	/**
 	 * This class sets up the screen. It's only called ONCE (when the game is loaded)
@@ -50,7 +50,8 @@ public class Main extends ApplicationAdapter {
 			@Override
 			public boolean keyDown(int keycode) {
 				int affectedPlayer = getAffectedPlayer(keycode);
-				if(affectedPlayer != -1) gameScreen.getPlayers().get(getAffectedPlayer(keycode)).interact(keycode);
+				if(affectedPlayer != -1)
+					GameScreen.getPlayers().get(getAffectedPlayer(keycode)).interact(keycode);
 				return true;
 			}
 

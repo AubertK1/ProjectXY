@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 
 public class KeyBinds {
@@ -88,6 +89,12 @@ public class KeyBinds {
             }
         }
         return -1;
+    }
+
+    public static boolean isKeyPressed(int key, int keySet){
+        int KEY = findKeyFromDefaultKey(key, keySet);
+
+        return Gdx.input.isKeyPressed(KEY);
     }
 
     public static class Keys{
