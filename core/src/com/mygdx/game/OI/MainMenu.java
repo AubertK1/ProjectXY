@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -15,7 +17,7 @@ public class MainMenu extends MenuScreen {
 
         background = new Texture("assets\\textures\\Night_Time_Background.png");
 
-        final TextButton play = createButton("PLAY",25,550,200,200);
+        final ImageButton play = createImageButton("textures/playTemp.PNG",25,550,200,200);
         play.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -23,7 +25,7 @@ public class MainMenu extends MenuScreen {
             }
         });
 
-        final TextButton controls = createButton("CONTROLS",25,325,200,200);
+        final TextButton controls = createTextButton("CONTROLS",25,325,200,200);
 
         controls.addListener(new ChangeListener() {
             @Override
