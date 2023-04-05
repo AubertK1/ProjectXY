@@ -1,5 +1,6 @@
 package com.mygdx.game.OI;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -11,6 +12,8 @@ import com.mygdx.game.Main;
 public class MainMenu extends MenuScreen {
 
     public MainMenu() {
+
+        background = new Texture("assets\\textures\\Night_Time_Background.png");
 
         final TextButton play = createButton("PLAY",25,550,200,200);
         play.addListener(new ChangeListener() {
