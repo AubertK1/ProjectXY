@@ -1,6 +1,7 @@
 package com.mygdx.game.OI;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -10,6 +11,7 @@ import com.mygdx.game.Platform;
 import com.mygdx.game.Weapons.Weapon;
 
 public class Screen {
+    protected Texture background;
     protected Skin skin = Main.skin;
     protected Stage stage = Main.stage;
     // Makes a new group
@@ -21,6 +23,6 @@ public class Screen {
         UI.remove();
     }
     public void render(SpriteBatch batch){
-
+        batch.draw(background,0, 0,2000,1000);
     }
 }
