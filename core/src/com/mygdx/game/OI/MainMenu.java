@@ -25,7 +25,7 @@ public class MainMenu extends MenuScreen {
             }
         });
 
-        final TextButton controls = createTextButton("CONTROLS",25,325,200,200);
+        final TextButton controls = createImageButton("textures/settings image.png",25,325,200,200);
 
         controls.addListener(new ChangeListener() {
             @Override
