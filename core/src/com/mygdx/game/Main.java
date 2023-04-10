@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.mygdx.game.OI.CharacterSelectScreen;
 import com.mygdx.game.OI.ControlScreen;
 import com.mygdx.game.OI.MainMenu;
 import com.mygdx.game.OI.Screen;
@@ -23,6 +24,7 @@ public class Main extends ApplicationAdapter {
 	static ControlScreen controlScreen;
 	//game screen
 	 public static GameScreen gameScreen;
+	 public static CharacterSelectScreen characterSelectScreen;
 	public static Screen currentScreen;
 	//detects whether the game is currently being played or not
 	public static String activeScreenName = "MainMenu";
@@ -133,6 +135,8 @@ public class Main extends ApplicationAdapter {
 			currentScreen=gameScreen;
 		}else if(newScreenName.equals("ControlScreen")){
 			currentScreen=controlScreen;
+		} else if (newScreenName.equals("CharacterSelectScreen")){
+			currentScreen=characterSelectScreen;
 		}
 		currentScreen.startDrawing();
 	}
