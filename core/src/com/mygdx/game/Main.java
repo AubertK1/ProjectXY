@@ -48,7 +48,7 @@ public class Main extends ApplicationAdapter {
 		controlScreen = new ControlScreen();
 		//setting up the game screen
 		gameScreen = new GameScreen();
-
+		characterSelectScreen = new CharacterSelectScreen();
 		currentScreen = mainMenu;//Set starting screen
 		currentScreen.startDrawing();
 
