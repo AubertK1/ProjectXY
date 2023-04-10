@@ -21,7 +21,7 @@ public class MainMenu extends MenuScreen {
         play.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Main.changeScreen("GameScreen");
+                Main.changeScreen("CharacterSelectScreen");
             }
         });
 
