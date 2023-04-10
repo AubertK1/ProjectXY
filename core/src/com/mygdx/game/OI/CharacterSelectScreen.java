@@ -10,7 +10,7 @@ import com.mygdx.game.Main;
 public class CharacterSelectScreen extends MenuScreen{
 
 
-    public Texture characterSelectImage = new Texture("textures/CHOOSE_YOUR_CHRACRTER.png");
+    public Texture characterSelectImage = new Texture("textures/CHOOSE_YOUR_CHARACTER.png");
 
     public CharacterSelectScreen() {
         final ImageButton fight = createImageButton("textures/FIGHT.PNG", 25, 550, 200, 200);
