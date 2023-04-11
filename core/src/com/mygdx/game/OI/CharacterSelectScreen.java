@@ -24,8 +24,8 @@ public class CharacterSelectScreen extends MenuScreen{
 
 
     public void render(SpriteBatch batch){
-        batch.draw(background,0, 0,2000,1000);
-        batch.draw(characterSelectImage,100, -10, 400, 200 );
+       // batch.draw(background,0, 0,2000,1000);
+        batch.draw(characterSelectImage,500, -10, 400, 200);
     }
 
     }
