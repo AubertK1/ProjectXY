@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.mygdx.game.Characters.Cyborg;
 import com.mygdx.game.Main;
 
 public class CharacterSelectScreen extends MenuScreen{
@@ -13,10 +14,18 @@ public class CharacterSelectScreen extends MenuScreen{
 
     public Texture characterSelectImage = new Texture("textures/CHOOSE_YOUR_CHARACTER.png");
 
-    public Texture vampireImage = new Texture("textures/Vampire_Bot/Vampire_Bot_48x.png");
-    public Texture violentCyborgImage = new Texture("textures/Violet_Cyborg/Violet_Cyborg_48x.png");
-    public Texture securityRobotImage = new Texture("textures/Security_Robot/Security_Robot_48x.png");
+    public ImageButton vampireImage = createImageButton("textures/Vampire_Bot/Vampire_Bot_48x.png",250,400,400,300);
+    vampireImage.addlistener(){
 
+    }
+    public ImageButton violetCyborgImage = createImageButton("textures/Violet_Cyborg/Violet_Cyborg_48x.png",750,400,300,300);
+    violetCyborgImage.addlistener(){
+
+    }
+    public ImageButton securityRobotImage = createImageButton("textures/Security_Robot/Security_Robot_48x.png",1250,400,300,300);
+    securityRobotImage.addlistener(){
+
+    }
     public CharacterSelectScreen() {
         background = new Texture("assets\\textures\\Night_Time_Background.png");
 
@@ -40,9 +49,6 @@ public class CharacterSelectScreen extends MenuScreen{
     public void render(SpriteBatch batch){
         batch.draw(background,0, 0,2000,1000);
         batch.draw(characterSelectImage,750, 800, 400, 200);
-        batch.draw(vampireImage,250,400,400,300);
-        batch.draw(violentCyborgImage,750,400,300,300);
-        batch.draw(securityRobotImage,1250,400,300,300);
     }
 
     }
