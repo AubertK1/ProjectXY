@@ -89,7 +89,7 @@ public class Cyborg extends Fighter{
         int atkFrame = nLightAnimation.getKeyFrameIndex(stateTime);
         int direction = isFacingRight ? UPRIGHT : UPLEFT;
         if(hit){
-            int damage = attackAlreadyHit ? 0 : 50;
+            int damage = attackAlreadyHit ? 0 : 20;
             float deltaT = nLightAnimation.getFrameDuration();
             switch (atkFrame){
                 case 1:
@@ -123,7 +123,7 @@ public class Cyborg extends Fighter{
         if(isFacingRight) moveRight(); else moveLeft();
         horVelocity *= .7f;
         if(hit){
-            int damage = attackAlreadyHit ? 0 : 5;
+            int damage = attackAlreadyHit ? 0 : 20;
             float deltaT = sLightAnimation.getFrameDuration();
             switch (atkFrame){
                 case 1:
@@ -136,7 +136,7 @@ public class Cyborg extends Fighter{
                     player.pull(struckPlayer, hitboxFocalPoint, deltaT);
                     break;
                 case 5:
-                    player.strike(struckPlayer, new HitData().set(damage, 2, 1.1f, direction, 18));
+                    player.strike(struckPlayer, new HitData().set(damage, 2, 1.5f, direction, 18));
                     break;
             }
             attackAlreadyHit = true;
@@ -155,7 +155,7 @@ public class Cyborg extends Fighter{
         int direction = isFacingRight ? DOWNRIGHT : DOWNLEFT;
 
         if(hit){
-            int damage = attackAlreadyHit ? 0 : 5;
+            int damage = attackAlreadyHit ? 0 : 20;
             player.strike(struckPlayer, new HitData().set(damage, 2, .5f, direction, 12));
             attackAlreadyHit = true;
         }

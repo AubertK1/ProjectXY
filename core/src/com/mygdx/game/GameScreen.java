@@ -69,10 +69,10 @@ public class GameScreen {
         player2 = new Player(2);
         // setting player 1's fighter (will be moved later so the player can choose)
         player1.setFighter(new Cyborg(spawn1.x, spawn1.y, player1));
-        player1.getFighter().scale(3f);
+        player1.getFighter().scale(5);
 
         player2.setFighter(new Robot(spawn2.x, spawn2.y, player2));
-        player2.getFighter().scale(3f);
+        player2.getFighter().scale(5);
 
         players.add(player1);
         players.add(player2);

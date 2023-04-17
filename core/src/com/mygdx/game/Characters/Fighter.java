@@ -20,7 +20,7 @@ public class Fighter extends MovingObj{
     protected Player player;
 
     //region stats
-    protected static int maxJumps = 3;
+    protected static int maxJumps = 2;
     protected float speed = 500;
     protected int damage = 10;
     protected int maxHealth = 100;
@@ -69,7 +69,7 @@ public class Fighter extends MovingObj{
     }
 
     public void update() {
-        float deltaTime = Main.getFrameRate();
+        // float deltaTime = Main.getFrameRate();
 
         //region collisions
         int i = 0;
