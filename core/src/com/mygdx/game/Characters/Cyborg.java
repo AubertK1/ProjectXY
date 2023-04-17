@@ -89,7 +89,7 @@ public class Cyborg extends Fighter{
         int atkFrame = nLightAnimation.getKeyFrameIndex(stateTime);
         int direction = isFacingRight ? UPRIGHT : UPLEFT;
         if(hit){
-            int damage = attackAlreadyHit ? 0 : 5;
+            int damage = attackAlreadyHit ? 0 : 50;
             float deltaT = nLightAnimation.getFrameDuration();
             switch (atkFrame){
                 case 1:
@@ -98,8 +98,8 @@ public class Cyborg extends Fighter{
                 case 2:
                 case 3:
                 case 4:
-                    player.strike(struckPlayer, new HitData().set(damage, 2, 0, direction, 3));
                     player.pull(struckPlayer, hitboxFocalPoint, deltaT);
+                    player.strike(struckPlayer, new HitData().set(damage, 2, 0, direction, 3));
                     break;
                 case 5:
                     player.strike(struckPlayer, new HitData().set(damage, 2, 1.03f, direction, 10));

@@ -61,7 +61,7 @@ public class Fighter extends MovingObj{
     }
     protected Attack currentATK = Attack.NOATTACK;
     protected boolean attackAlreadyHit = false;
-    //endregion
+    //endregionrff
 
     public Fighter(float x, float y, float width, float height, boolean isCollidable, boolean isVisible, Player player) {
         super(x, y, width, height, isCollidable, isVisible);
@@ -239,6 +239,10 @@ public class Fighter extends MovingObj{
 
     public void takeDamage(int damage){
         health -= damage;
+
+        if (health <= 0) {
+            reset();
+        }
     }
     public void knockBack(int direction, float multiplier, boolean preferRight){
         float baseHorKB = 800;

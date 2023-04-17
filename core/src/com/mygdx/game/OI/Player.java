@@ -1,6 +1,5 @@
 package com.mygdx.game.OI;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -123,11 +122,13 @@ public class Player {
 
         struckPlayer.getStruck(attackData, fighter.isFacingRight());
     }
+
     public void getStruck(HitData hitData, boolean preferRight){
-        fighter.takeDamage(hitData.damage);
         fighter.knockBack(hitData.direction, hitData.knockbackMultiplier, preferRight);
         fighter.getStunned(hitData.hitStunDuration);
+        fighter.takeDamage(hitData.damage);
     }
+
     public void pull(Player pulledPlayer, Point point, float time){
         pulledPlayer.getFighter().pullTo(point, time);
     }
