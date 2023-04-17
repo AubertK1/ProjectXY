@@ -55,7 +55,7 @@ public class GameScreen {
         mainPlatform = new Platform((Gdx.graphics.getWidth() / 2f) - (mainPTex.getWidth() / 2f),
                 (Gdx.graphics.getHeight() * .4f) - (mainPTex.getHeight()), mainPTex);
         mainPlatform.setHurtbox(43, 35, 122, 45);
-        mainPlatform.scale(8);
+        mainPlatform.scale(6);
         mainPlatform.setPositionFromHB((Gdx.graphics.getWidth() / 2f) - (mainPlatform.getHBWidth() / 2f),
                 (Gdx.graphics.getHeight() * .26f) - (mainPlatform.getHBHeight() / 2f));
         platforms.add(mainPlatform);
