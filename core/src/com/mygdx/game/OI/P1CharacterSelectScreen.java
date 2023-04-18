@@ -22,13 +22,6 @@ public class P1CharacterSelectScreen extends MenuScreen{
     public P1CharacterSelectScreen() {
         background = new Texture("assets\\textures\\Night_Time_Background.png");
 
-        final ImageButton fight = createImageButton("textures/BACK.png", 25, 550, 200, 200);
-        fight.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-                Main.changeScreen("MainMenu");
-            }
-        });
         final TextButton play = createTextButton("BACK",25,200,200,200);
         play.addListener(new ChangeListener() {
             @Override
@@ -40,16 +33,19 @@ public class P1CharacterSelectScreen extends MenuScreen{
         vampireImage.addListener(new ClickListener(){
             public void clicked (InputEvent event, float x, float y) {
                 GameScreen.setPlayers(1,"Vampire");
+                Main.changeScreen("P2CharacterSelectScreen");
             }
         });
         violetCyborgImage.addListener(new ClickListener(){
             public void clicked (InputEvent event, float x, float y) {
                 GameScreen.setPlayers(1,"Cyborg");
+                Main.changeScreen("P2CharacterSelectScreen");
             }
         });
         securityRobotImage.addListener(new ClickListener(){
             public void clicked (InputEvent event, float x, float y) {
                 GameScreen.setPlayers(1,"Robot");
+                Main.changeScreen("P2CharacterSelectScreen");
             }
         });
     }
