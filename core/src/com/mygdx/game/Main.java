@@ -6,10 +6,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.mygdx.game.OI.CharacterSelectScreen;
-import com.mygdx.game.OI.ControlScreen;
-import com.mygdx.game.OI.MainMenu;
+import com.mygdx.game.OI.*;
+import com.mygdx.game.OI.P1CharacterSelectScreen;
+import com.mygdx.game.OI.P2CharacterSelectScreen;
 import com.mygdx.game.OI.Screen;
+
 /**
  * This is the real Main class that all of your code will go into
  */
