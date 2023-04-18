@@ -138,8 +138,10 @@ public class Main extends ApplicationAdapter {
 			currentScreen=gameScreen;
 		}else if(newScreenName.equals("ControlScreen")){
 			currentScreen=controlScreen;
-		} else if (newScreenName.equals("CharacterSelectScreen")){
+		} else if (newScreenName.equals("P1CharacterSelectScreen")){
 			currentScreen=characterSelectScreen;
+		} else if (newScreenName.equals("P2CharacterSelectScreen")){
+			currentScreen=characterSelectScreen2;
 		}
 		currentScreen.startDrawing();
 	}
