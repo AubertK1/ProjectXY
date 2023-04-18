@@ -68,10 +68,10 @@ public class GameScreen extends Screen {
         player1 = new Player(1);
         player2 = new Player(2);
         // setting player 1's fighter (will be moved later so the player can choose)
-//        player1.setFighter(new Cyborg(spawn1.x, spawn1.y, player1));
+       player1.setFighter(new Cyborg(spawn1.x, spawn1.y, player1));
 //        player1.getFighter().scale(2.5f);
 //
-//        player2.setFighter(new Robot(spawn2.x, spawn2.y, player2));
+        player2.setFighter(new Robot(spawn2.x, spawn2.y, player2));
 //        player2.getFighter().scale(2.5f);
 
         players.add(player1);
@@ -84,11 +84,11 @@ public class GameScreen extends Screen {
         //region screen UI
         UI.setPosition(100, 50);
 
-        p1Label = new Label("ROBOT: " + player1.getFighter().getHealth(), skin);
+        p1Label = new Label("Player1: 100", skin);
         p1Label.setSize(100, 50);
         p1Label.setPosition(0, 0);
 
-        p2Label = new Label("VAMPIRE: " + player2.getFighter().getHealth(), skin);
+        p2Label = new Label("Player2: 100", skin);
         p2Label.setSize(p1Label.getWidth(), p1Label.getHeight());
         p2Label.setPosition(p1Label.getX() + p1Label.getWidth() + 5, p1Label.getY());
 
@@ -132,9 +132,7 @@ public class GameScreen extends Screen {
         }else{
             players.get(player-1).setFighter(new Robot(spawn.x, spawn.y,  players.get(player-1)));
         }
-        p1Label = new Label(fighter +": " + players.get(player-1).getFighter().getHealth(), skin);
-        p1Label.setSize(100, 50);
-        p1Label.setPosition(0, 0);
+
     }
     public static ArrayList<Weapon> getWeapons(){
         return weapons;
