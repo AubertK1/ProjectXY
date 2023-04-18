@@ -24,7 +24,8 @@ public class Main extends ApplicationAdapter {
 	static ControlScreen controlScreen;
 	//game screen
 	 public static GameScreen gameScreen;
-	 public static CharacterSelectScreen characterSelectScreen;
+	public static P1CharacterSelectScreen characterSelectScreen;
+	public static P2CharacterSelectScreen characterSelectScreen2;
 	public static Screen currentScreen;
 	//detects whether the game is currently being played or not
 	public static String activeScreenName = "MainMenu";
@@ -48,7 +49,8 @@ public class Main extends ApplicationAdapter {
 		controlScreen = new ControlScreen();
 		//setting up the game screen
 		gameScreen = new GameScreen();
-		characterSelectScreen = new CharacterSelectScreen();
+		characterSelectScreen = new P1CharacterSelectScreen();
+		characterSelectScreen2 = new P2CharacterSelectScreen();
 		currentScreen = mainMenu;//Set starting screen
 		currentScreen.startDrawing();
 
