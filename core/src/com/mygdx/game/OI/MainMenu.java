@@ -17,7 +17,7 @@ public class MainMenu extends MenuScreen {
 
         background = new Texture("assets\\textures\\Title_Screen.png");
 
-        final ImageButton play = createImageButton("textures/Start_Button.png",750,550,500,500);
+        final ImageButton play = createImageButton("textures/Start_Button.png",750,550,1000,1000);
         play.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
