@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -14,13 +15,13 @@ import com.mygdx.game.Main;
 public class P2CharacterSelectScreen extends MenuScreen{
     public Texture characterSelectImage = new Texture("textures/CHOOSE_YOUR_CHARACTER.png");
 
-    public ImageButton vampireImage = createImageButton("textures/Vampire_Bot/Vampire_Bot_48x.png",250,400,400,300);
-    public ImageButton violetCyborgImage = createImageButton("textures/Violet_Cyborg/Violet_Cyborg_48x.png",750,400,300,300);
-    public ImageButton securityRobotImage = createImageButton("textures/Security_Robot/Security_Robot_48x.png",1250,400,300,300);
+    public Button vampireImage = createImageButton("textures/Vampire_Bot/Vampire_Bot_48x.png",250,400,400,300);
+    public Button violetCyborgImage = createImageButton("textures/Violet_Cyborg/Violet_Cyborg_48x.png",750,400,300,300);
+    public Button securityRobotImage = createImageButton("textures/Security_Robot/Security_Robot_48x.png",1250,400,300,300);
     public P2CharacterSelectScreen() {
         background = new Texture("assets\\textures\\Night_Time_Background.png");
 
-        final ImageButton fight = createImageButton("textures/FIGHT.PNG", 25, 550, 200, 200);
+        final Button fight = createImageButton("textures/FIGHT.PNG", 25, 550, 200, 200);
         fight.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeListener.ChangeEvent event, Actor actor) {

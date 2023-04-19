@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -29,10 +30,10 @@ public class MenuScreen extends Screen {
         UI.addActor(aTextbutton);
         return aTextbutton;
     }
-    public ImageButton createImageButton(String filePath,int x, int y, int width, int height){
+    public Button createImageButton(String filePath,int x, int y, int width, int height){
         Texture playTexture = new Texture(filePath);
         Drawable drawable = new TextureRegionDrawable(new TextureRegion(playTexture));
-        final ImageButton imageButton = new ImageButton(drawable);
+        final Button imageButton = new Button(drawable);
         imageButton.setPosition(x,y);
         imageButton.setSize(width,height);
         UI.addActor(imageButton);
