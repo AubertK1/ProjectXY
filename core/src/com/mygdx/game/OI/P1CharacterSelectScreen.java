@@ -55,7 +55,7 @@ public class P1CharacterSelectScreen extends MenuScreen{
     public void render(SpriteBatch batch){
         batch.draw(background,0, 0,2000,1000);
         batch.draw(characterSelectImage,750, 800, 400, 200);
-        batch.draw(player1Image,800, 800, 400, 200);
+        batch.draw(player1Image,1150, 850, 200, 100);
     }
 
     }
