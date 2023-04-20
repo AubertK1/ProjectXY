@@ -33,7 +33,7 @@ public class P2CharacterSelectScreen extends MenuScreen{
         play.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Main.changeScreen("MainMenu");
+                Main.changeScreen("P1CharacterSelectScreen");
             }
         });
 
@@ -58,7 +58,7 @@ public class P2CharacterSelectScreen extends MenuScreen{
     public void render(SpriteBatch batch){
         batch.draw(background,0, 0,2000,1000);
         batch.draw(characterSelectImage,750, 800, 400, 200);
-        batch.draw(player2Image,800, 800, 400, 200);
+        batch.draw(player2Image,1150, 850, 200, 100);
     }
 
 
