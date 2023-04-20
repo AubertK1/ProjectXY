@@ -14,6 +14,7 @@ import com.mygdx.game.Main;
 
 public class P2CharacterSelectScreen extends MenuScreen{
     public Texture characterSelectImage = new Texture("textures/CHOOSE_YOUR_CHARACTER.png");
+    public Texture player2Image = new Texture("textures/P2.png");
 
     public Button vampireImage = createImageButton("textures/Vampire_Bot/Vampire_Bot_48x.png",250,400,400,300);
     public Button violetCyborgImage = createImageButton("textures/Violet_Cyborg/Violet_Cyborg_48x.png",750,400,300,300);
@@ -57,6 +58,7 @@ public class P2CharacterSelectScreen extends MenuScreen{
     public void render(SpriteBatch batch){
         batch.draw(background,0, 0,2000,1000);
         batch.draw(characterSelectImage,750, 800, 400, 200);
+        batch.draw(player2Image,800, 800, 400, 200);
     }
 
 
