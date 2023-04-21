@@ -194,8 +194,17 @@ public class Player {
      * @param fighter
      */
     public void setFighter(Fighter fighter){
+        //grabbing any necessary initializing variables
+        float scale = 1;
+        if(this.fighter != null){
+            scale = this.fighter.getScale();
+        }
+
         this.fighter = fighter;
+
         fighter.setPlayer(this);
+        //setting the initializing variables
+        fighter.scale(scale);
     }
     public Fighter getFighter(){
         return fighter;
