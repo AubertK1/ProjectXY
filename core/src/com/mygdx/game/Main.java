@@ -7,6 +7,10 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.OI.MainMenu;
+import com.mygdx.game.OI.*;
+import com.mygdx.game.OI.P1CharacterSelectScreen;
+import com.mygdx.game.OI.P2CharacterSelectScreen;
+import com.mygdx.game.OI.Screen;
 
 /**
  * This is the real Main class that all of your code will go into
@@ -18,11 +22,15 @@ public class Main extends ApplicationAdapter {
 	//a spritesheet of all the actors (an actor is a button, textfield, label, etc.)
 	public static Skin skin;
 	//main menu screen
-	MainMenu menu;
+	static MainMenu mainMenu;
+	static ControlScreen controlScreen;
 	//game screen
-	public static GameScreen gameScreen;
+	 public static GameScreen gameScreen;
+	public static P1CharacterSelectScreen characterSelectScreen;
+	public static P2CharacterSelectScreen characterSelectScreen2;
+	public static Screen currentScreen;
 	//detects whether the game is currently being played or not
-	public static boolean isMatchRunning = false;
+	public static String activeScreenName = "MainMenu";
 	//shows hitboxes
 	public static boolean inDebugMode = false;
 
@@ -39,9 +47,14 @@ public class Main extends ApplicationAdapter {
 		skin = new Skin(Gdx.files.internal("assets\\skin\\uiskin.json"));
 
 		//setting up main menu screen
-		menu = new MainMenu();
+		mainMenu = new MainMenu();
+		controlScreen = new ControlScreen();
 		//setting up the game screen
 		gameScreen = new GameScreen();
+		characterSelectScreen = new P1CharacterSelectScreen();
+		characterSelectScreen2 = new P2CharacterSelectScreen();
+		currentScreen = mainMenu;//Set starting screen
+		currentScreen.startDrawing();
 
 		//this is so the user can click on the screen
 		InputMultiplexer multiplexer = new InputMultiplexer();
@@ -101,18 +114,10 @@ public class Main extends ApplicationAdapter {
 	@Override
 	public void render () {
 		//sets the background color. Later we'll set a background image over this
-		ScreenUtils.clear(new Color(0x3fc9e8ff));
+		ScreenUtils.clear(new Color(0x961d1dff));
 		batch.begin();
 
-		//if match is not being played, show main menu screen
-		if (isMatchRunning == false){
-			menu.startDrawing();
-		}
-		else{ //if match is being played show gamescreen
-			menu.stopDrawing();
-			gameScreen.startDrawing();
-			gameScreen.render(batch);
-		}
+		currentScreen.render(batch);
 
 		batch.end();
 		//draws the actors on the screen
@@ -127,7 +132,21 @@ public class Main extends ApplicationAdapter {
 	public void dispose () {
 		batch.dispose();
 	}
-
+	static public void changeScreen(String newScreenName){
+		currentScreen.stopDrawing();
+		if(newScreenName.equals("MainMenu")){
+				currentScreen= mainMenu;
+		}else if(newScreenName.equals("GameScreen")){
+			currentScreen=gameScreen;
+		}else if(newScreenName.equals("ControlScreen")){
+			currentScreen=controlScreen;
+		} else if (newScreenName.equals("P1CharacterSelectScreen")){
+			currentScreen=characterSelectScreen;
+		} else if (newScreenName.equals("P2CharacterSelectScreen")){
+			currentScreen=characterSelectScreen2;
+		}
+		currentScreen.startDrawing();
+	}
 	public static float getFrameRate(){
 		return Gdx.graphics.getDeltaTime();
 	}

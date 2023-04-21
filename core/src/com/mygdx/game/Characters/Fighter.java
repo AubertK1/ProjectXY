@@ -61,7 +61,7 @@ public class Fighter extends MovingObj{
     }
     protected Attack currentATK = Attack.NOATTACK;
     protected boolean attackAlreadyHit = false;
-    //endregionrff
+    //endregion
 
     public Fighter(float x, float y, float width, float height, boolean isCollidable, boolean isVisible, Player player) {
         super(x, y, width, height, isCollidable, isVisible);
@@ -279,6 +279,7 @@ public class Fighter extends MovingObj{
                 vertVelocity = baseVertKB * multiplier;
                 break;
             case DOWN:
+
                 horVelocity = baseHorKB * multiplier * .35f;
                 vertVelocity = -baseVertKB * multiplier;
                 break;
@@ -287,6 +288,7 @@ public class Fighter extends MovingObj{
     public void getStunned(int duration){
         if(duration == 0) return;
         if(!isInHitStun) stop();
+
         isInHitStun = true;
         nextUnstunFrame = GameScreen.getFrame() + duration;
     }
@@ -321,6 +323,7 @@ public class Fighter extends MovingObj{
     public boolean isStunned() {
         return isInHitStun;
     }
+
 
     public boolean isAttacking(){
         return !(currentATK == Attack.NOATTACK);

@@ -10,14 +10,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mygdx.game.Characters.Cyborg;
 import com.mygdx.game.Characters.Robot;
+import com.mygdx.game.Characters.Vampire;
 import com.mygdx.game.OI.Player;
+import com.mygdx.game.OI.Screen;
 import com.mygdx.game.Weapons.Sword;
 import com.mygdx.game.Weapons.Weapon;
 
 import java.awt.*;
 import java.util.ArrayList;
 
-public class GameScreen {
+public class GameScreen extends Screen {
     private Player player1;
     private Player player2;
     private static ArrayList<Player> players = new ArrayList<>();
@@ -115,6 +117,23 @@ public class GameScreen {
 
     public static ArrayList<Player> getPlayers(){
         return players;
+    }
+    public static void setPlayers(int player,String fighter){
+        Vector2 spawn;
+        if (player == 1){
+            spawn = spawn1;
+        }else {
+            spawn = spawn2;
+        }
+
+        if(fighter.equals("Vampire")){
+            players.get(player-1).setFighter(new Vampire(spawn.x, spawn.y,  players.get(player-1)));
+        }else if (fighter.equals("Cyborg")){
+            players.get(player-1).setFighter(new Cyborg(spawn.x, spawn.y,  players.get(player-1)));
+        }else{
+            players.get(player-1).setFighter(new Robot(spawn.x, spawn.y,  players.get(player-1)));
+        }
+
     }
     public static ArrayList<Weapon> getWeapons(){
         return weapons;
