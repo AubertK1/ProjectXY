@@ -55,7 +55,7 @@ public class GameScreen {
         mainPlatform = new Platform((Gdx.graphics.getWidth() / 2f) - (mainPTex.getWidth() / 2f),
                 (Gdx.graphics.getHeight() * .4f) - (mainPTex.getHeight()), mainPTex);
         mainPlatform.setHurtbox(43, 35, 122, 45);
-        mainPlatform.scale(6);
+        mainPlatform.scale(8);
         mainPlatform.setPositionFromHB((Gdx.graphics.getWidth() / 2f) - (mainPlatform.getHBWidth() / 2f),
                 (Gdx.graphics.getHeight() * .26f) - (mainPlatform.getHBHeight() / 2f));
         platforms.add(mainPlatform);
@@ -69,10 +69,10 @@ public class GameScreen {
         player2 = new Player(2);
         // setting player 1's fighter (will be moved later so the player can choose)
         player1.setFighter(new Cyborg(spawn1.x, spawn1.y, player1));
-        player1.getFighter().scale(5);
+        player1.getFighter().scale(3);
 
         player2.setFighter(new Robot(spawn2.x, spawn2.y, player2));
-        player2.getFighter().scale(5);
+        player2.getFighter().scale(3);
 
         players.add(player1);
         players.add(player2);
