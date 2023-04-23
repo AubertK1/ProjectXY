@@ -10,20 +10,23 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mygdx.game.Characters.Cyborg;
 import com.mygdx.game.Characters.Robot;
+import com.mygdx.game.Characters.Vampire;
 import com.mygdx.game.OI.Player;
+import com.mygdx.game.OI.Screen;
 import com.mygdx.game.Weapons.Sword;
 import com.mygdx.game.Weapons.Weapon;
 
 import java.awt.*;
 import java.util.ArrayList;
 
-public class GameScreen {
+public class GameScreen extends Screen {
     private Player player1;
     private Player player2;
     private static ArrayList<Player> players = new ArrayList<>();
     private static ArrayList<Weapon> weapons = new ArrayList<>();
+    private static ArrayList<Platform> platforms = new ArrayList<>();
 
-    public Platform platform;
+    public Platform mainPlatform;
     private Texture background;
 
     //spawn points
@@ -49,19 +52,29 @@ public class GameScreen {
     public GameScreen() {
         // initializing everything
         background = new Texture("assets\\textures\\Night_Time_Background.png");
-        platform = new Platform(new Texture("assets\\textures\\Platforms\\Floating_Platform.png"));
-        platform.setHurtbox(43, 35, 122, 45);
-        platform.scale(8);
-        platform.setPositionFromHB((Gdx.graphics.getWidth() / 2f) - (platform.getHBWidth() / 2f),
-                (Gdx.graphics.getHeight() * .26f) - (platform.getHBHeight() / 2f));
+
+        Texture mainPTex = new Texture("assets\\textures\\Platforms\\Floating_Platform.png");
+        mainPlatform = new Platform((Gdx.graphics.getWidth() / 2f) - (mainPTex.getWidth() / 2f),
+                (Gdx.graphics.getHeight() * .4f) - (mainPTex.getHeight()), mainPTex);
+        mainPlatform.setHurtbox(43, 35, 122, 45);
+        mainPlatform.scale(8);
+        mainPlatform.setPositionFromHB((Gdx.graphics.getWidth() / 2f) - (mainPlatform.getHBWidth() / 2f),
+                (Gdx.graphics.getHeight() * .26f) - (mainPlatform.getHBHeight() / 2f));
+        platforms.add(mainPlatform);
+
+        Platform platform2 = new Platform(200, 600, new Texture("assets\\textures\\Platforms\\Neon_Platform_Sheet.png"), 5, 2);
+        platform2.setHurtbox(39, 8, 135, 89);
+        platform2.scale(2);
+        platforms.add(platform2);
+
         player1 = new Player(1);
         player2 = new Player(2);
         // setting player 1's fighter (will be moved later so the player can choose)
         player1.setFighter(new Cyborg(spawn1.x, spawn1.y, player1));
-        player1.getFighter().scale(2.5f);
+        player1.getFighter().scale(3);
 
         player2.setFighter(new Robot(spawn2.x, spawn2.y, player2));
-        player2.getFighter().scale(2.5f);
+        player2.getFighter().scale(3);
 
         players.add(player1);
         players.add(player2);
@@ -105,8 +118,28 @@ public class GameScreen {
     public static ArrayList<Player> getPlayers(){
         return players;
     }
+    public static void setPlayers(int player,String fighter){
+        Vector2 spawn;
+        if (player == 1){
+            spawn = spawn1;
+        }else {
+            spawn = spawn2;
+        }
+
+        if(fighter.equals("Vampire")){
+            players.get(player-1).setFighter(new Vampire(spawn.x, spawn.y,  players.get(player-1)));
+        }else if (fighter.equals("Cyborg")){
+            players.get(player-1).setFighter(new Cyborg(spawn.x, spawn.y,  players.get(player-1)));
+        }else{
+            players.get(player-1).setFighter(new Robot(spawn.x, spawn.y,  players.get(player-1)));
+        }
+
+    }
     public static ArrayList<Weapon> getWeapons(){
         return weapons;
+    }
+    public static ArrayList<Platform> getPlatforms(){
+        return platforms;
     }
     public static int getFrame(){
         return FRAMECOUNT;
@@ -126,7 +159,10 @@ public class GameScreen {
         update();
 
         batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        platform.render(batch);
+//        mainPlatform.render(batch);
+        for (Platform platform: platforms) {
+            platform.render(batch);
+        }
         for (Weapon weapon: weapons) {
             if(weapon.getOwner() == null) weapon.render(batch);
         }

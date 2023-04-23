@@ -1,11 +1,10 @@
 package com.mygdx.game;
 
 public abstract class MovingObj extends Object {
-    //object's speed
+    //object's velocity
     protected float horVelocity = 0;
-
-    protected boolean canFall = true;
     protected float vertVelocity = 0;
+    protected boolean canFall = true; //can the object fall lower
 
     /**
      * 
@@ -26,12 +25,13 @@ public abstract class MovingObj extends Object {
         if (canFall) {
             vertVelocity += GameScreen.GRAVITY;
             if (vertVelocity < -1000) vertVelocity = -1000; //maximum downward velocity
-//            textureBounds.y += frameRate * vertVelocity;
-            setPosition(getX(), getY() + (frameRate * vertVelocity));
         }
-//        textureBounds.x += frameRate * horVelocity;
+        else if (vertVelocity < 0) vertVelocity = 0;
+
+        setPosition(getX(), getY() + (frameRate * vertVelocity));
         setPosition(getX() + (frameRate * horVelocity), getY());
         slowDown();
+
     }
 
     public void slowDown(){

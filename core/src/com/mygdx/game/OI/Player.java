@@ -1,6 +1,5 @@
 package com.mygdx.game.OI;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -31,21 +30,15 @@ public class Player {
      * updates the visuals or anything that needs to be updated every frame
      */
     public void update() {
-        fighter.update();
         continueAttack();
 
         //registers player's input for all inputs that can be held
-        if(playerNum == 1) { //if player 1...
-            if (Gdx.input.isKeyPressed(Input.Keys.D)) interact(Input.Keys.D);
-            if (Gdx.input.isKeyPressed(Input.Keys.A)) interact(Input.Keys.A);
-            if (Gdx.input.isKeyPressed(Input.Keys.S) && fighter.canFall()) interact(Input.Keys.S);
-        }
-        else if(playerNum == 2) { //if player 2...
-            // keypresses
-            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) interact(Input.Keys.RIGHT);
-            if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) interact(Input.Keys.LEFT);
-            if (Gdx.input.isKeyPressed(Input.Keys.DOWN) && fighter.canFall()) interact(Input.Keys.DOWN);
-        }
+        if (KeyBinds.isKeyPressed(KeyBinds.Keys.DOWN, playerNum - 1))
+            interact(KeyBinds.findKeyFromDefaultKey(KeyBinds.Keys.DOWN, playerNum - 1));
+        else if (KeyBinds.isKeyPressed(KeyBinds.Keys.LEFT, playerNum - 1))
+            interact(KeyBinds.findKeyFromDefaultKey(KeyBinds.Keys.LEFT, playerNum - 1));
+        else if (KeyBinds.isKeyPressed(KeyBinds.Keys.RIGHT, playerNum - 1))
+            interact(KeyBinds.findKeyFromDefaultKey(KeyBinds.Keys.RIGHT, playerNum - 1));
     }
 
     public void resetAssets(){
@@ -87,6 +80,7 @@ public class Player {
     }
     public void continueAttack(){
         switch (fighter.getCurrentATK()){
+            case NOATTACK: return;
             case NLIGHT: fighter.neutralLightAtk();
                 break;
             case SLIGHT: fighter.sideLightAtk();
@@ -96,19 +90,13 @@ public class Player {
         }
     }
     public void startAttack(){
+        if(fighter.isAttacking()) return;
         int directionKey = -10;
         //region finding which direction to attack
-        if(playerNum == 1) { //if player 1...
-            if (Gdx.input.isKeyPressed(Input.Keys.D)) directionKey = KeyBinds.convertKey(Input.Keys.D);
-            else if (Gdx.input.isKeyPressed(Input.Keys.A)) directionKey = KeyBinds.convertKey(Input.Keys.A);
-            else if (Gdx.input.isKeyPressed(Input.Keys.S)) directionKey = KeyBinds.convertKey(Input.Keys.S);
-        }
-        else if(playerNum == 2) { //if player 2...
-            // keypresses
-            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) directionKey = KeyBinds.convertKey(Input.Keys.RIGHT);
-            else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) directionKey = KeyBinds.convertKey(Input.Keys.LEFT);
-            else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) directionKey = KeyBinds.convertKey(Input.Keys.DOWN);
-        }
+        if (KeyBinds.isKeyPressed(KeyBinds.Keys.DOWN, playerNum - 1)) directionKey = KeyBinds.Keys.DOWN;
+        else if (KeyBinds.isKeyPressed(KeyBinds.Keys.JUMP, playerNum - 1)) directionKey = -10;
+        else if (KeyBinds.isKeyPressed(KeyBinds.Keys.LEFT, playerNum - 1)) directionKey = KeyBinds.Keys.LEFT;
+        else if (KeyBinds.isKeyPressed(KeyBinds.Keys.RIGHT, playerNum - 1)) directionKey = KeyBinds.Keys.RIGHT;
         //endregion
         //region attacking in the direction
         switch (directionKey) {
@@ -132,13 +120,15 @@ public class Player {
         HitData attackData = new HitData().set(fighterHitData.damage,
                 HitData.IGNORE, avgKBMultiplier, fighterHitData.direction, fighterHitData.hitStunDuration);
 
-        struckPlayer.takeDamage(attackData, fighter.isFacingRight());
+        struckPlayer.getStruck(attackData, fighter.isFacingRight());
     }
-    public void takeDamage(HitData hitData, boolean preferRight){
-        fighter.takeDamage(hitData.damage);
+
+    public void getStruck(HitData hitData, boolean preferRight){
         fighter.knockBack(hitData.direction, hitData.knockbackMultiplier, preferRight);
-        fighter.stun(hitData.hitStunDuration);
+        fighter.getStunned(hitData.hitStunDuration);
+        fighter.takeDamage(hitData.damage);
     }
+
     public void pull(Player pulledPlayer, Point point, float time){
         pulledPlayer.getFighter().pullTo(point, time);
     }
@@ -149,6 +139,8 @@ public class Player {
      * @param PRESSEDKEY The key being pressed
      */
     public void interact(int PRESSEDKEY){
+        if(fighter.isStunned()) return;
+        
         //converts the key into its value in the default keyset
         int KEY = KeyBinds.convertKey(PRESSEDKEY);
 
@@ -156,13 +148,13 @@ public class Player {
         //key presses
         switch (KEY){
             case (KeyBinds.Keys.RIGHT):
-                if (fighter.isCollidingWith(Main.gameScreen.platform) == Object.RIGHTCOLLISION) fighter.stop();
+                if (fighter.isCollidingWith(Main.gameScreen.mainPlatform) == Object.RIGHTCOLLISION) fighter.stop();
                 else if(fighter.getXVelocity() < 0) fighter.stop();
                 else if (fighter.isAttacking());
                 else fighter.moveRight();
                 break;
             case (KeyBinds.Keys.LEFT):
-                if (fighter.isCollidingWith(Main.gameScreen.platform) == Object.LEFTCOLLISION) fighter.stop();
+                if (fighter.isCollidingWith(Main.gameScreen.mainPlatform) == Object.LEFTCOLLISION) fighter.stop();
                 else if(fighter.getXVelocity() > 0) fighter.stop();
                 else if (fighter.isAttacking());
                 else fighter.moveLeft();
@@ -202,8 +194,17 @@ public class Player {
      * @param fighter
      */
     public void setFighter(Fighter fighter){
+        //grabbing any necessary initializing variables
+        float scale = 1;
+        if(this.fighter != null){
+            scale = this.fighter.getScale();
+        }
+
         this.fighter = fighter;
+
         fighter.setPlayer(this);
+        //setting the initializing variables
+        fighter.scale(scale);
     }
     public Fighter getFighter(){
         return fighter;
@@ -214,6 +215,8 @@ public class Player {
      * @param batch just put batch
      */
     public void renderAssets(SpriteBatch batch){
+        update();
+
         fighter.render(batch);
         if(equippedWeapon != null) equippedWeapon.render(batch);
     }
