@@ -1,19 +1,21 @@
 package com.mygdx.game.Characters;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.DualAnimation;
+import com.mygdx.game.GameScreen;
 import com.mygdx.game.HitData;
 import com.mygdx.game.KeyBinds;
 import com.mygdx.game.OI.Player;
+import com.mygdx.game.Projectiles.Projectile;
 
 import java.awt.*;
 
 public class Cyborg extends Fighter{
 
     DualAnimation sHeavyChargeAnimation;
-    boolean sHeavyChargeReleased = false;
+    boolean doneCharging = false;
+    boolean bulletSent = false;
 
     public Cyborg(float x, float y, Player player) {
         //runs the Fighter class's constructor, so it can set up anything in that constructor
@@ -77,6 +79,11 @@ public class Cyborg extends Fighter{
 
         //region side heavy
         sHeavyAnimation = animate(new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_Charge_Release_Sheet.png"), 2, 2, .1f);
+        sHeavyAnimation.setHitboxes(new Rectangle(37, 24, 4, 4),
+                new Rectangle(37, 24, 4, 4),
+                new Rectangle(37, 24, 4, 4),
+                new Rectangle(37, 24, 4, 4));
+
         sHeavyChargeAnimation = animate(new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_Charging_Sheet.png"), 2, 2, .15f);
         //endregion
         //endregion
@@ -184,19 +191,28 @@ public class Cyborg extends Fighter{
 
     public void sideHeavyAtk() {
         if(KeyBinds.isKeyPressed(KeyBinds.Keys.HEAVYATTACK, player.getPlayerNum() - 1)) {
-            if(!sHeavyChargeReleased) {
+            if(!doneCharging) {
                 charge();
                 return;
             }
-        } else sHeavyChargeReleased = true;
+        } else doneCharging = true;
         if(currentATK == Attack.SHEAVY && sHeavyAnimation.isAnimationFinished(stateTime)){
             endAttack();
-            sHeavyChargeReleased = false;
+            doneCharging = false;
+            bulletSent = false;
             return;
         }
         currentATK = Attack.SHEAVY;
         swapAnimation(sHeavyAnimation);
 
+        if(!bulletSent){
+            Projectile bullet = GameScreen.projectilePool.grab();
+            boolean flip = !isFacingRight;
+            applyHitbox(currentAnimation.getKeyHitBox(stateTime), flip);
+            bullet.use(new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_Charge_Bullet.png"),
+                    getHitboxBounds().x, getHitboxBounds().y, 10, 10, flip ? -600 : 600, 0);
+            bulletSent = true;
+        }
     }
     private void charge(){
         currentATK = Attack.SHEAVY;
