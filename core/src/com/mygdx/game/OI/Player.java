@@ -87,9 +87,15 @@ public class Player {
                 break;
             case DLIGHT: fighter.downLightAtk();
                 break;
+            case NHEAVY: fighter.neutralHeavyAtk();
+                break;
+            case SHEAVY: fighter.sideHeavyAtk();
+                break;
+            case DHEAVY: fighter.downHeavyAtk();
+                break;
         }
     }
-    public void startAttack(){
+    public void startAttack(boolean isHeavyAtk){
         if(fighter.isAttacking()) return;
         int directionKey = -10;
         //region finding which direction to attack
@@ -99,17 +105,33 @@ public class Player {
         else if (KeyBinds.isKeyPressed(KeyBinds.Keys.RIGHT, playerNum - 1)) directionKey = KeyBinds.Keys.RIGHT;
         //endregion
         //region attacking in the direction
-        switch (directionKey) {
-            case (-10): //if no direction
-                fighter.neutralLightAtk();
-                break;
-            case (KeyBinds.Keys.RIGHT):
-            case (KeyBinds.Keys.LEFT):
-                fighter.sideLightAtk();
-                break;
-            case (KeyBinds.Keys.DOWN):
-                fighter.downLightAtk();
-                break;
+        if(!isHeavyAtk) { //if a light attack
+            switch (directionKey) {
+                case (-10): //if no direction
+                    fighter.neutralLightAtk();
+                    break;
+                case (KeyBinds.Keys.RIGHT):
+                case (KeyBinds.Keys.LEFT):
+                    fighter.sideLightAtk();
+                    break;
+                case (KeyBinds.Keys.DOWN):
+                    fighter.downLightAtk();
+                    break;
+            }
+        }
+        else { //if a heavy attack
+            switch (directionKey) {
+                case (-10): //if no direction
+                    fighter.neutralHeavyAtk();
+                    break;
+                case (KeyBinds.Keys.RIGHT):
+                case (KeyBinds.Keys.LEFT):
+                    fighter.sideHeavyAtk();
+                    break;
+                case (KeyBinds.Keys.DOWN):
+                    fighter.downHeavyAtk();
+                    break;
+            }
         }
         //endregion
     }
@@ -181,8 +203,11 @@ public class Player {
                     throwWeapon();
                 }
                 break;
-            case (KeyBinds.Keys.ATTACK):
-                startAttack();
+            case (KeyBinds.Keys.LIGHTATTACK):
+                startAttack(false);
+                break;
+            case (KeyBinds.Keys.HEAVYATTACK):
+                startAttack(true);
                 break;
             case (KeyBinds.Keys.TEMP): //fixme testing keybind changing. Delete later
                 KeyBinds.changeKeyBind(KeyBinds.findKeyFromDefaultKey(KeyBinds.Keys.JUMP, playerNum - 1), Input.Keys.SPACE);
@@ -209,7 +234,9 @@ public class Player {
     public Fighter getFighter(){
         return fighter;
     }
-
+    public int getPlayerNum(){
+        return playerNum;
+    }
     /**
      * renders the fighter's model
      * @param batch just put batch

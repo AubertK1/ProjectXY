@@ -1,13 +1,19 @@
 package com.mygdx.game.Characters;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
+import com.mygdx.game.DualAnimation;
 import com.mygdx.game.HitData;
+import com.mygdx.game.KeyBinds;
 import com.mygdx.game.OI.Player;
 
 import java.awt.*;
 
 public class Cyborg extends Fighter{
+
+    DualAnimation sHeavyChargeAnimation;
+    boolean sHeavyChargeReleased = false;
 
     public Cyborg(float x, float y, Player player) {
         //runs the Fighter class's constructor, so it can set up anything in that constructor
@@ -57,7 +63,7 @@ public class Cyborg extends Fighter{
                 new Point(43, 20),
                 new Point(-1, -1));
         //endregion
-        //region neutral light
+        //region down light
         dLightAnimation = animate(new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_Attack3_Sheet.png"), 2, 2, .055f);
         dLightAnimation.setHitboxes(new Rectangle(0, 0, 0, 0),
                 new Rectangle(0, 0, 0, 0),
@@ -67,6 +73,11 @@ public class Cyborg extends Fighter{
                 new Point(-1, -1),
                 new Point(-1, -1),
                 new Point(-1, -1));
+        //endregion
+
+        //region side heavy
+        sHeavyAnimation = animate(new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_Charge_Release_Sheet.png"), 2, 2, .1f);
+        sHeavyChargeAnimation = animate(new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_Charging_Sheet.png"), 2, 2, .15f);
         //endregion
         //endregion
         //endregion
@@ -172,7 +183,24 @@ public class Cyborg extends Fighter{
     }
 
     public void sideHeavyAtk() {
+        if(KeyBinds.isKeyPressed(KeyBinds.Keys.HEAVYATTACK, player.getPlayerNum() - 1)) {
+            if(!sHeavyChargeReleased) {
+                charge();
+                return;
+            }
+        } else sHeavyChargeReleased = true;
+        if(currentATK == Attack.SHEAVY && sHeavyAnimation.isAnimationFinished(stateTime)){
+            endAttack();
+            sHeavyChargeReleased = false;
+            return;
+        }
+        currentATK = Attack.SHEAVY;
+        swapAnimation(sHeavyAnimation);
 
+    }
+    private void charge(){
+        currentATK = Attack.SHEAVY;
+        swapAnimation(sHeavyChargeAnimation);
     }
 
     public void downHeavyAtk() {

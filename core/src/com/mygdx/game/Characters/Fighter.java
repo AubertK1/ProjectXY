@@ -52,12 +52,16 @@ public class Fighter extends MovingObj{
     DualAnimation nLightAnimation;
     DualAnimation sLightAnimation;
     DualAnimation dLightAnimation;
-    //endregion
+    DualAnimation nHeavyAnimation;
+    DualAnimation sHeavyAnimation;
+    DualAnimation dHeavyAnimation;
+    //endregionNH
 
     //region attacks
     public enum Attack {
         NOATTACK,
-        NLIGHT, SLIGHT, DLIGHT
+        NLIGHT, SLIGHT, DLIGHT,
+        NHEAVY, SHEAVY, DHEAVY,
     }
     protected Attack currentATK = Attack.NOATTACK;
     protected boolean attackAlreadyHit = false;
