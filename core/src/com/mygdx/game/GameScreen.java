@@ -13,6 +13,7 @@ import com.mygdx.game.Characters.Robot;
 import com.mygdx.game.Characters.Vampire;
 import com.mygdx.game.OI.Player;
 import com.mygdx.game.OI.Screen;
+import com.mygdx.game.Projectiles.ProjectilePool;
 import com.mygdx.game.Weapons.Sword;
 import com.mygdx.game.Weapons.Weapon;
 
@@ -28,6 +29,8 @@ public class GameScreen extends Screen {
 
     public Platform mainPlatform;
     private Texture background;
+
+    public static ProjectilePool projectilePool = new ProjectilePool();
 
     //spawn points
     public static Vector2 spawn1 = new Vector2(Gdx.graphics.getWidth() / 2f - 200, Gdx.graphics.getHeight() / 2f);
@@ -101,6 +104,8 @@ public class GameScreen extends Screen {
     private void update(){
         FRAMECOUNT++;
 
+        projectilePool.update();
+
         //checking if anything goes out of bounds
         for (Player player: players) {
             if(!gameBounds.contains(player.getFighter().getX(), player.getFighter().getY())) player.resetAssets();
@@ -168,5 +173,7 @@ public class GameScreen extends Screen {
         }
         player1.renderAssets(batch);
         player2.renderAssets(batch);
+
+        projectilePool.renderProjectiles(batch);
     }
 }
