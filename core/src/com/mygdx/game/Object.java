@@ -2,7 +2,6 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
@@ -16,7 +15,7 @@ public abstract class Object {
     protected Rectangle textureBounds;
     protected Rectangle hurtboxBounds;
     protected Rectangle hitbox = new Rectangle(0,0,0,0);
-    protected Point hitboxFP = new Point(-1, -1);
+    protected Point hitboxFocalPoint = new Point(-1, -1);
 
     // hitbox side minus texture side. How far the HB's side is away from the texture's side
     private float HBLeftOffset = 0, HBRightOffset = 0, HBTopOffset = 0, HBBottomOffset = 0;
@@ -51,6 +50,17 @@ public abstract class Object {
     public static final int TOPCOLLISION = 1;
     public static final int RIGHTCOLLISION = 2;
     public static final int BOTTOMCOLLISION = 3;
+    //endregion
+    //region direction conversions
+    public static final int NODIRECTION = -1;
+    public static final int LEFT = 0;
+    public static final int UPLEFT = 1;
+    public static final int UP = 2;
+    public static final int UPRIGHT = 3;
+    public static final int RIGHT = 4;
+    public static final int DOWNRIGHT = 5;
+    public static final int DOWN = 6;
+    public static final int DOWNLEFT = 7;
     //endregion
 
     public Object(float posX, float posY, float sizeX, float sizeY, boolean isCollidable, boolean isVisible) {
@@ -173,20 +183,17 @@ public abstract class Object {
     }
     // endregion getters
 
-    public void renderHurtBox(){
+    public void renderOutlines(){
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.setColor(new Color(Color.GREEN));
         shapeRenderer.rect(hurtboxBounds.x, hurtboxBounds.y, hurtboxBounds.width, hurtboxBounds.height);
         shapeRenderer.setColor(new Color(Color.ORANGE));
         shapeRenderer.rect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
-        if(hitboxFP.x != -1) {
+        if(hitboxFocalPoint.x != -1) {
             shapeRenderer.setColor(new Color(Color.RED));
-            shapeRenderer.rect((float) hitboxFP.getX()-2, (float) hitboxFP.getY()-2, 4, 4);
+            shapeRenderer.rect((float) hitboxFocalPoint.getX()-2, (float) hitboxFocalPoint.getY()-2, 4, 4);
         }
         shapeRenderer.end();
-    }
-    public Animation<TextureRegion> animate(Texture animationSheet){
-        return animate(animationSheet, 1, 2, .5f);
     }
     public DualAnimation animate(Texture animationSheet, int SHEET_ROWS, int SHEET_COLS, float frameDuration){
         TextureRegion[][] tmp = TextureRegion.split(animationSheet,
@@ -219,10 +226,10 @@ public abstract class Object {
     }
     public void applyFocalPoint(Point focalPoint, boolean flip){
         if(focalPoint.getX() == -1 && focalPoint.getY() == -1) {
-            this.hitboxFP.setLocation(-1, -1);
+            this.hitboxFocalPoint.setLocation(-1, -1);
             return;
         }
-        this.hitboxFP.setLocation(
+        this.hitboxFocalPoint.setLocation(
                 getX() + ((flip ? (getWidth() / scale) - focalPoint.getX(): focalPoint.getX()) * scale),
                 getY() + (focalPoint.getY() * scale)
         );

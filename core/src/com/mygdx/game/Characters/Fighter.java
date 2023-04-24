@@ -20,7 +20,7 @@ public class Fighter extends MovingObj{
     protected Player player;
 
     //region stats
-    protected static int maxJumps = 3;
+    protected static int maxJumps = 2;
     protected float speed = 500;
     protected int damage = 10;
     protected int maxHealth = 100;
@@ -51,12 +51,17 @@ public class Fighter extends MovingObj{
     //attacks
     DualAnimation nLightAnimation;
     DualAnimation sLightAnimation;
-    //endregion
+    DualAnimation dLightAnimation;
+    DualAnimation nHeavyAnimation;
+    DualAnimation sHeavyAnimation;
+    DualAnimation dHeavyAnimation;
+    //endregionNH
 
     //region attacks
     public enum Attack {
         NOATTACK,
-        NLIGHT, SLIGHT, DLIGHT
+        NLIGHT, SLIGHT, DLIGHT,
+        NHEAVY, SHEAVY, DHEAVY,
     }
     protected Attack currentATK = Attack.NOATTACK;
     protected boolean attackAlreadyHit = false;
@@ -68,7 +73,7 @@ public class Fighter extends MovingObj{
     }
 
     public void update() {
-        float deltaTime = Main.getFrameRate();
+        // float deltaTime = Main.getFrameRate();
 
         //region collisions
         int i = 0;
@@ -229,34 +234,65 @@ public class Fighter extends MovingObj{
         isBlocking = true;
     }
 
+    public void endAttack(){
+        //ending the attack and resetting values
+        attackAlreadyHit = false;
+        currentATK = Attack.NOATTACK;
+        stateTime = 0;
+    }
+
     public void takeDamage(int damage){
         health -= damage;
+
+        if (health <= 0) {
+            reset();
+        }
     }
     public void knockBack(int direction, float multiplier, boolean preferRight){
-        float baseHorKB = 1120;
+        float baseHorKB = 800;
         float baseVertKB = -GameScreen.GRAVITY + baseHorKB;
 
         canFall = true;
         switch (direction){
-            case LEFTCOLLISION:
+            case LEFT:
+                horVelocity = -baseHorKB * multiplier * 1f;
+                vertVelocity = baseVertKB * multiplier * .65f;
+                break;
+            case RIGHT:
+                horVelocity = baseHorKB * multiplier * 1f;
+                vertVelocity = baseVertKB * multiplier * .65F;
+                break;
+            case UPLEFT:
                 horVelocity = -baseHorKB * multiplier * .74f;
                 vertVelocity = baseVertKB * multiplier * .9f;
                 break;
-            case RIGHTCOLLISION:
+            case UPRIGHT:
                 horVelocity = baseHorKB * multiplier * .74f;
-                vertVelocity = baseVertKB * multiplier * 1;
+                vertVelocity = baseVertKB * multiplier * .9f;
                 break;
-            case TOPCOLLISION:
+            case DOWNLEFT:
+                horVelocity = -baseHorKB * multiplier * .74f;
+                vertVelocity = -baseVertKB * multiplier * .9f;
+                break;
+            case DOWNRIGHT:
+                horVelocity = baseHorKB * multiplier * .74f;
+                vertVelocity = -baseVertKB * multiplier * .9f;
+                break;
+            case UP:
                 horVelocity = (preferRight ? baseHorKB : -baseHorKB) * multiplier * .35f;
                 vertVelocity = baseVertKB * multiplier;
                 break;
-            case BOTTOMCOLLISION:
+            case DOWN:
+
                 horVelocity = baseHorKB * multiplier * .35f;
                 vertVelocity = -baseVertKB * multiplier;
                 break;
         }
     }
-    public void stun(int duration){
+    public void getStunned(int duration){
+        if(duration == 0) return;
+        if(!isInHitStun) stop();
+
         isInHitStun = true;
         nextUnstunFrame = GameScreen.getFrame() + duration;
     }
@@ -288,6 +324,10 @@ public class Fighter extends MovingObj{
     public int getDamage() {
         return damage;
     }
+    public boolean isStunned() {
+        return isInHitStun;
+    }
+
 
     public boolean isAttacking(){
         return !(currentATK == Attack.NOATTACK);
@@ -342,7 +382,7 @@ public class Fighter extends MovingObj{
 
         if(Main.inDebugMode) {
             batch.end();
-            renderHurtBox();
+            renderOutlines();
             batch.begin();
         }
     }

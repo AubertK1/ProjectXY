@@ -27,9 +27,11 @@ public abstract class MovingObj extends Object {
             if (vertVelocity < -1000) vertVelocity = -1000; //maximum downward velocity
         }
         else if (vertVelocity < 0) vertVelocity = 0;
+
         setPosition(getX(), getY() + (frameRate * vertVelocity));
         setPosition(getX() + (frameRate * horVelocity), getY());
         slowDown();
+
     }
 
     public void slowDown(){

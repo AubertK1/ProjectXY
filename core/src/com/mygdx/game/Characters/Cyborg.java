@@ -1,13 +1,19 @@
 package com.mygdx.game.Characters;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
+import com.mygdx.game.DualAnimation;
 import com.mygdx.game.HitData;
+import com.mygdx.game.KeyBinds;
 import com.mygdx.game.OI.Player;
 
 import java.awt.*;
 
 public class Cyborg extends Fighter{
+
+    DualAnimation sHeavyChargeAnimation;
+    boolean sHeavyChargeReleased = false;
 
     public Cyborg(float x, float y, Player player) {
         //runs the Fighter class's constructor, so it can set up anything in that constructor
@@ -25,6 +31,7 @@ public class Cyborg extends Fighter{
         fallAnimation = animate(new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_Falling_Sheet.png"), 2, 2, .15f);
 
         //region attack animations
+        //region side light
         sLightAnimation = animate(new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_Attack1_Sheet.png"), 2, 3, .085f);
         sLightAnimation.setHitboxes(new Rectangle(0, 0, 0, 0),
                 new Rectangle(0, 19, 5, 8),
@@ -39,6 +46,40 @@ public class Cyborg extends Fighter{
                 new Point(38, 25),
                 new Point(-1, -1));
         //endregion
+        //region neutral light
+        nLightAnimation = animate(new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_Attack2_Sheet.png"), 1, 7, .055f);
+        nLightAnimation.setHitboxes(new Rectangle(0, 0, 0, 0),
+                new Rectangle(0, 0, 0, 0),
+                new Rectangle(23, 20, 9, 10),
+                new Rectangle(23, 20, 13, 10),
+                new Rectangle(27, 18, 17, 12),
+                new Rectangle(27, 20, 22, 8),
+                new Rectangle(27, 20, 21, 8));
+        nLightAnimation.setFocalPoints(new Point(-1, -1),
+                new Point(-1, -1),
+                new Point(26, 28),
+                new Point(33, 25),
+                new Point(38, 23),
+                new Point(43, 20),
+                new Point(-1, -1));
+        //endregion
+        //region down light
+        dLightAnimation = animate(new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_Attack3_Sheet.png"), 2, 2, .055f);
+        dLightAnimation.setHitboxes(new Rectangle(0, 0, 0, 0),
+                new Rectangle(0, 0, 0, 0),
+                new Rectangle(24, 7, 12, 8),
+                new Rectangle(25, 6, 14, 8));
+        dLightAnimation.setFocalPoints(new Point(-1, -1),
+                new Point(-1, -1),
+                new Point(-1, -1),
+                new Point(-1, -1));
+        //endregion
+
+        //region side heavy
+        sHeavyAnimation = animate(new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_Charge_Release_Sheet.png"), 2, 2, .1f);
+        sHeavyChargeAnimation = animate(new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_Charging_Sheet.png"), 2, 2, .15f);
+        //endregion
+        //endregion
         //endregion
     }
 
@@ -48,40 +89,65 @@ public class Cyborg extends Fighter{
     }
 
     public void neutralLightAtk() {
-//        currentATK = Attack.NLIGHT;
-
-    }
-
-    public void sideLightAtk() {
-        if(sLightAnimation.isAnimationFinished(stateTime)){
-            currentATK = Attack.NOATTACK;
-            stateTime = 0;
+        if(currentATK == Attack.NLIGHT && nLightAnimation.isAnimationFinished(stateTime)){
+            endAttack();
             return;
         }
-        swapAnimation(sLightAnimation);
+        currentATK = Attack.NLIGHT;
+        swapAnimation(nLightAnimation);
         Player struckPlayer = player.checkHit();
         boolean hit = struckPlayer != null;
-        currentATK = Attack.SLIGHT;
-        int atkFrame = sLightAnimation.getKeyFrameIndex(stateTime);
-        int direction = isFacingRight ? RIGHTCOLLISION : LEFTCOLLISION;
-        if(isFacingRight) moveRight();
-        else moveLeft();
-        horVelocity *= .7f;
+        int atkFrame = nLightAnimation.getKeyFrameIndex(stateTime);
+        int direction = isFacingRight ? UPRIGHT : UPLEFT;
         if(hit){
-            int damage = attackAlreadyHit ? 0 : 5;
-            float deltaT = sLightAnimation.getFrameDuration();
+            int damage = attackAlreadyHit ? 0 : 20;
+            float deltaT = nLightAnimation.getFrameDuration();
             switch (atkFrame){
                 case 1:
-                    player.strike(struckPlayer, new HitData().set(damage, 2, .00f, direction, 0));
+                    player.strike(struckPlayer, new HitData().set(damage, 2, 0, direction, 3));
                     break;
                 case 2:
                 case 3:
                 case 4:
-                    player.strike(struckPlayer, new HitData().set(damage, 2, .00f, direction, 0));
-                    player.pull(struckPlayer, hitboxFP, deltaT);
+                    player.pull(struckPlayer, hitboxFocalPoint, deltaT);
+                    player.strike(struckPlayer, new HitData().set(damage, 2, 0, direction, 3));
                     break;
                 case 5:
-                    player.strike(struckPlayer, new HitData().set(damage, 2, 1.1f, direction, 0));
+                    player.strike(struckPlayer, new HitData().set(damage, 2, 1.03f, direction, 10));
+                    break;
+            }
+            attackAlreadyHit = true;
+        }
+    }
+
+    public void sideLightAtk() {
+        if(currentATK == Attack.SLIGHT && sLightAnimation.isAnimationFinished(stateTime)){
+            endAttack();
+            return;
+        }
+        currentATK = Attack.SLIGHT;
+        swapAnimation(sLightAnimation);
+        Player struckPlayer = player.checkHit();
+        boolean hit = struckPlayer != null;
+        int atkFrame = sLightAnimation.getKeyFrameIndex(stateTime);
+        int direction = isFacingRight ? RIGHT : LEFT;
+        if(isFacingRight) moveRight(); else moveLeft();
+        horVelocity *= .7f;
+        if(hit){
+            int damage = attackAlreadyHit ? 0 : 20;
+            float deltaT = sLightAnimation.getFrameDuration();
+            switch (atkFrame){
+                case 1:
+                    player.strike(struckPlayer, new HitData().set(damage, 2, 0, direction, 18));
+                    break;
+                case 2:
+                case 3:
+                case 4:
+                    player.strike(struckPlayer, new HitData().set(damage, 2, 0, direction, 18));
+                    player.pull(struckPlayer, hitboxFocalPoint, deltaT);
+                    break;
+                case 5:
+                    player.strike(struckPlayer, new HitData().set(damage, 2, 1.5f, direction, 18));
                     break;
             }
             attackAlreadyHit = true;
@@ -89,7 +155,21 @@ public class Cyborg extends Fighter{
     }
 
     public void downLightAtk() {
+        if(currentATK == Attack.DLIGHT && dLightAnimation.isAnimationFinished(stateTime)){
+            endAttack();
+            return;
+        }
+        currentATK = Attack.DLIGHT;
+        swapAnimation(dLightAnimation);
+        Player struckPlayer = player.checkHit();
+        boolean hit = struckPlayer != null;
+        int direction = isFacingRight ? DOWNRIGHT : DOWNLEFT;
 
+        if(hit){
+            int damage = attackAlreadyHit ? 0 : 20;
+            player.strike(struckPlayer, new HitData().set(damage, 2, .5f, direction, 12));
+            attackAlreadyHit = true;
+        }
     }
     // endregion
 
@@ -103,7 +183,24 @@ public class Cyborg extends Fighter{
     }
 
     public void sideHeavyAtk() {
+        if(KeyBinds.isKeyPressed(KeyBinds.Keys.HEAVYATTACK, player.getPlayerNum() - 1)) {
+            if(!sHeavyChargeReleased) {
+                charge();
+                return;
+            }
+        } else sHeavyChargeReleased = true;
+        if(currentATK == Attack.SHEAVY && sHeavyAnimation.isAnimationFinished(stateTime)){
+            endAttack();
+            sHeavyChargeReleased = false;
+            return;
+        }
+        currentATK = Attack.SHEAVY;
+        swapAnimation(sHeavyAnimation);
 
+    }
+    private void charge(){
+        currentATK = Attack.SHEAVY;
+        swapAnimation(sHeavyChargeAnimation);
     }
 
     public void downHeavyAtk() {
