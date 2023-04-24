@@ -238,6 +238,7 @@ public class Fighter extends MovingObj{
         //ending the attack and resetting values
         attackAlreadyHit = false;
         currentATK = Attack.NOATTACK;
+        isInHitStun = false; //fixme may cause unintended glitches
         stateTime = 0;
     }
 
@@ -355,6 +356,10 @@ public class Fighter extends MovingObj{
      */
     public void setPlayer(Player player) {
         this.player = player;
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 
     /**

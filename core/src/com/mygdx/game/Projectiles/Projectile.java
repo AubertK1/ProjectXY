@@ -9,15 +9,17 @@ import com.mygdx.game.Object;
 public class Projectile extends MovingObj {
     protected int activeTime = 0;
     protected HitData hitData = new HitData();
+    protected Player owner;
 
     public Projectile() {
         super(-1, -1, 0, 0, true, false);
     }
 
-    public void use(Texture model, float centerX, float centerY, float width, float height, float hVelo, float vVelo){
+    public void use(Player owner, Texture model, float x, float y, float width, float height, float hVelo, float vVelo){
         this.model = model;
+        setOwner(owner);
 
-        setPosition(centerX - (width/2f), centerY - (height/2f));
+        setPosition(x, y);
         setHBPosition(0, 0);
         setSize(width, height);
         setHBSize(width, height);
@@ -27,6 +29,10 @@ public class Projectile extends MovingObj {
 
     public void setHitData(HitData hitData){
         this.hitData = hitData;
+    }
+
+    public void setOwner(Player owner) {
+        this.owner = owner;
     }
 
     public void launch(float hVelo, float vVelo){
@@ -65,6 +71,9 @@ public class Projectile extends MovingObj {
 
     }
 
+    public void free(){
+        GameScreen.projectilePool.free(this);
+    }
     private void update(){
         setPosition(getX() + (Main.getFrameRate() * horVelocity), getY());
 

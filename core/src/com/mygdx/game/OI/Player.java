@@ -146,8 +146,8 @@ public class Player {
     }
 
     public void getStruck(HitData hitData, boolean preferRight){
-        fighter.knockBack(hitData.direction, hitData.knockbackMultiplier, preferRight);
         fighter.getStunned(hitData.hitStunDuration);
+        fighter.knockBack(hitData.direction, hitData.knockbackMultiplier, preferRight);
         fighter.takeDamage(hitData.damage);
     }
 
@@ -172,13 +172,13 @@ public class Player {
             case (KeyBinds.Keys.RIGHT):
                 if (fighter.isCollidingWith(Main.gameScreen.mainPlatform) == Object.RIGHTCOLLISION) fighter.stop();
                 else if(fighter.getXVelocity() < 0) fighter.stop();
-                else if (fighter.isAttacking());
+                else if(fighter.isStunned());
                 else fighter.moveRight();
                 break;
             case (KeyBinds.Keys.LEFT):
                 if (fighter.isCollidingWith(Main.gameScreen.mainPlatform) == Object.LEFTCOLLISION) fighter.stop();
                 else if(fighter.getXVelocity() > 0) fighter.stop();
-                else if (fighter.isAttacking());
+                else if(fighter.isStunned());
                 else fighter.moveLeft();
                 break;
             case (KeyBinds.Keys.JUMP):

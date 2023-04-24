@@ -103,6 +103,8 @@ public class Cyborg extends Fighter{
         }
         currentATK = Attack.NLIGHT;
         swapAnimation(nLightAnimation);
+        isInHitStun = true;
+
         Player struckPlayer = player.checkHit();
         boolean hit = struckPlayer != null;
         int atkFrame = nLightAnimation.getKeyFrameIndex(stateTime);
@@ -135,6 +137,7 @@ public class Cyborg extends Fighter{
         }
         currentATK = Attack.SLIGHT;
         swapAnimation(sLightAnimation);
+
         Player struckPlayer = player.checkHit();
         boolean hit = struckPlayer != null;
         int atkFrame = sLightAnimation.getKeyFrameIndex(stateTime);
@@ -169,6 +172,8 @@ public class Cyborg extends Fighter{
         }
         currentATK = Attack.DLIGHT;
         swapAnimation(dLightAnimation);
+        isInHitStun = true;
+
         Player struckPlayer = player.checkHit();
         boolean hit = struckPlayer != null;
         int direction = isFacingRight ? DOWNRIGHT : DOWNLEFT;
@@ -191,6 +196,8 @@ public class Cyborg extends Fighter{
     }
 
     public void sideHeavyAtk() {
+        currentATK = Attack.SHEAVY;
+        isInHitStun = true;
         if(KeyBinds.isKeyPressed(KeyBinds.Keys.HEAVYATTACK, player.getPlayerNum() - 1)) {
             if(!doneCharging) {
                 charge();
@@ -210,8 +217,9 @@ public class Cyborg extends Fighter{
             PlasmaBallProjectile plasmaBall = (PlasmaBallProjectile) GameScreen.projectilePool.grab(PlasmaBallProjectile.class);
             boolean flip = !isFacingRight;
             applyHitbox(currentAnimation.getKeyHitBox(stateTime), flip);
-            plasmaBall.use(new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_Charge_Bullet.png"),
+            plasmaBall.use(this.player, new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_Charge_Bullet.png"),
                     getHitboxBounds().x, getHitboxBounds().y, 10, 10, flip ? -600 : 600, 0);
+            plasmaBall.setHitData(new HitData().set(5, 1, .75f, NODIRECTION, 15));
             plasmaBallSent = true;
         }
     }
