@@ -7,6 +7,7 @@ import com.mygdx.game.GameScreen;
 import com.mygdx.game.HitData;
 import com.mygdx.game.KeyBinds;
 import com.mygdx.game.OI.Player;
+import com.mygdx.game.Projectiles.PlasmaBallProjectile;
 import com.mygdx.game.Projectiles.Projectile;
 
 import java.awt.*;
@@ -206,7 +207,7 @@ public class Cyborg extends Fighter{
         swapAnimation(sHeavyAnimation);
 
         if(!plasmaBallSent){
-            Projectile plasmaBall = GameScreen.projectilePool.grab();
+            PlasmaBallProjectile plasmaBall = (PlasmaBallProjectile) GameScreen.projectilePool.grab(PlasmaBallProjectile.class);
             boolean flip = !isFacingRight;
             applyHitbox(currentAnimation.getKeyHitBox(stateTime), flip);
             plasmaBall.use(new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_Charge_Bullet.png"),
