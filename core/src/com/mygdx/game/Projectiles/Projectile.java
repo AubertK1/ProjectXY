@@ -2,11 +2,13 @@ package com.mygdx.game.Projectiles;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.mygdx.game.Main;
-import com.mygdx.game.MovingObj;
+import com.mygdx.game.*;
+import com.mygdx.game.OI.Player;
+import com.mygdx.game.Object;
 
 public class Projectile extends MovingObj {
     protected int activeTime = 0;
+    protected HitData hitData = new HitData();
 
     public Projectile() {
         super(-1, -1, 0, 0, true, false);
@@ -16,9 +18,17 @@ public class Projectile extends MovingObj {
         this.model = model;
 
         setPosition(centerX - (width/2f), centerY - (height/2f));
+        setHBPosition(0, 0);
         setSize(width, height);
+        setHBSize(width, height);
+
         launch(hVelo, vVelo);
     }
+
+    public void setHitData(HitData hitData){
+        this.hitData = hitData;
+    }
+
     public void launch(float hVelo, float vVelo){
         vertVelocity = vVelo;
         horVelocity = hVelo;
@@ -32,8 +42,34 @@ public class Projectile extends MovingObj {
         launch(0, 0);
     }
 
+    protected Object checkCollision(){
+        for (Player player: GameScreen.getPlayers()) { //fighter collisions
+            if (this.isCollidingWith(player.getFighter()) != NOCOLLISION) { //if hits a fighter
+                return player.getFighter();
+            }
+        }
+        for (Platform platform: GameScreen.getPlatforms()) { //platform collisions
+            if (this.isCollidingWith(platform) != NOCOLLISION) { //if hits a platform
+                return platform;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * The effect from hitting something. Will vary from different projectiles
+     * @param collidedObj the object that's being hit by the projectile
+     */
+    protected void proc(Object collidedObj){
+
+    }
+
     private void update(){
         setPosition(getX() + (Main.getFrameRate() * horVelocity), getY());
+
+        Object obj = checkCollision();
+        if(obj != null) proc(obj);
     }
     public void render(SpriteBatch batch) {
         update();

@@ -15,7 +15,7 @@ public class Cyborg extends Fighter{
 
     DualAnimation sHeavyChargeAnimation;
     boolean doneCharging = false;
-    boolean bulletSent = false;
+    boolean plasmaBallSent = false;
 
     public Cyborg(float x, float y, Player player) {
         //runs the Fighter class's constructor, so it can set up anything in that constructor
@@ -199,19 +199,19 @@ public class Cyborg extends Fighter{
         if(currentATK == Attack.SHEAVY && sHeavyAnimation.isAnimationFinished(stateTime)){
             endAttack();
             doneCharging = false;
-            bulletSent = false;
+            plasmaBallSent = false;
             return;
         }
         currentATK = Attack.SHEAVY;
         swapAnimation(sHeavyAnimation);
 
-        if(!bulletSent){
-            Projectile bullet = GameScreen.projectilePool.grab();
+        if(!plasmaBallSent){
+            Projectile plasmaBall = GameScreen.projectilePool.grab();
             boolean flip = !isFacingRight;
             applyHitbox(currentAnimation.getKeyHitBox(stateTime), flip);
-            bullet.use(new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_Charge_Bullet.png"),
+            plasmaBall.use(new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_Charge_Bullet.png"),
                     getHitboxBounds().x, getHitboxBounds().y, 10, 10, flip ? -600 : 600, 0);
-            bulletSent = true;
+            plasmaBallSent = true;
         }
     }
     private void charge(){
