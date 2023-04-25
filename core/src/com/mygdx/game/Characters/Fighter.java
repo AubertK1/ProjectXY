@@ -84,6 +84,8 @@ public class Fighter extends MovingObj{
                 canFallChanged = true;
                 stopJump();
                 resetJumps();
+
+                this.snapOutOf(platform, UP);
             } else if (!canFallChanged && i == GameScreen.getPlatforms().size()-1){
                 canFall = true;
             }
@@ -98,16 +100,20 @@ public class Fighter extends MovingObj{
                 stopJump();
                 resetJumps();
                 vertVelocity = -135;
+
+                this.snapOutOf(platform, RIGHT);
             }
             if (this.isCollidingWith(platform) == RIGHTCOLLISION) { //if hitting a platform from the side
                 if(horVelocity > 0) horVelocity = 0;
                 stopJump();
                 resetJumps();
                 vertVelocity = -135;
+
+                this.snapOutOf(platform, LEFT);
             }
 
             i++;
-        }
+        }   
         //endregion
 
         //region gravity

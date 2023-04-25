@@ -234,6 +234,7 @@ public abstract class Object {
                 getY() + (focalPoint.getY() * scale)
         );
     }
+
     /**
      * checks if this object is colliding with object o
      *
@@ -269,19 +270,51 @@ public abstract class Object {
         Point thisMidpoint = new Point((int) ((thisXRange.getP2().getX()+thisXRange.getP1().getX())/2), (int) ((thisYRange.getP2().getY()+thisYRange.getP1().getY())/2));
         Point oMidpoint = new Point((int) ((oXRange.getP2().getX()+oXRange.getP1().getX())/2), (int) ((oYRange.getP2().getY()+oYRange.getP1().getY())/2));
 
-        //check if these objects would even overlap horizontally...will be false if they would pass by each other horizontally
-        if(thisXRange.intersectsLine(oXRange)){
-            if(thisMidpoint.y > oMidpoint.y && r1.getY() < r2.getY() + r2.getHeight()) return BOTTOMCOLLISION; //if this object is being collided from the bottom
-            else if(thisMidpoint.y < oMidpoint.y && r1.getY() + r1.getHeight()> r2.getY()) return TOPCOLLISION; //if this object is being collided from the top
-        }
-
+        //fixme
         //check if these objects would even overlap vertically...will be false if they would pass by each other vertically
         if(thisYRange.intersectsLine(oYRange)){
             if(thisMidpoint.x > oMidpoint.x && r1.getX() < r2.getX() + r2.getWidth()) return LEFTCOLLISION; //if this object is being collided from the left
             else if(thisMidpoint.x < oMidpoint.x && r1.getX() + r1.getWidth() > r2.getX()) return RIGHTCOLLISION; //if this object is being collided from the right
         }
 
+        //check if these objects would even overlap horizontally...will be false if they would pass by each other horizontally
+        if(thisXRange.intersectsLine(oXRange)){
+            if(thisMidpoint.y > oMidpoint.y && r1.getY() < r2.getY() + r2.getHeight()) return BOTTOMCOLLISION; //if this object is being collided from the bottom
+            else if(thisMidpoint.y < oMidpoint.y && r1.getY() + r1.getHeight()> r2.getY()) return TOPCOLLISION; //if this object is being collided from the top
+        }
+
+
         return NOCOLLISION;
     }
 
+    public void snapOutOf(Object o, int direction){
+        snapOut(this, o, direction);
+    }
+    /**
+     *
+     * @param o1 The object that will be moved out
+     * @param o2 The object that will not be moved
+     * @param direction The direction o1 will be moved out of o2
+     */
+    public static void snapOut(Object o1, Object o2, int direction){
+        int mercyRange = 3; //MUST BE THE SAME AS IN isColliding()
+        switch (direction){
+            case LEFT:
+                float leftX = o2.getHBX() - o1.getHBWidth() + mercyRange;
+                o1.setPosition(leftX, o1.getY());
+                break;
+            case RIGHT:
+                float rightX = o2.getHBX() + o2.getHBWidth() - mercyRange;
+                o1.setPosition(rightX, o1.getY());
+                break;
+            case DOWN:
+                float bottomY = o2.getHBY() - o1.getHBHeight() + mercyRange;
+                o1.setPosition(o1.getX(), bottomY);
+                break;
+            case UP:
+                float topY = o2.getHBY() + o2.getHBHeight() - mercyRange;
+                o1.setPosition(o1.getX(), topY);
+                break;
+        }
+    }
 }
