@@ -85,7 +85,7 @@ public class Fighter extends MovingObj{
                 stopJump();
                 resetJumps();
 
-                this.snapOutOf(platform, UP);
+                this.pushOutOf(platform, UP);
             } else if (!canFallChanged && i == GameScreen.getPlatforms().size()-1){
                 canFall = true;
             }
@@ -93,6 +93,8 @@ public class Fighter extends MovingObj{
             if (this.isCollidingWith(platform)[TOPCOLLISION]) { //if hitting a platform from the bottom
                 stopJump();
                 vertVelocity = 0;
+
+                this.pushOutOf(platform, DOWN);
             }
 
             if (this.isCollidingWith(platform)[LEFTCOLLISION]) { //if hitting a platform from the side
@@ -101,7 +103,7 @@ public class Fighter extends MovingObj{
                 resetJumps();
                 vertVelocity = -135;
 
-//                this.snapOutOf(platform, RIGHT);
+                this.pushOutOf(platform, RIGHT);
             }
             if (this.isCollidingWith(platform)[RIGHTCOLLISION]) { //if hitting a platform from the side
                 if(horVelocity > 0) horVelocity = 0;
@@ -109,7 +111,7 @@ public class Fighter extends MovingObj{
                 resetJumps();
                 vertVelocity = -135;
 
-//                this.snapOutOf(platform, LEFT);
+                this.pushOutOf(platform, LEFT);
             }
 
             i++;
@@ -126,7 +128,6 @@ public class Fighter extends MovingObj{
         if (GameScreen.getFrame() >= nextJumpFrame) {
             isJumping = false;
         }
-        if(currentATK == Attack.NOATTACK) attackAlreadyHit = false;
         if(GameScreen.getFrame() >= nextUnstunFrame) isInHitStun = false;
     }
 
@@ -298,7 +299,7 @@ public class Fighter extends MovingObj{
     }
     public void getStunned(int duration){
         if(duration == 0) return;
-        if(!isInHitStun) stop();
+//        if(!isInHitStun) stop();
 
         isInHitStun = true;
         nextUnstunFrame = GameScreen.getFrame() + duration;

@@ -185,6 +185,8 @@ public abstract class Object {
 
     public void renderOutlines(){
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.setColor(new Color(Color.PINK));
+        shapeRenderer.rect(textureBounds.x, textureBounds.y, textureBounds.width, textureBounds.height);
         shapeRenderer.setColor(new Color(Color.GREEN));
         shapeRenderer.rect(hurtboxBounds.x, hurtboxBounds.y, hurtboxBounds.width, hurtboxBounds.height);
         shapeRenderer.setColor(new Color(Color.ORANGE));
@@ -284,8 +286,9 @@ public abstract class Object {
             else if(thisMidpoint.x < oMidpoint.x && r1.getX() + r1.getWidth() > r2.getX()) collisions[RIGHTCOLLISION] = true; //if this object is being collided from the right
         }
 
-        for (boolean c: collisions) { //if another collision was found, make the NOCOLLISION element false
-            if (c) {
+        for (int i = 0; i < collisions.length; i++) { //if another collision was found, make the NOCOLLISION element false
+            if (i == NOCOLLISION) continue; //skips the value of the NOCOLLISION element bc it will be true by default
+            if (collisions[i]) {
                 collisions[NOCOLLISION] = false;
                 break;
             }
@@ -293,8 +296,8 @@ public abstract class Object {
         return collisions;
     }
 
-    public void snapOutOf(Object o, int direction){
-        snapOut(this, o, direction);
+    public void pushOutOf(Object o, int direction){
+        pushOut(this, o, direction);
     }
     /**
      *
@@ -302,19 +305,19 @@ public abstract class Object {
      * @param o2 The object that will not be moved
      * @param direction The direction o1 will be moved out of o2
      */
-    public static void snapOut(Object o1, Object o2, int direction){
+    public static void pushOut(Object o1, Object o2, int direction){
         int mercyRange = 3; //MUST BE THE SAME AS IN isColliding()
         switch (direction){
             case LEFT:
                 float leftX = o2.getHBX() - o1.getHBWidth() + mercyRange;
-                o1.setPosition(leftX, o1.getY());
+                o1.setPositionFromHB(leftX, o1.getY());
                 break;
             case RIGHT:
                 float rightX = o2.getHBX() + o2.getHBWidth() - mercyRange;
-                o1.setPosition(rightX, o1.getY());
+                o1.setPositionFromHB(rightX, o1.getY());
                 break;
             case DOWN:
-                float bottomY = o2.getHBY() - o1.getHBHeight() + mercyRange;
+                float bottomY = o2.getHBY() - o1.getHBHeight();
                 o1.setPosition(o1.getX(), bottomY);
                 break;
             case UP:
