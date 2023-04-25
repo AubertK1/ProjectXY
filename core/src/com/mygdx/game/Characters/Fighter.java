@@ -79,7 +79,7 @@ public class Fighter extends MovingObj{
         int i = 0;
         boolean canFallChanged = false;
         for (Platform platform: GameScreen.getPlatforms()) { //platform collisions
-            if (this.isCollidingWith(platform) == BOTTOMCOLLISION) { //if landing on a platform
+            if (this.isCollidingWith(platform)[BOTTOMCOLLISION]) { //if landing on a platform
                 canFall = false;
                 canFallChanged = true;
                 stopJump();
@@ -90,26 +90,26 @@ public class Fighter extends MovingObj{
                 canFall = true;
             }
 
-            if (this.isCollidingWith(platform) == TOPCOLLISION) { //if hitting a platform from the bottom
+            if (this.isCollidingWith(platform)[TOPCOLLISION]) { //if hitting a platform from the bottom
                 stopJump();
                 vertVelocity = 0;
             }
 
-            if (this.isCollidingWith(platform) == LEFTCOLLISION) { //if hitting a platform from the side
+            if (this.isCollidingWith(platform)[LEFTCOLLISION]) { //if hitting a platform from the side
                 if(horVelocity < 0) horVelocity = 0;
                 stopJump();
                 resetJumps();
                 vertVelocity = -135;
 
-                this.snapOutOf(platform, RIGHT);
+//                this.snapOutOf(platform, RIGHT);
             }
-            if (this.isCollidingWith(platform) == RIGHTCOLLISION) { //if hitting a platform from the side
+            if (this.isCollidingWith(platform)[RIGHTCOLLISION]) { //if hitting a platform from the side
                 if(horVelocity > 0) horVelocity = 0;
                 stopJump();
                 resetJumps();
                 vertVelocity = -135;
 
-                this.snapOutOf(platform, LEFT);
+//                this.snapOutOf(platform, LEFT);
             }
 
             i++;
