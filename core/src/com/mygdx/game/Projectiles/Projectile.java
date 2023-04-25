@@ -50,6 +50,7 @@ public class Projectile extends MovingObj {
 
     protected Object checkCollision(){
         for (Player player: GameScreen.getPlayers()) { //fighter collisions
+            if(player == owner) continue;
             if (!this.isCollidingWith(player.getFighter())[NOCOLLISION]) { //if hits a fighter
                 return player.getFighter();
             }

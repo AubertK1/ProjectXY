@@ -8,15 +8,15 @@ import com.mygdx.game.HitData;
 import com.mygdx.game.KeyBinds;
 import com.mygdx.game.OI.Player;
 import com.mygdx.game.Projectiles.PlasmaBallProjectile;
-import com.mygdx.game.Projectiles.Projectile;
 
 import java.awt.*;
 
 public class Cyborg extends Fighter{
 
     DualAnimation sHeavyChargeAnimation;
-    boolean doneCharging = false;
+    boolean plasmaBallAlreadyCharged = false;
     boolean plasmaBallSent = false;
+    float plasmaBallScale = 1;
 
     public Cyborg(float x, float y, Player player) {
         //runs the Fighter class's constructor, so it can set up anything in that constructor
@@ -80,10 +80,10 @@ public class Cyborg extends Fighter{
 
         //region side heavy
         sHeavyAnimation = animate(new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_Charge_Release_Sheet.png"), 2, 2, .1f);
-        sHeavyAnimation.setHitboxes(new Rectangle(37, 24, 4, 4),
-                new Rectangle(37, 24, 4, 4),
-                new Rectangle(37, 24, 4, 4),
-                new Rectangle(37, 24, 4, 4));
+        sHeavyAnimation.setHitboxes(new Rectangle(37, 22, 4, 4),
+                new Rectangle(37, 22, 4, 4),
+                new Rectangle(37, 22, 4, 4),
+                new Rectangle(37, 22, 4, 4));
 
         sHeavyChargeAnimation = animate(new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_Charging_Sheet.png"), 2, 2, .15f);
         //endregion
@@ -103,7 +103,7 @@ public class Cyborg extends Fighter{
         }
         currentATK = Attack.NLIGHT;
         swapAnimation(nLightAnimation);
-        isInHitStun = true;
+        getStunned(5);
 
         Player struckPlayer = player.checkHit();
         boolean hit = struckPlayer != null;
@@ -172,7 +172,7 @@ public class Cyborg extends Fighter{
         }
         currentATK = Attack.DLIGHT;
         swapAnimation(dLightAnimation);
-        isInHitStun = true;
+        getStunned(5);
 
         Player struckPlayer = player.checkHit();
         boolean hit = struckPlayer != null;
@@ -197,17 +197,18 @@ public class Cyborg extends Fighter{
 
     public void sideHeavyAtk() {
         currentATK = Attack.SHEAVY;
-        isInHitStun = true;
+        getStunned(5);
         if(KeyBinds.isKeyPressed(KeyBinds.Keys.HEAVYATTACK, player.getPlayerNum() - 1)) {
-            if(!doneCharging) {
+            if(!plasmaBallAlreadyCharged) { //so they can't charge again while it's being sent out
                 charge();
                 return;
             }
-        } else doneCharging = true;
+        } else plasmaBallAlreadyCharged = true;
         if(currentATK == Attack.SHEAVY && sHeavyAnimation.isAnimationFinished(stateTime)){
             endAttack();
-            doneCharging = false;
+            plasmaBallAlreadyCharged = false;
             plasmaBallSent = false;
+            plasmaBallScale = 1f;
             return;
         }
         currentATK = Attack.SHEAVY;
@@ -218,14 +219,15 @@ public class Cyborg extends Fighter{
             boolean flip = !isFacingRight;
             applyHitbox(currentAnimation.getKeyHitBox(stateTime), flip);
             plasmaBall.use(this.player, new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_Charge_Bullet.png"),
-                    getHitboxBounds().x, getHitboxBounds().y, 10, 10, flip ? -600 : 600, 0);
-            plasmaBall.setHitData(new HitData().set(5, 1, .75f, NODIRECTION, 15));
+                    getHitboxBounds().x, getHitboxBounds().y, 10 * (plasmaBallScale * plasmaBallScale), 10 * (plasmaBallScale * plasmaBallScale), flip ? -600 : 600, 0);
+            plasmaBall.setHitData(new HitData().set((int) (3 * plasmaBallScale), 1, .65f * plasmaBallScale, NODIRECTION, (int) (10 * plasmaBallScale)));
             plasmaBallSent = true;
         }
     }
     private void charge(){
         currentATK = Attack.SHEAVY;
         swapAnimation(sHeavyChargeAnimation);
+        if(plasmaBallScale < 2f && GameScreen.getFrame() % 8 == 0) plasmaBallScale += .1f;
     }
 
     public void downHeavyAtk() {

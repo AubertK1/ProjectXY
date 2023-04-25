@@ -171,14 +171,14 @@ public class Player {
         switch (KEY){
             case (KeyBinds.Keys.RIGHT):
                 if (fighter.isCollidingWith(Main.gameScreen.mainPlatform)[Object.RIGHTCOLLISION]) fighter.stop();
-                else if(fighter.getXVelocity() < 0) fighter.stop();
                 else if(fighter.isStunned());
+                else if(fighter.getXVelocity() < 0) fighter.stop();
                 else fighter.moveRight();
                 break;
             case (KeyBinds.Keys.LEFT):
                 if (fighter.isCollidingWith(Main.gameScreen.mainPlatform)[Object.LEFTCOLLISION]) fighter.stop();
-                else if(fighter.getXVelocity() > 0) fighter.stop();
                 else if(fighter.isStunned());
+                else if(fighter.getXVelocity() > 0) fighter.stop();
                 else fighter.moveLeft();
                 break;
             case (KeyBinds.Keys.JUMP):
