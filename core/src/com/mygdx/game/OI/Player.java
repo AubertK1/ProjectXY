@@ -68,7 +68,7 @@ public class Player {
         if(equippedWeapon == null) {
             for (Player player2 : GameScreen.getPlayers()) {
                 if(player2 == this) continue;
-                if (Object.isColliding(getFighter().getHitboxBounds(), player2.getFighter().getHurtboxBounds()) != Object.NOCOLLISION) {
+                if (!Object.isColliding(getFighter().getHitboxBounds(), player2.getFighter().getHurtboxBounds())[Object.NOCOLLISION]) {
                     return player2;
                 }
                 else if(player2 == GameScreen.getPlayers().get(GameScreen.getPlayers().size() - 1)){
@@ -170,13 +170,13 @@ public class Player {
         //key presses
         switch (KEY){
             case (KeyBinds.Keys.RIGHT):
-                if (fighter.isCollidingWith(Main.gameScreen.mainPlatform) == Object.RIGHTCOLLISION) fighter.stop();
+                if (fighter.isCollidingWith(Main.gameScreen.mainPlatform)[Object.RIGHTCOLLISION]) fighter.stop();
                 else if(fighter.getXVelocity() < 0) fighter.stop();
                 else if(fighter.isStunned());
                 else fighter.moveRight();
                 break;
             case (KeyBinds.Keys.LEFT):
-                if (fighter.isCollidingWith(Main.gameScreen.mainPlatform) == Object.LEFTCOLLISION) fighter.stop();
+                if (fighter.isCollidingWith(Main.gameScreen.mainPlatform)[Object.LEFTCOLLISION]) fighter.stop();
                 else if(fighter.getXVelocity() > 0) fighter.stop();
                 else if(fighter.isStunned());
                 else fighter.moveLeft();
@@ -192,7 +192,7 @@ public class Player {
                 if(equippedWeapon == null) {
                     Weapon interactedWeapon = null;
                     for (Weapon weapon : GameScreen.getWeapons()) {
-                        if (fighter.isCollidingWith(weapon) != Object.NOCOLLISION && weapon.getOwner() == null){
+                        if (!fighter.isCollidingWith(weapon)[Object.NOCOLLISION] && weapon.getOwner() == null){
                             interactedWeapon = weapon;
                             break;
                         }

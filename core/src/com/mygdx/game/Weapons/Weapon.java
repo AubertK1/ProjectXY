@@ -29,21 +29,21 @@ public class Weapon extends MovingObj {
         int i = 0;
         boolean canFallChanged = false;
         for (Platform platform: GameScreen.getPlatforms()) { //platform collisions
-            if (this.isCollidingWith(platform) == BOTTOMCOLLISION) { //if landing on a platform
+            if (this.isCollidingWith(platform)[BOTTOMCOLLISION]) { //if landing on a platform
                 canFall = false;
                 canFallChanged = true;
             } else if (!canFallChanged && i == GameScreen.getPlatforms().size()-1){
                 canFall = true;
             }
 
-            if (this.isCollidingWith(platform) == TOPCOLLISION) { //if hitting a platform from the bottom
+            if (this.isCollidingWith(platform)[TOPCOLLISION]) { //if hitting a platform from the bottom
                 vertVelocity = 0;
             }
 
-            if (this.isCollidingWith(platform) == LEFTCOLLISION) { //if hitting a platform from the side
+            if (this.isCollidingWith(platform)[LEFTCOLLISION]) { //if hitting a platform from the side
                 if(horVelocity < 0) horVelocity = 0;
             }
-            if (this.isCollidingWith(platform) == RIGHTCOLLISION) { //if hitting a platform from the side
+            if (this.isCollidingWith(platform)[RIGHTCOLLISION]) { //if hitting a platform from the side
                 if(horVelocity > 0) horVelocity = 0;
             }
 

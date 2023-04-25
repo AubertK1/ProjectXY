@@ -50,12 +50,12 @@ public class Projectile extends MovingObj {
 
     protected Object checkCollision(){
         for (Player player: GameScreen.getPlayers()) { //fighter collisions
-            if (this.isCollidingWith(player.getFighter()) != NOCOLLISION) { //if hits a fighter
+            if (!this.isCollidingWith(player.getFighter())[NOCOLLISION]) { //if hits a fighter
                 return player.getFighter();
             }
         }
         for (Platform platform: GameScreen.getPlatforms()) { //platform collisions
-            if (this.isCollidingWith(platform) != NOCOLLISION) { //if hits a platform
+            if (!this.isCollidingWith(platform)[NOCOLLISION]) { //if hits a platform
                 return platform;
             }
         }
