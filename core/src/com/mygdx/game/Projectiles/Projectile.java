@@ -15,11 +15,11 @@ public class Projectile extends MovingObj {
         super(-1, -1, 0, 0, true, false);
     }
 
-    public void use(Player owner, Texture model, float x, float y, float width, float height, float hVelo, float vVelo){
+    public void use(Player owner, Texture model, float centerX, float centerY, float width, float height, float hVelo, float vVelo){
         this.model = model;
         setOwner(owner);
 
-        setPosition(x, y);
+        setPosition(centerX - (width/2f), centerY - (height/2f));
         setHBPosition(0, 0);
         setSize(width, height);
         setHBSize(width, height);
