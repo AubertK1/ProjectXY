@@ -75,7 +75,7 @@ public class Projectile extends MovingObj {
     public void free(){
         GameScreen.projectilePool.free(this);
     }
-    private void update(){
+    protected void update(){
         setPosition(getX() + (Main.getFrameRate() * horVelocity), getY());
 
         Object obj = checkCollision();

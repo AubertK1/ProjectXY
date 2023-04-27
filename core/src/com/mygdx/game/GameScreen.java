@@ -37,7 +37,7 @@ public class GameScreen extends Screen {
     public static Vector2 spawn2 = new Vector2(Gdx.graphics.getWidth() / 2f + 200, Gdx.graphics.getHeight() / 2f);
     public static Vector2 spawnCenter = new Vector2(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2f);
 
-    Rectangle gameBounds = new Rectangle(-600, -600, Gdx.graphics.getWidth() + 1200, Gdx.graphics.getHeight() + 1200);
+    public static final Rectangle gameBounds = new Rectangle(-600, -600, Gdx.graphics.getWidth() + 1200, Gdx.graphics.getHeight() + 1200);
 
     //the current frame the game is on
     private static int FRAMECOUNT = 0;
