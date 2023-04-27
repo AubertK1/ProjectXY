@@ -9,7 +9,7 @@ import com.mygdx.game.Main;
 
 public class ControlScreen extends MenuScreen{
     public ControlScreen() {
-        
+
         final TextButton play = createTextButton("BACK",25,550,200,200);
         play.addListener(new ChangeListener() {
             @Override
