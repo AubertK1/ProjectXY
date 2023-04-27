@@ -10,7 +10,6 @@ import com.mygdx.game.Main;
 public class ControlScreen extends MenuScreen{
     public ControlScreen() {
 
-        background = new Texture("assets\\textures\\Temp_Control_Screen.png");
 
         final TextButton play = createTextButton("BACK",25,550,200,200);
         play.addListener(new ChangeListener() {
