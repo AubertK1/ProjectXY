@@ -2,7 +2,6 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
@@ -16,7 +15,7 @@ public abstract class Object {
     protected Rectangle textureBounds;
     protected Rectangle hurtboxBounds;
     protected Rectangle hitbox = new Rectangle(0,0,0,0);
-    protected Point hitboxFP = new Point(-1, -1);
+    protected Point hitboxFocalPoint = new Point(-1, -1);
 
     // hitbox side minus texture side. How far the HB's side is away from the texture's side
     private float HBLeftOffset = 0, HBRightOffset = 0, HBTopOffset = 0, HBBottomOffset = 0;
@@ -46,11 +45,22 @@ public abstract class Object {
     ShapeRenderer shapeRenderer = new ShapeRenderer();
 
     //region border conversions
-    public static final int NOCOLLISION = -1;
-    public static final int LEFTCOLLISION = 0;
-    public static final int TOPCOLLISION = 1;
-    public static final int RIGHTCOLLISION = 2;
-    public static final int BOTTOMCOLLISION = 3;
+    public static final int NOCOLLISION = 0;
+    public static final int LEFTCOLLISION = 1;
+    public static final int TOPCOLLISION = 2;
+    public static final int RIGHTCOLLISION = 3;
+    public static final int BOTTOMCOLLISION = 4;
+    //endregion
+    //region direction conversions
+    public static final int NODIRECTION = -1;
+    public static final int LEFT = 0;
+    public static final int UPLEFT = 1;
+    public static final int UP = 2;
+    public static final int UPRIGHT = 3;
+    public static final int RIGHT = 4;
+    public static final int DOWNRIGHT = 5;
+    public static final int DOWN = 6;
+    public static final int DOWNLEFT = 7;
     //endregion
 
     public Object(float posX, float posY, float sizeX, float sizeY, boolean isCollidable, boolean isVisible) {
@@ -173,20 +183,19 @@ public abstract class Object {
     }
     // endregion getters
 
-    public void renderHurtBox(){
+    public void renderOutlines(){
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.setColor(new Color(Color.PINK));
+        shapeRenderer.rect(textureBounds.x, textureBounds.y, textureBounds.width, textureBounds.height);
         shapeRenderer.setColor(new Color(Color.GREEN));
         shapeRenderer.rect(hurtboxBounds.x, hurtboxBounds.y, hurtboxBounds.width, hurtboxBounds.height);
         shapeRenderer.setColor(new Color(Color.ORANGE));
         shapeRenderer.rect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
-        if(hitboxFP.x != -1) {
+        if(hitboxFocalPoint.x != -1) {
             shapeRenderer.setColor(new Color(Color.RED));
-            shapeRenderer.rect((float) hitboxFP.getX()-2, (float) hitboxFP.getY()-2, 4, 4);
+            shapeRenderer.rect((float) hitboxFocalPoint.getX()-2, (float) hitboxFocalPoint.getY()-2, 4, 4);
         }
         shapeRenderer.end();
-    }
-    public Animation<TextureRegion> animate(Texture animationSheet){
-        return animate(animationSheet, 1, 2, .5f);
     }
     public DualAnimation animate(Texture animationSheet, int SHEET_ROWS, int SHEET_COLS, float frameDuration){
         TextureRegion[][] tmp = TextureRegion.split(animationSheet,
@@ -219,37 +228,40 @@ public abstract class Object {
     }
     public void applyFocalPoint(Point focalPoint, boolean flip){
         if(focalPoint.getX() == -1 && focalPoint.getY() == -1) {
-            this.hitboxFP.setLocation(-1, -1);
+            this.hitboxFocalPoint.setLocation(-1, -1);
             return;
         }
-        this.hitboxFP.setLocation(
+        this.hitboxFocalPoint.setLocation(
                 getX() + ((flip ? (getWidth() / scale) - focalPoint.getX(): focalPoint.getX()) * scale),
                 getY() + (focalPoint.getY() * scale)
         );
     }
+
     /**
      * checks if this object is colliding with object o
      *
      * @param o the second object your checking for collision with
      * @return the value of the side that the second object is touching on this object
      */
-    public int isCollidingWith(Object o) {
-        if(!isCollidable || !o.getIsCollidable()) return NOCOLLISION; //return if they can't collide
+    public boolean[] isCollidingWith(Object o) {
+        if(!isCollidable || !o.getIsCollidable()) return new boolean[]{true, false, false, false, false}; //return if they can't collide
 
         return isColliding(this, o);
     }
 
-    public static int isColliding(Object o1, Object o2){
-        if(!o1.getIsCollidable() || !o2.getIsCollidable()) return NOCOLLISION; //return if they can't collide
+    public static boolean[] isColliding(Object o1, Object o2){
+        if(!o1.getIsCollidable() || !o2.getIsCollidable()) return new boolean[]{true, false, false, false, false}; //return if they can't collide
 
         return isColliding(o1.getHurtboxBounds(), o2.getHurtboxBounds());
     }
-    public static int isColliding(Rectangle r1, Rectangle r2) {
+    public static boolean[] isColliding(Rectangle r1, Rectangle r2) {
         //fixme Because of the refresh rate, sometimes the objects clip into each other before the collision is checked.
         //fixme so either we make this function detect a FUTURE collision or (as I just did temporarily) we assign
         //fixme an arbitrary "mercy range" where the objects are technically in each other by a few pixels but we don't count it.
         //fixme Here I put the "mercy range" at 5 so I removed 5 from the x range of both objects
         int mercyRange = 3;
+        boolean[] collisions = new boolean[]{true, false, false, false, false};
+
         //puts the x values of both objects on the same horizontal plane, so I can check if they will overlap
         Line2D thisXRange = new Line2D.Float(r1.getX() + mercyRange, 0, r1.getX() + r1.getWidth() - mercyRange, 0);
         Line2D oXRange = new Line2D.Float(r2.getX() + mercyRange, 0, r2.getX() + r2.getWidth() - mercyRange, 0);
@@ -264,17 +276,54 @@ public abstract class Object {
 
         //check if these objects would even overlap horizontally...will be false if they would pass by each other horizontally
         if(thisXRange.intersectsLine(oXRange)){
-            if(thisMidpoint.y > oMidpoint.y && r1.getY() < r2.getY() + r2.getHeight()) return BOTTOMCOLLISION; //if this object is being collided from the bottom
-            else if(thisMidpoint.y < oMidpoint.y && r1.getY() + r1.getHeight()> r2.getY()) return TOPCOLLISION; //if this object is being collided from the top
+            if(thisMidpoint.y > oMidpoint.y && r1.getY() < r2.getY() + r2.getHeight()) collisions[BOTTOMCOLLISION] = true; //if this object is being collided from the bottom
+            else if(thisMidpoint.y < oMidpoint.y && r1.getY() + r1.getHeight()> r2.getY()) collisions[TOPCOLLISION] = true; //if this object is being collided from the top
         }
 
         //check if these objects would even overlap vertically...will be false if they would pass by each other vertically
         if(thisYRange.intersectsLine(oYRange)){
-            if(thisMidpoint.x > oMidpoint.x && r1.getX() < r2.getX() + r2.getWidth()) return LEFTCOLLISION; //if this object is being collided from the left
-            else if(thisMidpoint.x < oMidpoint.x && r1.getX() + r1.getWidth() > r2.getX()) return RIGHTCOLLISION; //if this object is being collided from the right
+            if(thisMidpoint.x > oMidpoint.x && r1.getX() < r2.getX() + r2.getWidth()) collisions[LEFTCOLLISION] = true; //if this object is being collided from the left
+            else if(thisMidpoint.x < oMidpoint.x && r1.getX() + r1.getWidth() > r2.getX()) collisions[RIGHTCOLLISION] = true; //if this object is being collided from the right
         }
 
-        return NOCOLLISION;
+        for (int i = 0; i < collisions.length; i++) { //if another collision was found, make the NOCOLLISION element false
+            if (i == NOCOLLISION) continue; //skips the value of the NOCOLLISION element bc it will be true by default
+            if (collisions[i]) {
+                collisions[NOCOLLISION] = false;
+                break;
+            }
+        }
+        return collisions;
     }
 
+    public void pushOutOf(Object o, int direction){
+        pushOut(this, o, direction);
+    }
+    /**
+     *
+     * @param o1 The object that will be moved out
+     * @param o2 The object that will not be moved
+     * @param direction The direction o1 will be moved out of o2
+     */
+    public static void pushOut(Object o1, Object o2, int direction){
+        int mercyRange = 3; //MUST BE THE SAME AS IN isColliding()
+        switch (direction){
+            case LEFT:
+                float leftX = o2.getHBX() - o1.getHBWidth() + mercyRange;
+                o1.setPositionFromHB(leftX, o1.getY());
+                break;
+            case RIGHT:
+                float rightX = o2.getHBX() + o2.getHBWidth() - mercyRange;
+                o1.setPositionFromHB(rightX, o1.getY());
+                break;
+            case DOWN:
+                float bottomY = o2.getHBY() - o1.getHBHeight();
+                o1.setPosition(o1.getX(), bottomY);
+                break;
+            case UP:
+                float topY = o2.getHBY() + o2.getHBHeight() - mercyRange;
+                o1.setPosition(o1.getX(), topY);
+                break;
+        }
+    }
 }

@@ -13,6 +13,7 @@ import com.mygdx.game.Characters.Robot;
 import com.mygdx.game.Characters.Vampire;
 import com.mygdx.game.OI.Player;
 import com.mygdx.game.OI.Screen;
+import com.mygdx.game.Projectiles.ProjectilePool;
 import com.mygdx.game.Weapons.Sword;
 import com.mygdx.game.Weapons.Weapon;
 
@@ -29,12 +30,14 @@ public class GameScreen extends Screen {
     public Platform mainPlatform;
     private Texture background;
 
+    public static ProjectilePool projectilePool = new ProjectilePool();
+
     //spawn points
     public static Vector2 spawn1 = new Vector2(Gdx.graphics.getWidth() / 2f - 200, Gdx.graphics.getHeight() / 2f);
     public static Vector2 spawn2 = new Vector2(Gdx.graphics.getWidth() / 2f + 200, Gdx.graphics.getHeight() / 2f);
     public static Vector2 spawnCenter = new Vector2(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2f);
 
-    Rectangle gameBounds = new Rectangle(-600, -600, Gdx.graphics.getWidth() + 1200, Gdx.graphics.getHeight() + 1200);
+    public static final Rectangle gameBounds = new Rectangle(-600, -600, Gdx.graphics.getWidth() + 1200, Gdx.graphics.getHeight() + 1200);
 
     //the current frame the game is on
     private static int FRAMECOUNT = 0;
@@ -42,14 +45,16 @@ public class GameScreen extends Screen {
     public static float GRAVITY = -115;
 
     //region UI
+    Skin skin = Main.skin;
+    Stage stage = Main.stage;
+    // Makes a new group
+    Group UI = new Group();
 
-
-
-    static Label p1Label, p2Label;
+    Label p1Label, p2Label;
     //endregion
     public GameScreen() {
         // initializing everything
-        background = new Texture("assets\\textures\\Night_Time_Background.png");
+        background = new Texture("assets\\textures\\Background\\Night_Time_Background.png");
 
         Texture mainPTex = new Texture("assets\\textures\\Platforms\\Floating_Platform.png");
         mainPlatform = new Platform((Gdx.graphics.getWidth() / 2f) - (mainPTex.getWidth() / 2f),
@@ -68,11 +73,11 @@ public class GameScreen extends Screen {
         player1 = new Player(1);
         player2 = new Player(2);
         // setting player 1's fighter (will be moved later so the player can choose)
-       player1.setFighter(new Cyborg(spawn1.x, spawn1.y, player1));
-//        player1.getFighter().scale(2.5f);
-//
+        player1.setFighter(new Cyborg(spawn1.x, spawn1.y, player1));
+        player1.getFighter().scale(3);
+
         player2.setFighter(new Robot(spawn2.x, spawn2.y, player2));
-//        player2.getFighter().scale(2.5f);
+        player2.getFighter().scale(3);
 
         players.add(player1);
         players.add(player2);
@@ -84,11 +89,11 @@ public class GameScreen extends Screen {
         //region screen UI
         UI.setPosition(100, 50);
 
-        p1Label = new Label("Player1: 100", skin);
+        p1Label = new Label("ROBOT: " + player1.getFighter().getHealth(), skin);
         p1Label.setSize(100, 50);
         p1Label.setPosition(0, 0);
 
-        p2Label = new Label("Player2: 100", skin);
+        p2Label = new Label("VAMPIRE: " + player2.getFighter().getHealth(), skin);
         p2Label.setSize(p1Label.getWidth(), p1Label.getHeight());
         p2Label.setPosition(p1Label.getX() + p1Label.getWidth() + 5, p1Label.getY());
 
@@ -98,6 +103,8 @@ public class GameScreen extends Screen {
     }
     private void update(){
         FRAMECOUNT++;
+
+        projectilePool.update();
 
         //checking if anything goes out of bounds
         for (Player player: players) {
@@ -112,7 +119,6 @@ public class GameScreen extends Screen {
         p1Label.setText("ROBOT: " + player1.getFighter().getHealth());
         p2Label.setText("VAMPIRE: " + player2.getFighter().getHealth());
     }
-
 
     public static ArrayList<Player> getPlayers(){
         return players;
@@ -167,5 +173,7 @@ public class GameScreen extends Screen {
         }
         player1.renderAssets(batch);
         player2.renderAssets(batch);
+
+        projectilePool.renderProjectiles(batch);
     }
 }

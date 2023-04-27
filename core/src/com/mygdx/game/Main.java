@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.mygdx.game.OI.MainMenu;
 import com.mygdx.game.OI.*;
 import com.mygdx.game.OI.P1CharacterSelectScreen;
 import com.mygdx.game.OI.P2CharacterSelectScreen;
@@ -62,7 +63,8 @@ public class Main extends ApplicationAdapter {
 			@Override
 			public boolean keyDown(int keycode) {
 				int affectedPlayer = getAffectedPlayer(keycode);
-				if(affectedPlayer != -1) gameScreen.getPlayers().get(getAffectedPlayer(keycode)).interact(keycode);
+				if(affectedPlayer != -1)
+					GameScreen.getPlayers().get(getAffectedPlayer(keycode)).interact(keycode);
 				return true;
 			}
 

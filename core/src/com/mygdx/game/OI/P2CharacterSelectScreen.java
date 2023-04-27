@@ -13,16 +13,16 @@ import com.mygdx.game.GameScreen;
 import com.mygdx.game.Main;
 
 public class P2CharacterSelectScreen extends MenuScreen{
-    public Texture characterSelectImage = new Texture("textures/CHOOSE_YOUR_CHARACTER.png");
-    public Texture player2Image = new Texture("textures/P2.png");
+    public Texture characterSelectImage = new Texture("textures/Background/CHOOSE_YOUR_CHARACTER.png");
+    public Texture player2Image = new Texture("textures/Background/P2.png");
 
     public Button vampireImage = createImageButton("textures/Vampire_Bot/Vampire_Bot_48x.png",250,400,400,300);
     public Button violetCyborgImage = createImageButton("textures/Violet_Cyborg/Violet_Cyborg_48x.png",750,400,300,300);
     public Button securityRobotImage = createImageButton("textures/Security_Robot/Security_Robot_48x.png",1250,400,300,300);
     public P2CharacterSelectScreen() {
-        background = new Texture("assets\\textures\\Night_Time_Background.png");
+        background = new Texture("assets\\textures\\Background\\Night_Time_Background.png");
 
-        final Button fight = createImageButton("textures/FIGHT.PNG", 25, 550, 200, 200);
+        final Button fight = createImageButton("textures/Button/FIGHT.PNG", 25, 550, 200, 200);
         fight.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeListener.ChangeEvent event, Actor actor) {

@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 
 public class KeyBinds {
@@ -14,7 +15,8 @@ public class KeyBinds {
             KeyBinds.Keys.DOWN,
             KeyBinds.Keys.RIGHT,
             KeyBinds.Keys.INTERACT,
-            KeyBinds.Keys.ATTACK,
+            KeyBinds.Keys.LIGHTATTACK,
+            KeyBinds.Keys.HEAVYATTACK,
             KeyBinds.Keys.TEMP
     };
     /**
@@ -28,6 +30,7 @@ public class KeyBinds {
             Input.Keys.D,
             Input.Keys.E,
             Input.Keys.F,
+            Input.Keys.G,
             Input.Keys.Y
     };
     /**
@@ -39,8 +42,9 @@ public class KeyBinds {
             Input.Keys.LEFT,
             Input.Keys.DOWN,
             Input.Keys.RIGHT,
-            Input.Keys.PERIOD,
             Input.Keys.CONTROL_RIGHT,
+            Input.Keys.COMMA,
+            Input.Keys.PERIOD,
             Input.Keys.BACKSLASH
     };
 
@@ -90,13 +94,20 @@ public class KeyBinds {
         return -1;
     }
 
+    public static boolean isKeyPressed(int key, int keySet){
+        int KEY = findKeyFromDefaultKey(key, keySet);
+
+        return Gdx.input.isKeyPressed(KEY);
+    }
+
     public static class Keys{
         public static final int LEFT = Input.Keys.A;
         public static final int RIGHT = Input.Keys.D;
         public static final int DOWN = Input.Keys.S;
         public static final int JUMP = Input.Keys.W;
-        public static final int INTERACT = Input.Keys.F;
-        public static final int ATTACK = Input.Keys.E;
+        public static final int INTERACT = Input.Keys.E;
+        public static final int LIGHTATTACK = Input.Keys.F;
+        public static final int HEAVYATTACK = Input.Keys.G;
         public static final int TEMP = Input.Keys.Y;
     }
 }

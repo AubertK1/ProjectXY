@@ -1,6 +1,5 @@
 package com.mygdx.game.OI;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -34,17 +33,12 @@ public class Player {
         continueAttack();
 
         //registers player's input for all inputs that can be held
-        if(playerNum == 1) { //if player 1...
-            if (Gdx.input.isKeyPressed(Input.Keys.D)) interact(Input.Keys.D);
-            if (Gdx.input.isKeyPressed(Input.Keys.A)) interact(Input.Keys.A);
-            if (Gdx.input.isKeyPressed(Input.Keys.S) && fighter.canFall()) interact(Input.Keys.S);
-        }
-        else if(playerNum == 2) { //if player 2...
-            // keypresses
-            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) interact(Input.Keys.RIGHT);
-            if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) interact(Input.Keys.LEFT);
-            if (Gdx.input.isKeyPressed(Input.Keys.DOWN) && fighter.canFall()) interact(Input.Keys.DOWN);
-        }
+        if (KeyBinds.isKeyPressed(KeyBinds.Keys.DOWN, playerNum - 1))
+            interact(KeyBinds.findKeyFromDefaultKey(KeyBinds.Keys.DOWN, playerNum - 1));
+        else if (KeyBinds.isKeyPressed(KeyBinds.Keys.LEFT, playerNum - 1))
+            interact(KeyBinds.findKeyFromDefaultKey(KeyBinds.Keys.LEFT, playerNum - 1));
+        else if (KeyBinds.isKeyPressed(KeyBinds.Keys.RIGHT, playerNum - 1))
+            interact(KeyBinds.findKeyFromDefaultKey(KeyBinds.Keys.RIGHT, playerNum - 1));
     }
 
     public void resetAssets(){
@@ -74,7 +68,7 @@ public class Player {
         if(equippedWeapon == null) {
             for (Player player2 : GameScreen.getPlayers()) {
                 if(player2 == this) continue;
-                if (Object.isColliding(getFighter().getHitboxBounds(), player2.getFighter().getHurtboxBounds()) != Object.NOCOLLISION) {
+                if (!Object.isColliding(getFighter().getHitboxBounds(), player2.getFighter().getHurtboxBounds())[Object.NOCOLLISION]) {
                     return player2;
                 }
                 else if(player2 == GameScreen.getPlayers().get(GameScreen.getPlayers().size() - 1)){
@@ -86,41 +80,58 @@ public class Player {
     }
     public void continueAttack(){
         switch (fighter.getCurrentATK()){
+            case NOATTACK: return;
             case NLIGHT: fighter.neutralLightAtk();
                 break;
             case SLIGHT: fighter.sideLightAtk();
                 break;
             case DLIGHT: fighter.downLightAtk();
                 break;
+            case NHEAVY: fighter.neutralHeavyAtk();
+                break;
+            case SHEAVY: fighter.sideHeavyAtk();
+                break;
+            case DHEAVY: fighter.downHeavyAtk();
+                break;
         }
     }
-    public void startAttack(){
+    public void startAttack(boolean isHeavyAtk){
+        if(fighter.isAttacking()) return;
         int directionKey = -10;
         //region finding which direction to attack
-        if(playerNum == 1) { //if player 1...
-            if (Gdx.input.isKeyPressed(Input.Keys.D)) directionKey = KeyBinds.convertKey(Input.Keys.D);
-            else if (Gdx.input.isKeyPressed(Input.Keys.A)) directionKey = KeyBinds.convertKey(Input.Keys.A);
-            else if (Gdx.input.isKeyPressed(Input.Keys.S)) directionKey = KeyBinds.convertKey(Input.Keys.S);
-        }
-        else if(playerNum == 2) { //if player 2...
-            // keypresses
-            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) directionKey = KeyBinds.convertKey(Input.Keys.RIGHT);
-            else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) directionKey = KeyBinds.convertKey(Input.Keys.LEFT);
-            else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) directionKey = KeyBinds.convertKey(Input.Keys.DOWN);
-        }
+        if (KeyBinds.isKeyPressed(KeyBinds.Keys.DOWN, playerNum - 1)) directionKey = KeyBinds.Keys.DOWN;
+        else if (KeyBinds.isKeyPressed(KeyBinds.Keys.JUMP, playerNum - 1)) directionKey = -10;
+        else if (KeyBinds.isKeyPressed(KeyBinds.Keys.LEFT, playerNum - 1)) directionKey = KeyBinds.Keys.LEFT;
+        else if (KeyBinds.isKeyPressed(KeyBinds.Keys.RIGHT, playerNum - 1)) directionKey = KeyBinds.Keys.RIGHT;
         //endregion
         //region attacking in the direction
-        switch (directionKey) {
-            case (-10): //if no direction
-                fighter.neutralLightAtk();
-                break;
-            case (KeyBinds.Keys.RIGHT):
-            case (KeyBinds.Keys.LEFT):
-                fighter.sideLightAtk();
-                break;
-            case (KeyBinds.Keys.DOWN):
-                fighter.downLightAtk();
-                break;
+        if(!isHeavyAtk) { //if a light attack
+            switch (directionKey) {
+                case (-10): //if no direction
+                    fighter.neutralLightAtk();
+                    break;
+                case (KeyBinds.Keys.RIGHT):
+                case (KeyBinds.Keys.LEFT):
+                    fighter.sideLightAtk();
+                    break;
+                case (KeyBinds.Keys.DOWN):
+                    fighter.downLightAtk();
+                    break;
+            }
+        }
+        else { //if a heavy attack
+            switch (directionKey) {
+                case (-10): //if no direction
+                    fighter.neutralHeavyAtk();
+                    break;
+                case (KeyBinds.Keys.RIGHT):
+                case (KeyBinds.Keys.LEFT):
+                    fighter.sideHeavyAtk();
+                    break;
+                case (KeyBinds.Keys.DOWN):
+                    fighter.downHeavyAtk();
+                    break;
+            }
         }
         //endregion
     }
@@ -131,13 +142,15 @@ public class Player {
         HitData attackData = new HitData().set(fighterHitData.damage,
                 HitData.IGNORE, avgKBMultiplier, fighterHitData.direction, fighterHitData.hitStunDuration);
 
-        struckPlayer.takeDamage(attackData, fighter.isFacingRight());
+        struckPlayer.getStruck(attackData, fighter.isFacingRight());
     }
-    public void takeDamage(HitData hitData, boolean preferRight){
-        fighter.takeDamage(hitData.damage);
+
+    public void getStruck(HitData hitData, boolean preferRight){
+        fighter.getStunned(hitData.hitStunDuration);
         fighter.knockBack(hitData.direction, hitData.knockbackMultiplier, preferRight);
-        fighter.stun(hitData.hitStunDuration);
+        fighter.takeDamage(hitData.damage);
     }
+
     public void pull(Player pulledPlayer, Point point, float time){
         pulledPlayer.getFighter().pullTo(point, time);
     }
@@ -148,6 +161,8 @@ public class Player {
      * @param PRESSEDKEY The key being pressed
      */
     public void interact(int PRESSEDKEY){
+        if(fighter.isStunned()) return;
+        
         //converts the key into its value in the default keyset
         int KEY = KeyBinds.convertKey(PRESSEDKEY);
 
@@ -155,15 +170,15 @@ public class Player {
         //key presses
         switch (KEY){
             case (KeyBinds.Keys.RIGHT):
-                if (fighter.isCollidingWith(Main.gameScreen.mainPlatform) == Object.RIGHTCOLLISION) fighter.stop();
+                if (fighter.isCollidingWith(Main.gameScreen.mainPlatform)[Object.RIGHTCOLLISION]) fighter.stop();
+                else if(fighter.isStunned());
                 else if(fighter.getXVelocity() < 0) fighter.stop();
-                else if (fighter.isAttacking());
                 else fighter.moveRight();
                 break;
             case (KeyBinds.Keys.LEFT):
-                if (fighter.isCollidingWith(Main.gameScreen.mainPlatform) == Object.LEFTCOLLISION) fighter.stop();
+                if (fighter.isCollidingWith(Main.gameScreen.mainPlatform)[Object.LEFTCOLLISION]) fighter.stop();
+                else if(fighter.isStunned());
                 else if(fighter.getXVelocity() > 0) fighter.stop();
-                else if (fighter.isAttacking());
                 else fighter.moveLeft();
                 break;
             case (KeyBinds.Keys.JUMP):
@@ -177,7 +192,7 @@ public class Player {
                 if(equippedWeapon == null) {
                     Weapon interactedWeapon = null;
                     for (Weapon weapon : GameScreen.getWeapons()) {
-                        if (fighter.isCollidingWith(weapon) != Object.NOCOLLISION && weapon.getOwner() == null){
+                        if (!fighter.isCollidingWith(weapon)[Object.NOCOLLISION] && weapon.getOwner() == null){
                             interactedWeapon = weapon;
                             break;
                         }
@@ -188,8 +203,11 @@ public class Player {
                     throwWeapon();
                 }
                 break;
-            case (KeyBinds.Keys.ATTACK):
-                startAttack();
+            case (KeyBinds.Keys.LIGHTATTACK):
+                startAttack(false);
+                break;
+            case (KeyBinds.Keys.HEAVYATTACK):
+                startAttack(true);
                 break;
             case (KeyBinds.Keys.TEMP): //fixme testing keybind changing. Delete later
                 KeyBinds.changeKeyBind(KeyBinds.findKeyFromDefaultKey(KeyBinds.Keys.JUMP, playerNum - 1), Input.Keys.SPACE);
@@ -201,13 +219,24 @@ public class Player {
      * @param fighter
      */
     public void setFighter(Fighter fighter){
+        //grabbing any necessary initializing variables
+        float scale = 1;
+        if(this.fighter != null){
+            scale = this.fighter.getScale();
+        }
+
         this.fighter = fighter;
+
         fighter.setPlayer(this);
+        //setting the initializing variables
+        fighter.scale(scale);
     }
     public Fighter getFighter(){
         return fighter;
     }
-
+    public int getPlayerNum(){
+        return playerNum;
+    }
     /**
      * renders the fighter's model
      * @param batch just put batch

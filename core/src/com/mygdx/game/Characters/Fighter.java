@@ -20,7 +20,7 @@ public class Fighter extends MovingObj{
     protected Player player;
 
     //region stats
-    protected static int maxJumps = 3;
+    protected static int maxJumps = 2;
     protected float speed = 500;
     protected int damage = 10;
     protected int maxHealth = 100;
@@ -30,7 +30,6 @@ public class Fighter extends MovingObj{
 
     //region states of being
     protected boolean isAlive = true; //is the player alive
-    protected boolean canFall = true; //can the player fall lower
     protected boolean isJumping = false; //is the player jumping
     protected boolean isBlocking = false; //is the player blocking
     protected boolean isFacingRight = true;
@@ -52,12 +51,17 @@ public class Fighter extends MovingObj{
     //attacks
     DualAnimation nLightAnimation;
     DualAnimation sLightAnimation;
-    //endregion
+    DualAnimation dLightAnimation;
+    DualAnimation nHeavyAnimation;
+    DualAnimation sHeavyAnimation;
+    DualAnimation dHeavyAnimation;
+    //endregionNH
 
     //region attacks
     public enum Attack {
         NOATTACK,
-        NLIGHT, SLIGHT, DLIGHT
+        NLIGHT, SLIGHT, DLIGHT,
+        NHEAVY, SHEAVY, DHEAVY,
     }
     protected Attack currentATK = Attack.NOATTACK;
     protected boolean attackAlreadyHit = false;
@@ -69,62 +73,61 @@ public class Fighter extends MovingObj{
     }
 
     public void update() {
-        float deltaTime = Main.getFrameRate();
+        // float deltaTime = Main.getFrameRate();
 
         //region collisions
         int i = 0;
         boolean canFallChanged = false;
         for (Platform platform: GameScreen.getPlatforms()) { //platform collisions
-            if (this.isCollidingWith(platform) == BOTTOMCOLLISION) { //if landing on a platform
+            if (this.isCollidingWith(platform)[BOTTOMCOLLISION]) { //if landing on a platform
                 canFall = false;
                 canFallChanged = true;
                 stopJump();
                 resetJumps();
+
+                this.pushOutOf(platform, UP);
             } else if (!canFallChanged && i == GameScreen.getPlatforms().size()-1){
                 canFall = true;
             }
 
-            if (this.isCollidingWith(platform) == TOPCOLLISION) { //if hitting a platform from the bottom
+            if (this.isCollidingWith(platform)[TOPCOLLISION]) { //if hitting a platform from the bottom
                 stopJump();
                 vertVelocity = 0;
+
+                this.pushOutOf(platform, DOWN);
             }
 
-            if (this.isCollidingWith(platform) == LEFTCOLLISION) { //if hitting a platform from the side
+            if (this.isCollidingWith(platform)[LEFTCOLLISION]) { //if hitting a platform from the side
                 if(horVelocity < 0) horVelocity = 0;
                 stopJump();
                 resetJumps();
                 vertVelocity = -135;
+
+                this.pushOutOf(platform, RIGHT);
             }
-            if (this.isCollidingWith(platform) == RIGHTCOLLISION) { //if hitting a platform from the side
+            if (this.isCollidingWith(platform)[RIGHTCOLLISION]) { //if hitting a platform from the side
                 if(horVelocity > 0) horVelocity = 0;
                 stopJump();
                 resetJumps();
                 vertVelocity = -135;
+
+                this.pushOutOf(platform, LEFT);
             }
 
             i++;
-        }
+        }   
         //endregion
 
         //region gravity
-        if(!isInHitStun) {
-            if (canFall) {
-                vertVelocity += GameScreen.GRAVITY;
-                if(vertVelocity < 0 && !isAttacking()) swapAnimation(fallAnimation);
-                if (vertVelocity < -1000) vertVelocity = -1000; //maximum downward velocity
-            }
-            else if (vertVelocity < 0) vertVelocity = 0;
-        }
-        setPosition(getX(), getY() + (deltaTime * vertVelocity));
-        setPosition(getX() + (deltaTime * horVelocity), getY());
-        slowDown();
+        applyPhysics();
+        if(vertVelocity < -100 && !isAttacking()) swapAnimation(fallAnimation);
+
         //endregion
 
         //applying a jump cool down
         if (GameScreen.getFrame() >= nextJumpFrame) {
             isJumping = false;
         }
-        if(currentATK == Attack.NOATTACK) attackAlreadyHit = false;
         if(GameScreen.getFrame() >= nextUnstunFrame) isInHitStun = false;
     }
 
@@ -238,34 +241,66 @@ public class Fighter extends MovingObj{
         isBlocking = true;
     }
 
+    public void endAttack(){
+        //ending the attack and resetting values
+        attackAlreadyHit = false;
+        currentATK = Attack.NOATTACK;
+        isInHitStun = false; //fixme may cause unintended glitches
+        stateTime = 0;
+    }
+
     public void takeDamage(int damage){
         health -= damage;
+
+        if (health <= 0) {
+            reset();
+        }
     }
     public void knockBack(int direction, float multiplier, boolean preferRight){
-        float baseHorKB = 1120;
+        float baseHorKB = 800;
         float baseVertKB = -GameScreen.GRAVITY + baseHorKB;
 
         canFall = true;
         switch (direction){
-            case LEFTCOLLISION:
+            case LEFT:
+                horVelocity = -baseHorKB * multiplier * 1f;
+                vertVelocity = baseVertKB * multiplier * .65f;
+                break;
+            case RIGHT:
+                horVelocity = baseHorKB * multiplier * 1f;
+                vertVelocity = baseVertKB * multiplier * .65F;
+                break;
+            case UPLEFT:
                 horVelocity = -baseHorKB * multiplier * .74f;
                 vertVelocity = baseVertKB * multiplier * .9f;
                 break;
-            case RIGHTCOLLISION:
+            case UPRIGHT:
                 horVelocity = baseHorKB * multiplier * .74f;
-                vertVelocity = baseVertKB * multiplier * 1;
+                vertVelocity = baseVertKB * multiplier * .9f;
                 break;
-            case TOPCOLLISION:
+            case DOWNLEFT:
+                horVelocity = -baseHorKB * multiplier * .74f;
+                vertVelocity = -baseVertKB * multiplier * .9f;
+                break;
+            case DOWNRIGHT:
+                horVelocity = baseHorKB * multiplier * .74f;
+                vertVelocity = -baseVertKB * multiplier * .9f;
+                break;
+            case UP:
                 horVelocity = (preferRight ? baseHorKB : -baseHorKB) * multiplier * .35f;
                 vertVelocity = baseVertKB * multiplier;
                 break;
-            case BOTTOMCOLLISION:
+            case DOWN:
+
                 horVelocity = baseHorKB * multiplier * .35f;
                 vertVelocity = -baseVertKB * multiplier;
                 break;
         }
     }
-    public void stun(int duration){
+    public void getStunned(int duration){
+        if(duration == 0) return;
+//        if(!isInHitStun) stop();
+
         isInHitStun = true;
         nextUnstunFrame = GameScreen.getFrame() + duration;
     }
@@ -297,6 +332,10 @@ public class Fighter extends MovingObj{
     public int getDamage() {
         return damage;
     }
+    public boolean isStunned() {
+        return isInHitStun;
+    }
+
 
     public boolean isAttacking(){
         return !(currentATK == Attack.NOATTACK);
@@ -326,6 +365,10 @@ public class Fighter extends MovingObj{
         this.player = player;
     }
 
+    public Player getPlayer() {
+        return player;
+    }
+
     /**
      * renders the fighter's model onto the screen
      * @param batch just put batch
@@ -351,7 +394,7 @@ public class Fighter extends MovingObj{
 
         if(Main.inDebugMode) {
             batch.end();
-            renderHurtBox();
+            renderOutlines();
             batch.begin();
         }
     }
