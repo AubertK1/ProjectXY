@@ -54,7 +54,7 @@ public class GameScreen extends Screen {
     //endregion
     public GameScreen() {
         // initializing everything
-        background = new Texture("assets\\textures\\Night_Time_Background.png");
+        background = new Texture("assets\\textures\\Background\\Night_Time_Background.png");
 
         Texture mainPTex = new Texture("assets\\textures\\Platforms\\Floating_Platform.png");
         mainPlatform = new Platform((Gdx.graphics.getWidth() / 2f) - (mainPTex.getWidth() / 2f),
