@@ -12,7 +12,7 @@ public class MainMenu extends MenuScreen {
 
     public MainMenu() {
 
-        background = new Texture("assets\\textures\\Title_Screen.png");
+        background = new Texture("assets\\textures\\BackgroundTitle_Screen.png");
 
         final Button play = createImageButton("textures/Start_Button.png",700,80,600,400);
         play.addListener(new ChangeListener() {
