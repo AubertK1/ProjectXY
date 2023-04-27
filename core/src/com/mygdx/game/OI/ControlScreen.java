@@ -1,5 +1,7 @@
 package com.mygdx.game.OI;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -38,6 +40,15 @@ public class ControlScreen extends MenuScreen{
     }
 
     public void render(SpriteBatch batch){
+        for(int i = 0; i < 256; i++)
+            if( Gdx.input.isKeyJustPressed( i ) ){
+                if(currentKeyBind.equals("p1Jump")){
+                    p1JumpBtn.text = Input.Keys.toString(i);
+                    //set keybind
+                } else if(currentKeyBind.equals("p1Down")){
+                    
+                }
+            }
 
     }
 }
