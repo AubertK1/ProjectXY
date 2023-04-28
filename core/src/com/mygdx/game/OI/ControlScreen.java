@@ -20,7 +20,7 @@ public class ControlScreen extends MenuScreen{
             }
         });
 
-        final TextButton controls = createTextButton("DEFAULT",25,325,200,200);
+        final TextButton controls = createTextButton("DEFAULT", 25, 325, 200, 200);
 
         controls.addListener(new ChangeListener() {
             @Override
@@ -29,7 +29,7 @@ public class ControlScreen extends MenuScreen{
             }
         });
 
-        final TextButton changeControls = createTextButton("CHANGE KEYBINDS",25,100,200,200);
+        final TextButton changeControls = createTextButton("CHANGE KEYBINDS", 25, 100, 200, 200);
 
         controls.addListener(new ChangeListener() {
             @Override

@@ -1,7 +1,6 @@
 package com.mygdx.game.Projectiles;
 
 import com.mygdx.game.Characters.Fighter;
-import com.mygdx.game.GameScreen;
 import com.mygdx.game.Object;
 import com.mygdx.game.Platform;
 
