@@ -12,7 +12,10 @@ public class PlasmaBallProjectile extends Projectile{
 
     @Override
     protected void proc(Object collidedObj) {
+        System.out.println("hit Player");
+
         if(collidedObj instanceof Platform){
+            System.out.println("Hit Platform");
             free();
         }
         else if(collidedObj instanceof Fighter){

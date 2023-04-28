@@ -15,11 +15,11 @@ public class Projectile extends MovingObj {
         super(-1, -1, 0, 0, true, false);
     }
 
-    public void use(Player owner, Texture model, float centerX, float centerY, float width, float height, float hVelo, float vVelo){
+    public void use(Player owner, Texture model, float x, float y, float width, float height, float hVelo, float vVelo){
         this.model = model;
         setOwner(owner);
 
-        setPosition(centerX - (width/2f), centerY - (height/2f));
+        setPosition(x, y);
         setHBPosition(0, 0);
         setSize(width, height);
         setHBSize(width, height);
@@ -75,7 +75,7 @@ public class Projectile extends MovingObj {
     public void free(){
         GameScreen.projectilePool.free(this);
     }
-    protected void update(){
+    private void update(){
         setPosition(getX() + (Main.getFrameRate() * horVelocity), getY());
 
         Object obj = checkCollision();

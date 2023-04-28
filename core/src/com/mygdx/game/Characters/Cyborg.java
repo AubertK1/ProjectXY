@@ -8,14 +8,12 @@ import com.mygdx.game.HitData;
 import com.mygdx.game.KeyBinds;
 import com.mygdx.game.OI.Player;
 import com.mygdx.game.Projectiles.PlasmaBallProjectile;
-import com.mygdx.game.Projectiles.StunBallProjectile;
 
 import java.awt.*;
 
 public class Cyborg extends Fighter{
 
     DualAnimation sHeavyChargeAnimation;
-    DualAnimation nHeavyChargeAnimation;
     boolean plasmaBallAlreadyCharged = false;
     boolean plasmaBallSent = false;
     float plasmaBallScale = 1;
@@ -80,21 +78,12 @@ public class Cyborg extends Fighter{
                 new Point(-1, -1));
         //endregion
 
-        //region neutral heavy
-        nHeavyAnimation = animate(new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_Stun_Release_Sheet.png"), 2, 2, .05f);
-        nHeavyAnimation.setHitboxes(new Rectangle(37, 26, 4, 4),
-                new Rectangle(37, 26, 4, 4),
-                new Rectangle(37, 26, 4, 4),
-                new Rectangle(37, 26, 4, 4));
-
-        nHeavyChargeAnimation = animate(new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_Charging_Stun_Sheet.png"), 2, 2, .15f);
-        //endregion
         //region side heavy
         sHeavyAnimation = animate(new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_Charge_Release_Sheet.png"), 2, 2, .1f);
-        sHeavyAnimation.setHitboxes(new Rectangle(37, 26, 4, 4),
-                new Rectangle(37, 26, 4, 4),
-                new Rectangle(37, 26, 4, 4),
-                new Rectangle(37, 26, 4, 4));
+        sHeavyAnimation.setHitboxes(new Rectangle(37, 22, 4, 4),
+                new Rectangle(37, 22, 4, 4),
+                new Rectangle(37, 22, 4, 4),
+                new Rectangle(37, 22, 4, 4));
 
         sHeavyChargeAnimation = animate(new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_Charging_Sheet.png"), 2, 2, .15f);
         //endregion
@@ -203,36 +192,7 @@ public class Cyborg extends Fighter{
     }
 
     public void neutralHeavyAtk() {
-        currentATK = Attack.NHEAVY;
-        getStunned(5);
-        if(KeyBinds.isKeyPressed(KeyBinds.Keys.HEAVYATTACK, player.getPlayerNum() - 1)) {
-            if(!plasmaBallAlreadyCharged) { //so they can't charge again while it's being sent out
-                hold();
-                return;
-            }
-        } else plasmaBallAlreadyCharged = true;
-        if(currentATK == Attack.NHEAVY && nHeavyAnimation.isAnimationFinished(stateTime)){
-            endAttack();
-            plasmaBallAlreadyCharged = false;
-            plasmaBallSent = false;
-            return;
-        }
-        currentATK = Attack.NHEAVY;
-        swapAnimation(nHeavyAnimation);
 
-        if(!plasmaBallSent){
-            StunBallProjectile plasmaBall = (StunBallProjectile) GameScreen.projectilePool.grab(StunBallProjectile.class);
-            boolean flip = !isFacingRight;
-            applyHitbox(currentAnimation.getKeyHitBox(stateTime), flip);
-            plasmaBall.use(this.player, new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_Stun_Bullet.png"),
-                    getHitboxBounds().x, getHitboxBounds().y, 10, 10, flip ? -600 : 600, 0);
-            plasmaBall.setHitData(new HitData().set(6, 1, .75f, NODIRECTION, 16));
-            plasmaBallSent = true;
-        }
-    }
-    private void hold(){
-        currentATK = Attack.NHEAVY;
-        swapAnimation(nHeavyChargeAnimation);
     }
 
     public void sideHeavyAtk() {

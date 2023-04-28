@@ -1,7 +1,6 @@
 package com.mygdx.game.Projectiles;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.mygdx.game.GameScreen;
 
 import java.util.LinkedList;
 
@@ -17,9 +16,7 @@ public class ProjectilePool {
         int expirationTime = 300;
         for (int i = 0; i < busy.size(); i++) {
             busy.get(i).activeTime++;
-            if(busy.get(i).activeTime > expirationTime ||
-                    !GameScreen.gameBounds.contains(busy.get(i).getX(), busy.get(i).getY()))
-                free(busy.get(i));
+            if(busy.get(i).activeTime > expirationTime) free(busy.get(i));
         }
     }
     public Projectile grab(Class projectileType){
@@ -51,8 +48,8 @@ public class ProjectilePool {
     }
 
     public void renderProjectiles(SpriteBatch batch){
-        for (int i = 0; i < busy.size(); i++) {
-            busy.get(i).render(batch);
+        for (Projectile p : busy) {
+            p.render(batch);
         }
     }
 }
