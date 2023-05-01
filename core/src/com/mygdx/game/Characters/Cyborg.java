@@ -38,8 +38,7 @@ public class Cyborg extends Fighter{
         //region attack animations
         //region side light
         sLightAnimation = animate(new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_Attack1_Sheet.png"), 2, 3, 30);
-        sLightAnimation.setHitboxes(
-                new Rectangle(0, 0, 0, 0),
+        sLightAnimation.setHitboxes(null,
                 new Rectangle(0, 19, 5, 8),
                 new Rectangle(4, 22, 27, 6),
                 new Rectangle(12, 20, 25, 7),
@@ -54,9 +53,8 @@ public class Cyborg extends Fighter{
         //endregion
         //region neutral light
         nLightAnimation = animate(new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_Attack2_Sheet.png"), 1, 7, 21);
-        nLightAnimation.setHitboxes(
-                new Rectangle(0, 0, 0, 0),
-                new Rectangle(0, 0, 0, 0),
+        nLightAnimation.setHitboxes(null,
+                null,
                 new Rectangle(23, 20, 9, 10),
                 new Rectangle(23, 20, 13, 10),
                 new Rectangle(27, 18, 17, 12),

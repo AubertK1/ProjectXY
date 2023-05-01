@@ -258,7 +258,7 @@ public abstract class Object {
         //fixme Because of the refresh rate, sometimes the objects clip into each other before the collision is checked.
         //fixme so either we make this function detect a FUTURE collision or (as I just did temporarily) we assign
         //fixme an arbitrary "mercy range" where the objects are technically in each other by a few pixels but we don't count it.
-        //fixme Here I put the "mercy range" at 5 so I removed 5 from the x range of both objects
+        //fixme Here I put the "mercy range" at 3 so I removed 3 from the x range of both objects
         int mercyRange = 3;
         boolean[] collisions = new boolean[]{true, false, false, false, false};
 

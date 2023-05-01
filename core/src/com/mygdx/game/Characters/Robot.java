@@ -25,15 +25,15 @@ public class Robot extends Fighter{
 
         runAnimation = animate(new Texture("assets\\textures\\Security_Robot\\Security_Robot_Running_Sheet.png"), 2, 2, 18);
 
+
         nLightAnimation = animate(new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_Attack2_Sheet.png"), 1, 7, 21);
-        nLightAnimation.setHitboxes(
-                new Rectangle(0, 0, 0, 0),
-                new Rectangle(0, 0, 0, 0),
-                new Rectangle(23, 20, 9, 35),
-                new Rectangle(23, 20, 13, 35),
-                new Rectangle(27, 18, 17, 35),
-                new Rectangle(27, 20, 22, 35),
-                new Rectangle(27, 20, 21, 35));
+        nLightAnimation.setHitboxes(null,
+                null,
+                new Rectangle(23, 20, 9, 10),
+                new Rectangle(23, 20, 13, 10),
+                new Rectangle(27, 18, 17, 12),
+                new Rectangle(27, 20, 22, 8),
+                new Rectangle(27, 20, 21, 8));
 
         //region attack animations
         //endregion
