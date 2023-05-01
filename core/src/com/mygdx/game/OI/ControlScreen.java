@@ -46,7 +46,7 @@ public class ControlScreen extends MenuScreen{
                     p1JumpBtn.text = Input.Keys.toString(i);
                     //set keybind
                 } else if(currentKeyBind.equals("p1Down")){
-                    
+                    p1DownBtn.text = Input.Keys.toString(i);
                 }
             }
 
