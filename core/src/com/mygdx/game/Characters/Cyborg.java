@@ -10,7 +10,7 @@ import com.mygdx.game.OI.Player;
 import com.mygdx.game.Projectiles.PlasmaBallProjectile;
 import com.mygdx.game.Projectiles.StunBallProjectile;
 
-import java.awt.*;
+import java.awt.Point;
 
 public class Cyborg extends Fighter{
 
@@ -38,7 +38,8 @@ public class Cyborg extends Fighter{
         //region attack animations
         //region side light
         sLightAnimation = animate(new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_Attack1_Sheet.png"), 2, 3, 30);
-        sLightAnimation.setHitboxes(new Rectangle(0, 0, 0, 0),
+        sLightAnimation.setHitboxes(
+                new Rectangle(0, 0, 0, 0),
                 new Rectangle(0, 19, 5, 8),
                 new Rectangle(4, 22, 27, 6),
                 new Rectangle(12, 20, 25, 7),
@@ -53,7 +54,8 @@ public class Cyborg extends Fighter{
         //endregion
         //region neutral light
         nLightAnimation = animate(new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_Attack2_Sheet.png"), 1, 7, 21);
-        nLightAnimation.setHitboxes(new Rectangle(0, 0, 0, 0),
+        nLightAnimation.setHitboxes(
+                new Rectangle(0, 0, 0, 0),
                 new Rectangle(0, 0, 0, 0),
                 new Rectangle(23, 20, 9, 10),
                 new Rectangle(23, 20, 13, 10),
@@ -104,10 +106,12 @@ public class Cyborg extends Fighter{
     }
 
     public void neutralLightAtk() {
+
         if(currentATK == Attack.NLIGHT && nLightAnimation.isAnimationFinished(stateTime)){
             endAttack(0);
             return;
         }
+
         currentATK = Attack.NLIGHT;
         swapAnimation(nLightAnimation);
         getStunned(nLightAnimation.getTotalFrames());
@@ -203,17 +207,21 @@ public class Cyborg extends Fighter{
     public void neutralHeavyAtk() {
         currentATK = Attack.NHEAVY;
         if(KeyBinds.isKeyPressed(KeyBinds.Keys.HEAVYATTACK, player.getPlayerNum() - 1)) {
+            
             if(!plasmaBallAlreadyCharged) { //so they can't charge again while it's being sent out
                 hold();
                 return;
             }
+
         } else plasmaBallAlreadyCharged = true;
+
         if(currentATK == Attack.NHEAVY && nHeavyAnimation.isAnimationFinished(stateTime) && plasmaBallSent){
             endAttack(6);
             plasmaBallAlreadyCharged = false;
             plasmaBallSent = false;
             return;
         }
+
         currentATK = Attack.NHEAVY;
         swapAnimation(nHeavyAnimation);
         getStunned(nHeavyAnimation.getTotalFrames());
@@ -228,6 +236,7 @@ public class Cyborg extends Fighter{
             plasmaBallSent = true;
         }
     }
+
     private void hold(){
         currentATK = Attack.NHEAVY;
         swapAnimation(nHeavyChargeAnimation);

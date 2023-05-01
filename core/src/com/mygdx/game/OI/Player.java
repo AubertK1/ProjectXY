@@ -3,12 +3,15 @@ package com.mygdx.game.OI;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import com.mygdx.game.*;
+import com.mygdx.game.KeyBinds;
+import com.mygdx.game.Main;
+import com.mygdx.game.GameScreen;
+import com.mygdx.game.HitData;
 import com.mygdx.game.Characters.Fighter;
 import com.mygdx.game.Object;
 import com.mygdx.game.Weapons.Weapon;
 
-import java.awt.*;
+import java.awt.Point;
 
 /**
  * The actual player. This is what is directly being affected by the user, and it uses inputs
