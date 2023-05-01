@@ -34,7 +34,7 @@ public class Fighter extends MovingObj{
     protected boolean isBlocking = false; //is the player blocking
     protected boolean isFacingRight = true;
 
-    protected boolean isInHitStun = false;
+    protected boolean isStunned = false;
     //endregion
 
     protected int jumpsLeft = maxJumps;
@@ -65,6 +65,8 @@ public class Fighter extends MovingObj{
     }
     protected Attack currentATK = Attack.NOATTACK;
     protected boolean attackAlreadyHit = false;
+
+    protected int nextATKFrame = 0;
     //endregion
 
     public Fighter(float x, float y, float width, float height, boolean isCollidable, boolean isVisible, Player player) {
@@ -128,7 +130,7 @@ public class Fighter extends MovingObj{
         if (GameScreen.getFrame() >= nextJumpFrame) {
             isJumping = false;
         }
-        if(GameScreen.getFrame() >= nextUnstunFrame) isInHitStun = false;
+        if(GameScreen.getFrame() >= nextUnstunFrame) isStunned = false;
     }
 
     /**
@@ -241,12 +243,20 @@ public class Fighter extends MovingObj{
         isBlocking = true;
     }
 
-    public void endAttack(){
+    public void endAttack(int recoveryFrames){
         //ending the attack and resetting values
         attackAlreadyHit = false;
         currentATK = Attack.NOATTACK;
-        isInHitStun = false; //fixme may cause unintended glitches
+//        isStunned = false; //fixme may cause unintended glitches
         stateTime = 0;
+
+        recover(recoveryFrames);
+    }
+
+    private void recover(int recoveryFrames){
+        nextATKFrame = GameScreen.getFrame() + recoveryFrames;
+        if(isStunned)
+            getStunned(recoveryFrames); //if stunned, extend it through the recovery frames
     }
 
     public void takeDamage(int damage){
@@ -297,11 +307,16 @@ public class Fighter extends MovingObj{
                 break;
         }
     }
+
+    /**
+     * Stops fighter from receiving player input
+     * @param duration the amount of frames the fighter will be stunned
+     */
     public void getStunned(int duration){
         if(duration == 0) return;
 //        if(!isInHitStun) stop();
 
-        isInHitStun = true;
+        isStunned = true;
         nextUnstunFrame = GameScreen.getFrame() + duration;
     }
 
@@ -333,7 +348,7 @@ public class Fighter extends MovingObj{
         return damage;
     }
     public boolean isStunned() {
-        return isInHitStun;
+        return isStunned;
     }
 
 
@@ -369,6 +384,9 @@ public class Fighter extends MovingObj{
         return player;
     }
 
+    public int getNextATKFrame(){
+        return nextATKFrame;
+    }
     /**
      * renders the fighter's model onto the screen
      * @param batch just put batch

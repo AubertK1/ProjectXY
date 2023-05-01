@@ -18,8 +18,8 @@ public class Sword extends MeleeWeapon{
         setHurtbox(0, 0, 32, 32);
         setSize(model.getWidth(), model.getHeight());
 
-        swapAnimation(idleAnimation = animate(idleSheet = new Texture("assets\\stock-textures\\SwordSheet2.png"), 2, 2, .15f));
-        hitAnimation = animate(hitSheet, 2, 2, .075f);
+        swapAnimation(idleAnimation = animate(idleSheet = new Texture("assets\\stock-textures\\SwordSheet2.png"), 2, 2, 36));
+        hitAnimation = animate(hitSheet, 2, 2, 18);
     }
 
     @Override

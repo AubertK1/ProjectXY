@@ -96,7 +96,9 @@ public class Player {
         }
     }
     public void startAttack(boolean isHeavyAtk){
-        if(fighter.isAttacking()) return;
+        if(GameScreen.getFrame() < fighter.getNextATKFrame() || fighter.isAttacking()) return;
+        fighter.endAttack(0);
+
         int directionKey = -10;
         //region finding which direction to attack
         if (KeyBinds.isKeyPressed(KeyBinds.Keys.DOWN, playerNum - 1)) directionKey = KeyBinds.Keys.DOWN;
@@ -171,13 +173,11 @@ public class Player {
         switch (KEY){
             case (KeyBinds.Keys.RIGHT):
                 if (fighter.isCollidingWith(Main.gameScreen.mainPlatform)[Object.RIGHTCOLLISION]) fighter.stop();
-                else if(fighter.isStunned());
                 else if(fighter.getXVelocity() < 0) fighter.stop();
                 else fighter.moveRight();
                 break;
             case (KeyBinds.Keys.LEFT):
                 if (fighter.isCollidingWith(Main.gameScreen.mainPlatform)[Object.LEFTCOLLISION]) fighter.stop();
-                else if(fighter.isStunned());
                 else if(fighter.getXVelocity() > 0) fighter.stop();
                 else fighter.moveLeft();
                 break;
