@@ -38,32 +38,25 @@ public class ControlScreen extends MenuScreen {
             public void changed(ChangeEvent event, Actor actor) {
 
             }
-            /*
-            final TextButton upP1 = new TextButton("W",);
 
-            final TextButton downP1 = new TextButton("S",);
+            final TextButton upP1 =  createTextButton("W", 150, 100,100,100);
+            final TextButton downP1 =   createTextButton("S",150, 1200,100,100);
+            final TextButton rightP1 =  createTextButton("D",150, 140,100,100);
+            final TextButton leftP1 =   createTextButton("A",150, 160,100,100);
+            final TextButton lightP1 =  createTextButton("F",150, 180,100,100);
+            final TextButton heavyP1 =  createTextButton("G",150, 200,100,100);
+            final TextButton tempP1 =   createTextButton("Y",150, 220,100,100);
+            final TextButton interactP1 =  createTextButton("E",150, 240,100,100);
 
-            final TextButton rightP1 = new TextButton("D",);
+            final TextButton upP2 = createTextButton("UP ARROW",350, 100,100,100);
+            final TextButton downP2 = createTextButton("DOWN ARROW",350, 120,100,100);
+            final TextButton rightP2 = createTextButton("RIGHT ARROW",350, 140,100,100);
+            final TextButton leftP2 = createTextButton("LEFT ARROW",350, 160,100,100);
+            final TextButton lightP2 =createTextButton("COMMA",350, 180,100,100);
+            final TextButton heavyP2 =createTextButton("PERIOD",350, 200,100,100);
+            final TextButton tempP2 = createTextButton("/",350, 220,100,100);
+            final TextButton interactP2 = createTextButton("CTRL R",350, 240,100,100);
 
-            final TextButton leftP1 = new TextButton("A");
-
-            final TextButton lightP1 = new TextButton("F",);
-
-            final TextButton heavyP1 = new TextButton("G",);
-
-            final TextButton tempP1 = new TextButton("Y",);
-
-            final TextButton interactP1 = new TextButton("E",);
-
-            final TextButton upP2 = new TextButton("UP ARROW",);
-            final TextButton downP2 = new TextButton("DOWN ARROW",);
-            final TextButton rightP2 = new TextButton("RIGHT ARROW",);
-            final TextButton leftP2 = new TextButton("LEFT ARROW");
-            final TextButton lightP2 = new TextButton("COMMA",);
-            final TextButton heavyP2 = new TextButton("PERIOD",);
-            final TextButton tempP2 = new TextButton("/",);
-            final TextButton interactP2 = new TextButton("CTRL R",);
-        */
         });
     }
 }
