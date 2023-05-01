@@ -9,14 +9,21 @@ import java.awt.*;
 public class DualAnimation extends Animation<TextureRegion> {
     private Rectangle[] hitboxes;
     private Point[] focalPoints;
+    private int totalFrames = 0;
 
-    public DualAnimation(float frameDuration, TextureRegion... keyFrames) {
-        super(frameDuration, keyFrames);
+    public DualAnimation(int totalFrames, TextureRegion... keyFrames) {
+        super(1, keyFrames);
+
+        float frameDuration = (totalFrames / (float) keyFrames.length) * (1/60f);
+        setFrameDuration(frameDuration);
+        this.totalFrames = totalFrames;
+
         hitboxes = new Rectangle[keyFrames.length];
         focalPoints = new Point[keyFrames.length];
+
         for (int i = 0; i < hitboxes.length; i++) {
-            if(hitboxes[i] == null) hitboxes[i] = new Rectangle(0,0,0,0);
-            else hitboxes[i].set(0,0,0,0);
+            if(hitboxes[i] == null) hitboxes[i] = new Rectangle(-1, -1, 0, 0);
+            else hitboxes[i].set(-1, -1, 0, 0);
         }
         for (int i = 0; i < focalPoints.length; i++) {
             if(focalPoints[i] == null) focalPoints[i] = new Point(-1,-1);
@@ -26,14 +33,20 @@ public class DualAnimation extends Animation<TextureRegion> {
 
     public void setHitboxes(Rectangle... hitboxOffsets){
         for (int i = 0; i < hitboxes.length; i++) {
-            if(i < hitboxOffsets.length) hitboxes[i].set(hitboxOffsets[i]);
+            if(i < hitboxOffsets.length){
+                if(hitboxOffsets[i] == null) hitboxes[i].set(-1, -1, 0, 0);
+                hitboxes[i].set(hitboxOffsets[i]);
+            }
             else hitboxes[i].set(hitboxOffsets[hitboxOffsets.length-1]);
         }
     }
 
     public void setFocalPoints(Point... focalPointOffsets){
         for (int i = 0; i < focalPoints.length; i++) {
-            if(i < focalPointOffsets.length) focalPoints[i].setLocation(focalPointOffsets[i]);
+            if(i < focalPointOffsets.length){
+                if(focalPointOffsets[i] == null) focalPoints[i].setLocation(-1, -1);
+                else focalPoints[i].setLocation(focalPointOffsets[i]);
+            }
             else focalPoints[i].setLocation(-1, -1);
         }
     }
@@ -52,5 +65,9 @@ public class DualAnimation extends Animation<TextureRegion> {
 
     public Point[] getFocalPoints(){
         return this.focalPoints;
+    }
+
+    public int getTotalFrames(){
+        return totalFrames;
     }
 }

@@ -185,8 +185,8 @@ public abstract class Object {
 
     public void renderOutlines(){
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(new Color(Color.PINK));
-        shapeRenderer.rect(textureBounds.x, textureBounds.y, textureBounds.width, textureBounds.height);
+//        shapeRenderer.setColor(new Color(Color.PINK));
+//        shapeRenderer.rect(textureBounds.x, textureBounds.y, textureBounds.width, textureBounds.height);
         shapeRenderer.setColor(new Color(Color.GREEN));
         shapeRenderer.rect(hurtboxBounds.x, hurtboxBounds.y, hurtboxBounds.width, hurtboxBounds.height);
         shapeRenderer.setColor(new Color(Color.ORANGE));
@@ -197,7 +197,7 @@ public abstract class Object {
         }
         shapeRenderer.end();
     }
-    public DualAnimation animate(Texture animationSheet, int SHEET_ROWS, int SHEET_COLS, float frameDuration){
+    public DualAnimation animate(Texture animationSheet, int SHEET_ROWS, int SHEET_COLS, int totalFrames){
         TextureRegion[][] tmp = TextureRegion.split(animationSheet,
                 animationSheet.getWidth() / SHEET_COLS, animationSheet.getHeight() / SHEET_ROWS);
 
@@ -209,7 +209,7 @@ public abstract class Object {
             }
         }
 
-        return new DualAnimation(frameDuration, animFrames);
+        return new DualAnimation(totalFrames, animFrames);
     }
     public void swapAnimation(DualAnimation newAnimation){
         swapAnimation(newAnimation, false);

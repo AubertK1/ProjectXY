@@ -26,7 +26,7 @@ public class Platform extends Object {
      */
     public Platform(float x, float y, Texture spriteSheet, int ROWS, int COLUMNS) {
         super(x, y, spriteSheet.getWidth(), spriteSheet.getHeight(), true, true);
-        swapAnimation(idleAnimation = animate(idleSheet = spriteSheet, ROWS, COLUMNS, .35f));
+        swapAnimation(idleAnimation = animate(idleSheet = spriteSheet, ROWS, COLUMNS, (int) (.35 * ROWS * COLUMNS * 60)));
 
         TextureRegion model2 = currentAnimation.getKeyFrame(stateTime, true);
         setSize(model2.getRegionWidth(), model2.getRegionHeight());
