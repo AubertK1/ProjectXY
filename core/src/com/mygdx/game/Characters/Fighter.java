@@ -96,7 +96,7 @@ public class Fighter extends MovingObj{
                 stopJump();
                 vertVelocity = 0;
 
-                this.pushOutOf(platform, DOWN);
+                // this.pushOutOf(platform, DOWN);
             }
 
             if (this.isCollidingWith(platform)[LEFTCOLLISION]) { //if hitting a platform from the side

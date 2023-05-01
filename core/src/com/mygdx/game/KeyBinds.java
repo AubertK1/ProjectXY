@@ -1,5 +1,7 @@
 package com.mygdx.game;
 
+import java.util.HashMap;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 
@@ -33,6 +35,14 @@ public class KeyBinds {
             Input.Keys.G,
             Input.Keys.Y
     };
+
+    public static HashMap<Integer, Integer> keySetMap = new HashMap<Integer, Integer>() {
+        {
+            put(1, 1);
+        }
+    };
+
+
     /**
      * Player 2 will always be using this keyset
      * MAKE SURE THE KEYS ON HERE ALIGN WITH THE KEYS ON THE OTHER KEYSETS
