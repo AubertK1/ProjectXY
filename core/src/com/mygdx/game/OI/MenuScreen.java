@@ -2,8 +2,11 @@ package com.mygdx.game.OI;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
@@ -31,5 +34,13 @@ public class MenuScreen extends Screen {
         imageButton.setSize(width,height);
         UI.addActor(imageButton);
         return imageButton;
+    }
+
+    public Label createLabel(String buttonText, int x, int y, int width, int height){
+        final Label aLabel = new Label(buttonText,skin);
+        aLabel.setPosition(x,y);
+        aLabel.setSize(width,height);
+        UI.addActor(aLabel);
+        return aLabel;
     }
 }
