@@ -12,7 +12,7 @@ import com.mygdx.game.Projectiles.StunBallProjectile;
 
 import java.awt.Point;
 
-public class Cyborg extends Fighter{
+public class Cyborg extends Fighter {
 
     DualAnimation sHeavyChargeAnimation;
     DualAnimation nHeavyChargeAnimation;
