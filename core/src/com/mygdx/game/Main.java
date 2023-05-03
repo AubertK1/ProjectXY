@@ -62,10 +62,23 @@ public class Main extends ApplicationAdapter {
 		InputProcessor screenProcessor = new InputProcessor() {
 			@Override
 			public boolean keyDown(int keycode) {
-				int affectedPlayer = getAffectedPlayer(keycode);
-				if(affectedPlayer != -1)
-					GameScreen.getPlayers().get(getAffectedPlayer(keycode)).interact(keycode);
-				return true;
+				//if control screen
+				if(currentScreen == controlScreen){
+					if (controlScreen.oldKey  != -1){
+						boolean changed = KeyBinds.changeKeyBind(controlScreen.oldKey,keycode);
+						if(changed) {
+							controlScreen.changeButtonText(keycode);
+							controlScreen.oldKey  = -1;
+						}
+					}
+					return true;
+				}
+				else {
+					int affectedPlayer = getAffectedPlayer(keycode);
+					if (affectedPlayer != -1)
+						GameScreen.getPlayers().get(getAffectedPlayer(keycode)).interact(keycode);
+					return true;
+				}
 			}
 
 			@Override
