@@ -71,9 +71,13 @@ public class KeyBinds {
         else return defaultKeys[newKey];
     }
 
-    public static void changeKeyBind(int oldKey, int newKey){
+    public static boolean changeKeyBind(int oldKey, int newKey){
+        if(findKeyIndex(newKey)>=0){
+            return false;
+        }
         keysets[findKeySetIndex(oldKey)][findKeyIndex(oldKey)] = newKey;
         System.out.print("key changed");
+        return true;
     }
 
     public static int findKeyFromDefaultKey(int defaultKey, int keyset){
