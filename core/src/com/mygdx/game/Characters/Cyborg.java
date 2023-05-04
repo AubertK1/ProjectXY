@@ -119,7 +119,7 @@ public class Cyborg extends Fighter {
 
         currentATK = Attack.NLIGHT;
         swapAnimation(nLightAnimation);
-        getStunned(nLightAnimation.getTotalFrames());
+        getStunned(nLightAnimation.getRemainingFrames(stateTime));
 
         Player struckPlayer = player.checkHit();
         boolean hit = struckPlayer != null;
@@ -153,7 +153,7 @@ public class Cyborg extends Fighter {
         }
         currentATK = Attack.SLIGHT;
         swapAnimation(sLightAnimation);
-        getStunned(sLightAnimation.getTotalFrames());
+        getStunned(sLightAnimation.getRemainingFrames(stateTime));
 
         Player struckPlayer = player.checkHit();
         boolean hit = struckPlayer != null;
