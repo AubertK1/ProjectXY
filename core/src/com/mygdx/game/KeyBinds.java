@@ -5,6 +5,8 @@ import java.util.HashMap;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 
+import static com.mygdx.game.Main.controlScreen;
+
 public class KeyBinds {
 
     /**
@@ -96,6 +98,11 @@ public class KeyBinds {
             }
         }
         return -2;
+    }
+
+    public static void resetKeyBinds(){
+                keysets[0][KeyBinds.Keys.JUMP] = Input.Keys.W;
+
     }
 
     public static int findKeySetIndex(int KEY){
