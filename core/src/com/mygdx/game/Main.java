@@ -166,4 +166,6 @@ public class Main extends ApplicationAdapter {
 	public int getAffectedPlayer(int KEY){
 		return KeyBinds.findKeySetIndex(KEY);
 	}
+
+
 }
