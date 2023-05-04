@@ -13,6 +13,7 @@ import com.mygdx.game.Characters.Robot;
 import com.mygdx.game.Characters.Vampire;
 import com.mygdx.game.OI.Player;
 import com.mygdx.game.OI.Screen;
+import com.mygdx.game.Projectiles.ProjectilePool;
 import com.mygdx.game.Weapons.Sword;
 import com.mygdx.game.Weapons.Weapon;
 
@@ -29,12 +30,14 @@ public class GameScreen extends Screen {
     public Platform mainPlatform;
     private Texture background;
 
+    public static ProjectilePool projectilePool = new ProjectilePool();
+
     //spawn points
     public static Vector2 spawn1 = new Vector2(Gdx.graphics.getWidth() / 2f - 200, Gdx.graphics.getHeight() / 2f);
     public static Vector2 spawn2 = new Vector2(Gdx.graphics.getWidth() / 2f + 200, Gdx.graphics.getHeight() / 2f);
     public static Vector2 spawnCenter = new Vector2(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2f);
 
-    Rectangle gameBounds = new Rectangle(-600, -600, Gdx.graphics.getWidth() + 1200, Gdx.graphics.getHeight() + 1200);
+    public static final Rectangle gameBounds = new Rectangle(-600, -600, Gdx.graphics.getWidth() + 1200, Gdx.graphics.getHeight() + 1200);
 
     //the current frame the game is on
     private static int FRAMECOUNT = 0;
@@ -51,7 +54,7 @@ public class GameScreen extends Screen {
     //endregion
     public GameScreen() {
         // initializing everything
-        background = new Texture("assets\\textures\\Night_Time_Background.png");
+        background = new Texture("assets\\textures\\Background\\Night_Time_Background.png");
 
         Texture mainPTex = new Texture("assets\\textures\\Platforms\\Floating_Platform.png");
         mainPlatform = new Platform((Gdx.graphics.getWidth() / 2f) - (mainPTex.getWidth() / 2f),
@@ -100,6 +103,8 @@ public class GameScreen extends Screen {
     }
     private void update(){
         FRAMECOUNT++;
+
+        projectilePool.update();
 
         //checking if anything goes out of bounds
         for (Player player: players) {
@@ -168,5 +173,7 @@ public class GameScreen extends Screen {
         }
         player1.renderAssets(batch);
         player2.renderAssets(batch);
+
+        projectilePool.renderProjectiles(batch);
     }
 }

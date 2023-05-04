@@ -1,14 +1,12 @@
 package com.mygdx.game.OI;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mygdx.game.Main;
-import com.mygdx.game.Platform;
-import com.mygdx.game.Weapons.Weapon;
+
 
 public class Screen {
     protected Texture background;

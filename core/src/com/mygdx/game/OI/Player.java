@@ -3,12 +3,15 @@ package com.mygdx.game.OI;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import com.mygdx.game.*;
+import com.mygdx.game.KeyBinds;
+import com.mygdx.game.Main;
+import com.mygdx.game.GameScreen;
+import com.mygdx.game.HitData;
 import com.mygdx.game.Characters.Fighter;
 import com.mygdx.game.Object;
 import com.mygdx.game.Weapons.Weapon;
 
-import java.awt.*;
+import java.awt.Point;
 
 /**
  * The actual player. This is what is directly being affected by the user, and it uses inputs
@@ -68,7 +71,7 @@ public class Player {
         if(equippedWeapon == null) {
             for (Player player2 : GameScreen.getPlayers()) {
                 if(player2 == this) continue;
-                if (Object.isColliding(getFighter().getHitboxBounds(), player2.getFighter().getHurtboxBounds()) != Object.NOCOLLISION) {
+                if (!Object.isColliding(getFighter().getHitboxBounds(), player2.getFighter().getHurtboxBounds())[Object.NOCOLLISION]) {
                     return player2;
                 }
                 else if(player2 == GameScreen.getPlayers().get(GameScreen.getPlayers().size() - 1)){
@@ -96,7 +99,9 @@ public class Player {
         }
     }
     public void startAttack(boolean isHeavyAtk){
-        if(fighter.isAttacking()) return;
+        if(GameScreen.getFrame() < fighter.getNextATKFrame() || fighter.isAttacking()) return;
+        fighter.endAttack(0);
+
         int directionKey = -10;
         //region finding which direction to attack
         if (KeyBinds.isKeyPressed(KeyBinds.Keys.DOWN, playerNum - 1)) directionKey = KeyBinds.Keys.DOWN;
@@ -146,8 +151,8 @@ public class Player {
     }
 
     public void getStruck(HitData hitData, boolean preferRight){
-        fighter.knockBack(hitData.direction, hitData.knockbackMultiplier, preferRight);
         fighter.getStunned(hitData.hitStunDuration);
+        fighter.knockBack(hitData.direction, hitData.knockbackMultiplier, preferRight);
         fighter.takeDamage(hitData.damage);
     }
 
@@ -170,15 +175,13 @@ public class Player {
         //key presses
         switch (KEY){
             case (KeyBinds.Keys.RIGHT):
-                if (fighter.isCollidingWith(Main.gameScreen.mainPlatform) == Object.RIGHTCOLLISION) fighter.stop();
+                if (fighter.isCollidingWith(Main.gameScreen.mainPlatform)[Object.RIGHTCOLLISION]) fighter.stop();
                 else if(fighter.getXVelocity() < 0) fighter.stop();
-                else if (fighter.isAttacking());
                 else fighter.moveRight();
                 break;
             case (KeyBinds.Keys.LEFT):
-                if (fighter.isCollidingWith(Main.gameScreen.mainPlatform) == Object.LEFTCOLLISION) fighter.stop();
+                if (fighter.isCollidingWith(Main.gameScreen.mainPlatform)[Object.LEFTCOLLISION]) fighter.stop();
                 else if(fighter.getXVelocity() > 0) fighter.stop();
-                else if (fighter.isAttacking());
                 else fighter.moveLeft();
                 break;
             case (KeyBinds.Keys.JUMP):
@@ -192,7 +195,7 @@ public class Player {
                 if(equippedWeapon == null) {
                     Weapon interactedWeapon = null;
                     for (Weapon weapon : GameScreen.getWeapons()) {
-                        if (fighter.isCollidingWith(weapon) != Object.NOCOLLISION && weapon.getOwner() == null){
+                        if (!fighter.isCollidingWith(weapon)[Object.NOCOLLISION] && weapon.getOwner() == null){
                             interactedWeapon = weapon;
                             break;
                         }
