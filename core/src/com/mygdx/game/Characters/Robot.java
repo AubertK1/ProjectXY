@@ -27,8 +27,9 @@ public class Robot extends Fighter{
 
 
         nLightAnimation = animate(new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_Attack2_Sheet.png"), 1, 7, 21);
-        nLightAnimation.setHitboxes(null,
-                null,
+        nLightAnimation.setHitboxes(
+                new Rectangle(0, 0, 0, 0),
+                new Rectangle(0, 0, 0, 0),
                 new Rectangle(23, 20, 9, 10),
                 new Rectangle(23, 20, 13, 10),
                 new Rectangle(27, 18, 17, 12),

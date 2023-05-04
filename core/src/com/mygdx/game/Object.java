@@ -19,7 +19,7 @@ public abstract class Object {
 
     // hitbox side minus texture side. How far the HB's side is away from the texture's side
     private float HBLeftOffset = 0, HBRightOffset = 0, HBTopOffset = 0, HBBottomOffset = 0;
-
+    
     // determins if the object should be included in a collision check
     private boolean isCollidable;
     // determins if the object should be rendered during a render pass

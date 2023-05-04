@@ -6,6 +6,7 @@ import com.mygdx.game.DualAnimation;
 import com.mygdx.game.GameScreen;
 import com.mygdx.game.HitData;
 import com.mygdx.game.KeyBinds;
+import com.mygdx.game.Constants.CyborgConstants;
 import com.mygdx.game.OI.Player;
 import com.mygdx.game.Projectiles.PlasmaBallProjectile;
 import com.mygdx.game.Projectiles.StunBallProjectile;
@@ -26,7 +27,11 @@ public class Cyborg extends Fighter {
         //setting the visual model of the robot
         model = new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_48x.png");
         setSize(model.getWidth(), model.getHeight());
-        setHurtbox(13, 0, 21, 38);
+        setHurtbox(
+            CyborgConstants.kHurtBoxXOffSet,
+            CyborgConstants.kHurtBoxYOffSet,
+            CyborgConstants.kHurtBoxWidth, 
+            CyborgConstants.kHurtBoxHeight);
 
         //region setting animations
         swapAnimation(idleAnimation = animate(idleSheet = new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_Idle_Sheet.png"), 2, 2, 36));
@@ -38,7 +43,8 @@ public class Cyborg extends Fighter {
         //region attack animations
         //region side light
         sLightAnimation = animate(new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_Attack1_Sheet.png"), 2, 3, 30);
-        sLightAnimation.setHitboxes(null,
+        sLightAnimation.setHitboxes(
+                new Rectangle(0, 0, 0, 0),
                 new Rectangle(0, 19, 5, 8),
                 new Rectangle(4, 22, 27, 6),
                 new Rectangle(12, 20, 25, 7),
@@ -53,8 +59,9 @@ public class Cyborg extends Fighter {
         //endregion
         //region neutral light
         nLightAnimation = animate(new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_Attack2_Sheet.png"), 1, 7, 21);
-        nLightAnimation.setHitboxes(null,
-                null,
+        nLightAnimation.setHitboxes(
+                new Rectangle(0, 0, 0, 0),
+                new Rectangle(0, 0, 0, 0),
                 new Rectangle(23, 20, 9, 10),
                 new Rectangle(23, 20, 13, 10),
                 new Rectangle(27, 18, 17, 12),
