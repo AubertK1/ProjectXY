@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.mygdx.game.OI.ControlScreen;
 
 import static com.mygdx.game.Main.controlScreen;
 
@@ -101,7 +102,12 @@ public class KeyBinds {
     }
 
     public static void resetKeyBinds(){
-                keysets[0][KeyBinds.Keys.JUMP] = Input.Keys.W;
+        keysets[0][0] = Input.Keys.W;//jump
+        ControlScreen.upP1Text = Input.Keys.toString(Input.Keys.W);
+        keysets[0][1] = Input.Keys.S;
+        keysets[0][2] = Input.Keys.A;
+
+
 
     }
 

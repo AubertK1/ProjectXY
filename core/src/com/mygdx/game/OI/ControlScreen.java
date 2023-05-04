@@ -26,7 +26,7 @@ public class ControlScreen extends MenuScreen {
     public Label interactLabel;
 
     public int oldKey = -1;
-    String upP1Text = "W";
+    public static String upP1Text = "W";
     TextButton upP1;
     String downP1Text = "S";
     TextButton downP1;
@@ -85,6 +85,7 @@ public class ControlScreen extends MenuScreen {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
                     KeyBinds.resetKeyBinds();
+
                 }
             });
 
