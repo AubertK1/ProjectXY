@@ -185,8 +185,8 @@ public abstract class Object {
 
     public void renderOutlines(){
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-//        shapeRenderer.setColor(new Color(Color.PINK));
-//        shapeRenderer.rect(textureBounds.x, textureBounds.y, textureBounds.width, textureBounds.height);
+        shapeRenderer.setColor(new Color(Color.PINK));
+        shapeRenderer.rect(textureBounds.x, textureBounds.y, textureBounds.width, textureBounds.height);
         shapeRenderer.setColor(new Color(Color.GREEN));
         shapeRenderer.rect(hurtboxBounds.x, hurtboxBounds.y, hurtboxBounds.width, hurtboxBounds.height);
         shapeRenderer.setColor(new Color(Color.ORANGE));

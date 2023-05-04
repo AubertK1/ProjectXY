@@ -190,7 +190,7 @@ public class Cyborg extends Fighter {
         }
         currentATK = Attack.DLIGHT;
         swapAnimation(dLightAnimation);
-        getStunned(dLightAnimation.getTotalFrames());
+        getStunned(dLightAnimation.getRemainingFrames(stateTime));
 
         Player struckPlayer = player.checkHit();
         boolean hit = struckPlayer != null;
@@ -229,7 +229,7 @@ public class Cyborg extends Fighter {
 
         currentATK = Attack.NHEAVY;
         swapAnimation(nHeavyAnimation);
-        getStunned(nHeavyAnimation.getTotalFrames());
+        getStunned(nHeavyAnimation.getRemainingFrames(stateTime));
 
         if(!plasmaBallSent){
             StunBallProjectile plasmaBall = (StunBallProjectile) GameScreen.projectilePool.grab(StunBallProjectile.class);
@@ -245,7 +245,7 @@ public class Cyborg extends Fighter {
     private void hold(){
         currentATK = Attack.NHEAVY;
         swapAnimation(nHeavyChargeAnimation);
-        getStunned(nHeavyChargeAnimation.getTotalFrames());
+        getStunned(nHeavyChargeAnimation.getRemainingFrames(stateTime));
     }
 
     public void sideHeavyAtk() {
@@ -278,7 +278,7 @@ public class Cyborg extends Fighter {
     private void charge(){
         currentATK = Attack.SHEAVY;
         swapAnimation(sHeavyChargeAnimation);
-        getStunned(sHeavyChargeAnimation.getTotalFrames());
+        getStunned(sHeavyChargeAnimation.getRemainingFrames(stateTime));
 
         if(plasmaBallScale < 2f && GameScreen.getFrame() % 8 == 0) plasmaBallScale += .1f;
     }
