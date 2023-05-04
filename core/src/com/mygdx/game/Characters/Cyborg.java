@@ -52,7 +52,7 @@ public class Cyborg extends Fighter{
                 null);
         //endregion
         //region neutral light
-        nLightAnimation = animate(new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_Attack2_Sheet.png"), 1, 7, 21);
+        nLightAnimation = animate(new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_Attack2_Sheet.png"), 1, 7, 420);
         nLightAnimation.setHitboxes(new Rectangle(0, 0, 0, 0),
                 new Rectangle(0, 0, 0, 0),
                 new Rectangle(23, 20, 9, 10),
@@ -110,7 +110,7 @@ public class Cyborg extends Fighter{
         }
         currentATK = Attack.NLIGHT;
         swapAnimation(nLightAnimation);
-        getStunned(nLightAnimation.getTotalFrames());
+        getStunned(nLightAnimation.getRemainingFrames(stateTime));
 
         Player struckPlayer = player.checkHit();
         boolean hit = struckPlayer != null;
@@ -144,7 +144,7 @@ public class Cyborg extends Fighter{
         }
         currentATK = Attack.SLIGHT;
         swapAnimation(sLightAnimation);
-        getStunned(sLightAnimation.getTotalFrames());
+        getStunned(sLightAnimation.getRemainingFrames(stateTime));
 
         Player struckPlayer = player.checkHit();
         boolean hit = struckPlayer != null;

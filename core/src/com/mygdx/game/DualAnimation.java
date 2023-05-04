@@ -67,6 +67,9 @@ public class DualAnimation extends Animation<TextureRegion> {
         return this.focalPoints;
     }
 
+    public int getRemainingFrames(float stateTime){
+        return totalFrames - (int) (stateTime * 60);
+    }
     public int getTotalFrames(){
         return totalFrames;
     }
