@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -17,7 +18,6 @@ import com.mygdx.game.Projectiles.ProjectilePool;
 import com.mygdx.game.Weapons.Sword;
 import com.mygdx.game.Weapons.Weapon;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 public class GameScreen extends Screen {

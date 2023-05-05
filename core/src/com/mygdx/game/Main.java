@@ -1,13 +1,16 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.*;
+import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.mygdx.game.OI.ControlScreen;
 import com.mygdx.game.OI.MainMenu;
-import com.mygdx.game.OI.*;
 import com.mygdx.game.OI.P1CharacterSelectScreen;
 import com.mygdx.game.OI.P2CharacterSelectScreen;
 import com.mygdx.game.OI.Screen;
@@ -132,6 +135,7 @@ public class Main extends ApplicationAdapter {
 	public void dispose () {
 		batch.dispose();
 	}
+
 	static public void changeScreen(String newScreenName){
 		currentScreen.stopDrawing();
 		if(newScreenName.equals("MainMenu")){
@@ -147,9 +151,11 @@ public class Main extends ApplicationAdapter {
 		}
 		currentScreen.startDrawing();
 	}
+
 	public static float getFrameRate(){
 		return Gdx.graphics.getDeltaTime();
 	}
+
 	public int getAffectedPlayer(int KEY){
 		return KeyBinds.findKeySetIndex(KEY);
 	}

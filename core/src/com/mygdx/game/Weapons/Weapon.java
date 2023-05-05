@@ -1,6 +1,10 @@
 package com.mygdx.game.Weapons;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.mygdx.game.*;
+import com.mygdx.game.GameScreen;
+import com.mygdx.game.HitData;
+import com.mygdx.game.Main;
+import com.mygdx.game.MovingObj;
+import com.mygdx.game.Platform;
 import com.mygdx.game.OI.Player;
 
 /**
