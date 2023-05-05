@@ -270,6 +270,7 @@ public class Fighter extends MovingObj{
             reset();
         }
     }
+
     public void knockBack(int direction, float multiplier, boolean preferRight){
         float baseHorKB = 800;
         float baseVertKB = -GameScreen.GRAVITY + baseHorKB;
@@ -399,20 +400,20 @@ public class Fighter extends MovingObj{
         update();
 
         //this draws the fighter flipped depending on which way it is facing
-        boolean flip = !isFacingRight();
+        boolean isFlipped = !isFacingRight();
         if(currentAnimation == null) { //if no animation...
             //this draws the fighter flipped depending on which way it is facing
-            batch.draw(model, flip ? getX() + getWidth() : getX(), getY(), flip ? -getWidth() : getWidth(), getHeight());
+            batch.draw(model, isFlipped ? getX() + getWidth() : getX(), getY(), isFlipped ? -getWidth() : getWidth(), getHeight());
         }
         else { //if has an animation
             stateTime += Main.getFrameRate();
             modelFrame = currentAnimation.getKeyFrame(stateTime, true);
-            applyHitbox(currentAnimation.getKeyHitBox(stateTime), flip);
-            applyFocalPoint(currentAnimation.getKeyFocalPoint(stateTime), flip);
+            applyHitbox(currentAnimation.getKeyHitBox(stateTime), isFlipped);
+            applyFocalPoint(currentAnimation.getKeyFocalPoint(stateTime), isFlipped);
             if(currentAnimation != idleAnimation && currentAnimation.isAnimationFinished(stateTime)) currentAnimation = idleAnimation;
 
-            batch.draw(modelFrame, flip ? getX() + modelFrame.getRegionWidth() * getScale() : getX(), getY(),
-                    flip ? -modelFrame.getRegionWidth() * getScale() : modelFrame.getRegionWidth() * getScale(), modelFrame.getRegionHeight() * getScale());
+            batch.draw(modelFrame, isFlipped ? getX() + modelFrame.getRegionWidth() * getScale() : getX(), getY(),
+                    isFlipped ? -modelFrame.getRegionWidth() * getScale() : modelFrame.getRegionWidth() * getScale(), modelFrame.getRegionHeight() * getScale());
         }
 
         if(Main.inDebugMode) {
