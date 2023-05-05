@@ -65,10 +65,10 @@ public class GameScreen extends Screen {
                 (Gdx.graphics.getHeight() * .26f) - (mainPlatform.getHBHeight() / 2f));
         platforms.add(mainPlatform);
 
-        Platform platform2 = new Platform(200, 600, new Texture("assets\\textures\\Platforms\\Neon_Platform_Sheet.png"), 5, 2);
-        platform2.setHurtbox(39, 8, 135, 89);
-        platform2.scale(2);
-        platforms.add(platform2);
+//        Platform platform2 = new Platform(200, 600, new Texture("assets\\textures\\Platforms\\Neon_Platform_Sheet.png"), 5, 2);
+//        platform2.setHurtbox(39, 8, 135, 89);
+//        platform2.scale(2);
+//        platforms.add(platform2);
 
         player1 = new Player(1);
         player2 = new Player(2);
@@ -116,8 +116,8 @@ public class GameScreen extends Screen {
             if(!gameBounds.contains(weapon.getX(), weapon.getY())) weapon.setPosition(spawnCenter.x, spawnCenter.y);
         }
 
-        p1Label.setText("ROBOT: " + player1.getFighter().getHealth());
-        p2Label.setText("VAMPIRE: " + player2.getFighter().getHealth());
+        p1Label.setText(player1.getFighter().getName() + ": " + player1.getFighter().getHealth());
+        p2Label.setText(player2.getFighter().getName() + ": " + player2.getFighter().getHealth());
     }
 
     public static ArrayList<Player> getPlayers(){

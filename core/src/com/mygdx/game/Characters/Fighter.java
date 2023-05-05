@@ -24,6 +24,7 @@ public class Fighter extends MovingObj{
     protected Player player;
 
     //region stats
+    protected String name;
     protected static int maxJumps = 2;
     protected float speed = 500;
     protected int damage = 10;
@@ -252,7 +253,7 @@ public class Fighter extends MovingObj{
         attackAlreadyHit = false;
         currentATK = Attack.NOATTACK;
 //        isStunned = false; //fixme may cause unintended glitches
-        stateTime = 0;
+        stateTime = currentAnimation.getTotalFrames() / 60f;
 
         recover(recoveryFrames);
     }
@@ -260,19 +261,25 @@ public class Fighter extends MovingObj{
     private void recover(int recoveryFrames){
         nextATKFrame = GameScreen.getFrame() + recoveryFrames;
         if(isStunned)
-            getStunned(recoveryFrames); //if stunned, extend it through the recovery frames
+            beStunned(recoveryFrames); //if stunned, extend it through the recovery frames
     }
 
-    public void takeDamage(int damage){
+    public void beDamaged(int damage){
         health -= damage;
 
         if (health <= 0) {
-            reset();
+            die();
         }
     }
-    public void knockBack(int direction, float multiplier, boolean preferRight){
+    public void beKnockedBack(int direction, float multiplier, boolean preferRight){
         float baseHorKB = 800;
         float baseVertKB = -GameScreen.GRAVITY + baseHorKB;
+
+        if(multiplier < 0){ //negative multipliers do not scale with health.
+            multiplier = -multiplier;
+        } else {
+            multiplier = multiplier * ((float)(maxHealth - health) * (1 / 50f));
+        }
 
         canFall = true;
         switch (direction){
@@ -316,12 +323,23 @@ public class Fighter extends MovingObj{
      * Stops fighter from receiving player input
      * @param duration the amount of frames the fighter will be stunned
      */
-    public void getStunned(int duration){
+    public void beStunned(int duration){
         if(duration == 0) return;
 //        if(!isInHitStun) stop();
 
         isStunned = true;
         nextUnstunFrame = GameScreen.getFrame() + duration;
+    }
+
+    public void die(){
+        horVelocity *= 2;
+        vertVelocity *= 2;
+
+        float v = 4000;
+        if(horVelocity > 0 && horVelocity < v) horVelocity = v;
+        else if(horVelocity < 0 && horVelocity > -v) horVelocity = -v;
+        if(vertVelocity >= 0 && vertVelocity < v) vertVelocity = v;
+        else if(vertVelocity < 0 && vertVelocity > -v) vertVelocity = -v;
     }
 
     public boolean isJumping() {
@@ -386,6 +404,10 @@ public class Fighter extends MovingObj{
 
     public Player getPlayer() {
         return player;
+    }
+
+    public String getName(){
+        return name;
     }
 
     public int getNextATKFrame(){

@@ -33,6 +33,12 @@ public class Cyborg extends Fighter {
             CyborgConstants.kHurtBoxWidth, 
             CyborgConstants.kHurtBoxHeight);
 
+        //region stats
+        name = "Violet";
+        maxHealth = 100;
+        health = maxHealth;
+        //endregion
+
         //region setting animations
         swapAnimation(idleAnimation = animate(idleSheet = new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_Idle_Sheet.png"), 2, 2, 36));
 
@@ -119,14 +125,14 @@ public class Cyborg extends Fighter {
 
         currentATK = Attack.NLIGHT;
         swapAnimation(nLightAnimation);
-        getStunned(nLightAnimation.getRemainingFrames(stateTime));
+        beStunned(nLightAnimation.getRemainingFrames(stateTime));
 
         Player struckPlayer = player.checkHit();
         boolean hit = struckPlayer != null;
         int atkFrame = nLightAnimation.getKeyFrameIndex(stateTime);
         int direction = isFacingRight ? UPRIGHT : UPLEFT;
         if(hit){
-            int damage = attackAlreadyHit ? 0 : 20;
+            int damage = attackAlreadyHit ? 0 : 80;
             float deltaT = nLightAnimation.getFrameDuration();
             switch (atkFrame){
                 case 1:
@@ -153,7 +159,7 @@ public class Cyborg extends Fighter {
         }
         currentATK = Attack.SLIGHT;
         swapAnimation(sLightAnimation);
-        getStunned(sLightAnimation.getRemainingFrames(stateTime));
+        beStunned(sLightAnimation.getRemainingFrames(stateTime));
 
         Player struckPlayer = player.checkHit();
         boolean hit = struckPlayer != null;
@@ -190,15 +196,15 @@ public class Cyborg extends Fighter {
         }
         currentATK = Attack.DLIGHT;
         swapAnimation(dLightAnimation);
-        getStunned(dLightAnimation.getRemainingFrames(stateTime));
+        beStunned(dLightAnimation.getRemainingFrames(stateTime));
 
         Player struckPlayer = player.checkHit();
         boolean hit = struckPlayer != null;
         int direction = isFacingRight ? DOWNRIGHT : DOWNLEFT;
 
         if(hit){
-            int damage = attackAlreadyHit ? 0 : 20;
-            player.strike(struckPlayer, new HitData().set(damage, 2, .5f, direction, 12));
+            int damage = attackAlreadyHit ? 0 : 5;
+            player.strike(struckPlayer, new HitData().set(damage, 2, -.5f, direction, 12));
             attackAlreadyHit = true;
         }
     }
@@ -229,7 +235,7 @@ public class Cyborg extends Fighter {
 
         currentATK = Attack.NHEAVY;
         swapAnimation(nHeavyAnimation);
-        getStunned(nHeavyAnimation.getRemainingFrames(stateTime));
+        beStunned(nHeavyAnimation.getRemainingFrames(stateTime));
 
         if(!plasmaBallSent){
             StunBallProjectile plasmaBall = (StunBallProjectile) GameScreen.projectilePool.grab(StunBallProjectile.class);
@@ -245,7 +251,7 @@ public class Cyborg extends Fighter {
     private void hold(){
         currentATK = Attack.NHEAVY;
         swapAnimation(nHeavyChargeAnimation);
-        getStunned(nHeavyChargeAnimation.getRemainingFrames(stateTime));
+        beStunned(nHeavyChargeAnimation.getRemainingFrames(stateTime));
     }
 
     public void sideHeavyAtk() {
@@ -278,7 +284,7 @@ public class Cyborg extends Fighter {
     private void charge(){
         currentATK = Attack.SHEAVY;
         swapAnimation(sHeavyChargeAnimation);
-        getStunned(sHeavyChargeAnimation.getRemainingFrames(stateTime));
+        beStunned(sHeavyChargeAnimation.getRemainingFrames(stateTime));
 
         if(plasmaBallScale < 2f && GameScreen.getFrame() % 8 == 0) plasmaBallScale += .1f;
     }
