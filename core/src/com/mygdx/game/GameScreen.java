@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.mygdx.game.Characters.Cyborg;
 import com.mygdx.game.Characters.Robot;
 import com.mygdx.game.Characters.Vampire;
@@ -51,6 +52,13 @@ public class GameScreen extends Screen {
     Group UI = new Group();
 
     Label p1Label, p2Label;
+    //endregion
+
+    //region timerRegion
+    Label timerLabel;
+    int sec;
+    int min;
+    float timerTimeElapsed=0;
     //endregion
     public GameScreen() {
         // initializing everything
@@ -100,6 +108,17 @@ public class GameScreen extends Screen {
         UI.addActor(p1Label);
         UI.addActor(p2Label);
         //endregion
+
+        //region timerRegion
+        sec=0;
+        min=4;
+
+        timerLabel = new Label("Timer: " + min +":"+getSecString(), skin);
+        timerLabel.setSize(100, 50);
+        timerLabel.setPosition(1000, 500);
+
+        UI.addActor(timerLabel);
+        //endregion
     }
     private void update(){
         FRAMECOUNT++;
@@ -116,9 +135,22 @@ public class GameScreen extends Screen {
             if(!gameBounds.contains(weapon.getX(), weapon.getY())) weapon.setPosition(spawnCenter.x, spawnCenter.y);
         }
 
+        //region UI
         p1Label.setText("ROBOT: " + player1.getFighter().getHealth());
         p2Label.setText("VAMPIRE: " + player2.getFighter().getHealth());
+        //endregion
+
+        //region Timer
+        timerLabel.setText("Timer: " + min +":"+sec);
+       timerTimeElapsed = timerTimeElapsed+Gdx.graphics.getDeltaTime();
+       if (timerTimeElapsed>=1){
+           decreaseSec();
+       }
+        //endregion
     }
+
+
+    //TextButton back = createTextButton("back");
 
     public static ArrayList<Player> getPlayers(){
         return players;
@@ -176,4 +208,24 @@ public class GameScreen extends Screen {
 
         projectilePool.renderProjectiles(batch);
     }
+
+    //region Timer
+    private void decreaseSec(){
+        sec=sec-1;
+        if (sec<0){
+            min=min-1;
+            sec=59;
+        }
+        timerTimeElapsed= timerTimeElapsed-1;
+    }
+
+    private String getSecString(){
+        if(sec<10){
+            return "0"+sec;
+        }
+        return ""+sec;
+    }
+    //endregion
+
+
 }
