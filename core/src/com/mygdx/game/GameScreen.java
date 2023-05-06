@@ -82,9 +82,12 @@ public class GameScreen extends Screen {
         players.add(player1);
         players.add(player2);
 
+/*
+        //fixme Add this back later if needed
         Weapon sword = new Sword(spawnCenter.x, spawnCenter.y);
         sword.scale(2);
         weapons.add(sword);
+*/
 
         //region screen UI
         UI.setPosition(100, 50);
