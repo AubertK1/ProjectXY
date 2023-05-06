@@ -4,12 +4,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.GameScreen;
 import com.mygdx.game.Main;
-import org.jetbrains.annotations.NotNull;
 
 class VampireShadow extends Fighter{
     private final Vampire owner;
     private int nextVisibleFrame = 0;
-    protected VampireShadow(@NotNull Vampire owner) {
+    protected VampireShadow(Vampire owner) {
         super(owner.getX(), owner.getY(), owner.getWidth(), owner.getHeight(), false, true, null);
         this.owner = owner;
 
