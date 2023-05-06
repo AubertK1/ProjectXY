@@ -3,6 +3,7 @@ package com.mygdx.game.Characters;
 import com.badlogic.gdx.math.Rectangle;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.mygdx.game.Constants.FighterConstants;
 import com.mygdx.game.HitData;
 import com.mygdx.game.OI.Player;
 
@@ -42,38 +43,22 @@ public class Robot extends Fighter{
                 new Rectangle(34, 19, 17, 28));
 
         //region attack animations
+
         //endregion
         //endregion
     }
 
 
     public void neutralLightAtk() {
+        initiateAtk(FighterConstants.kNLIGHTIndex, 15);
 
-        if(currentATK == Attack.NLIGHT && nLightAnimation.isAnimationFinished(stateTime)){
-            endAttack(15);
-            return;
-        }
-
-        currentATK = Attack.NLIGHT;
-        swapAnimation(nLightAnimation);
-        beStunned(nLightAnimation.getRemainingFrames(stateTime));
-
-        int atkFrame = nLightAnimation.getKeyFrameIndex(stateTime);
-        if(atkFrame == 4){
-            System.out.print("");
-        }
         Player struckPlayer = player.checkHit();
         boolean hit = struckPlayer != null;
         int direction = isFacingRight ? UPRIGHT : UPLEFT;
 
         if(hit){
             int damage = attackAlreadyHit ? 0 : 20;
-            switch (atkFrame){
-                case 3:
-                case 4:
-                    player.strike(struckPlayer, new HitData().set(damage, 2, 2, direction, 20));
-                    break;
-            }
+            player.strike(struckPlayer, new HitData().set(damage, 2, 2, direction, 20));
             attackAlreadyHit = true;
         }
     }

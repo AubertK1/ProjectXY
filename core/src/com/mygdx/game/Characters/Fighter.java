@@ -60,16 +60,21 @@ public class Fighter extends MovingObj{
     DualAnimation nHeavyAnimation;
     DualAnimation sHeavyAnimation;
     DualAnimation dHeavyAnimation;
-    //endregionNH
+    //endregion
 
     //region attacks
     public enum Attack {
-        NOATTACK,
         NLIGHT, SLIGHT, DLIGHT,
         NHEAVY, SHEAVY, DHEAVY,
+
+        NOATTACK
     }
     protected Attack currentATK = Attack.NOATTACK;
     protected boolean attackAlreadyHit = false;
+    //region projectiles
+    boolean projectileCharged = false;
+    boolean projectileSent = false;
+    //endregion
 
     protected int nextATKFrame = 0;
     //endregion
@@ -132,16 +137,86 @@ public class Fighter extends MovingObj{
         //endregion
 
         //applying a jump cool down
-        if (GameScreen.getFrame() >= nextJumpFrame) {
-            isJumping = false;
-        }
-        if(GameScreen.getFrame() >= nextUnstunFrame) isStunned = false;
+        if (GameScreen.getFrame() >= nextJumpFrame) isJumping = false;
+        if (GameScreen.getFrame() >= nextUnstunFrame) isStunned = false;
     }
 
     /**
      * These will be extended and based on the fighter
      */
     // region attacks
+
+    public void initiateAtk(int atkIndexConstant, int recoveryFrames){
+        Attack[] atks = Attack.values();
+
+        Attack ATK = atks[atkIndexConstant];
+        DualAnimation atkAnim = null;
+        switch (atkIndexConstant){
+            case 0:
+                atkAnim = nLightAnimation;
+                break;
+            case 1:
+                atkAnim = sLightAnimation;
+                break;
+            case 2:
+                atkAnim = dLightAnimation;
+                break;
+            case 3:
+                atkAnim = nHeavyAnimation;
+                break;
+            case 4:
+                atkAnim = sHeavyAnimation;
+                break;
+            case 5:
+                atkAnim = dHeavyAnimation;
+                break;
+        }
+        if(atkAnim == null) return;
+
+        if(currentATK == ATK && atkAnim.isAnimationFinished(stateTime)){
+            endAttack(recoveryFrames);
+            return;
+        }
+        currentATK = ATK;
+        swapAnimation(atkAnim);
+        beStunned(atkAnim.getRemainingFrames(stateTime));
+    }
+
+    public void initiateProjectileAtk(int atkIndexConstant, int recoveryFrames){
+        Attack[] atks = Attack.values();
+
+        Attack ATK = atks[atkIndexConstant];
+        DualAnimation atkAnim = null;
+        switch (atkIndexConstant){
+            case 0:
+                atkAnim = nLightAnimation;
+                break;
+            case 1:
+                atkAnim = sLightAnimation;
+                break;
+            case 2:
+                atkAnim = dLightAnimation;
+                break;
+            case 3:
+                atkAnim = nHeavyAnimation;
+                break;
+            case 4:
+                atkAnim = sHeavyAnimation;
+                break;
+            case 5:
+                atkAnim = dHeavyAnimation;
+                break;
+        }
+        if(atkAnim == null) return;
+
+        if(currentATK == ATK && atkAnim.isAnimationFinished(stateTime) && projectileSent){ //this line is the only change
+            endAttack(recoveryFrames);
+            return;
+        }
+        currentATK = ATK;
+        swapAnimation(atkAnim);
+        beStunned(atkAnim.getRemainingFrames(stateTime));
+    }
 
     // region light attacks
     public void upLightAtk() {
@@ -252,8 +327,7 @@ public class Fighter extends MovingObj{
         //ending the attack and resetting values
         attackAlreadyHit = false;
         currentATK = Attack.NOATTACK;
-//        isStunned = false; //fixme may cause unintended glitches
-        stateTime = currentAnimation.getTotalFrames() / 60f;
+        stateTime = currentAnimation.getTotalFrames() / 60f; //ending animation
 
         recover(recoveryFrames);
     }
