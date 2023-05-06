@@ -118,8 +118,8 @@ public class Fighter extends MovingObj{
                 isOnWall = true;
 
                 this.pushOutOf(platform, RIGHT);
-            } else isOnWall = false;
-            if (this.isCollidingWith(platform)[RIGHTCOLLISION]) { //if hitting a platform from the side
+            }
+            else if (this.isCollidingWith(platform)[RIGHTCOLLISION]) { //if hitting a platform from the side
                 if(horVelocity > 0) horVelocity = 0;
                 stopJump();
                 resetJumps();
@@ -203,7 +203,6 @@ public class Fighter extends MovingObj{
                 else holdAtk(ATK, atkAnim, true);
                 return false;
             }
-
         } else{
             attackCharged = true;
             nextAttackHoldLimitFrame = getFrame() - 1;
@@ -310,8 +309,10 @@ public class Fighter extends MovingObj{
             jumpsLeft--;
 
             if(isOnWall){
-                if(isFacingRight) setPosition(getX() - 15, getY()); //If on left side of wall
-                else setPosition(getX() + 15, getY());; //If on right side of wall
+                if(isFacingRight)
+                    setPosition(getX() - 15, getY()); //If on left side of wall
+                else
+                    setPosition(getX() + 15, getY());; //If on right side of wall
                 vertVelocity = 2000;
             }
 
