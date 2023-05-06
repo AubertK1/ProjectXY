@@ -1,14 +1,12 @@
 package com.mygdx.game.Characters;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.mygdx.game.MovingObj;
-import com.mygdx.game.DualAnimation;
-import com.mygdx.game.Platform;
-import com.mygdx.game.GameScreen;
-import com.mygdx.game.Main;
+import com.mygdx.game.*;
 import com.mygdx.game.OI.Player;
 
 import java.awt.Point;
+
+import static com.mygdx.game.GameScreen.getFrame;
 
 /**
  * All fighters will extend from this class. It declares the basic properties
@@ -38,14 +36,16 @@ public class Fighter extends MovingObj{
     protected boolean isJumping = false; //is the player jumping
     protected boolean isBlocking = false; //is the player blocking
     protected boolean isFacingRight = true;
-
     protected boolean isStunned = false;
+    private boolean isOnWall = false;
+    private boolean isFrozen = false;
     //endregion
 
     protected int jumpsLeft = maxJumps;
     //the next frame they'll be able to jump at
     protected int nextJumpFrame = 0;
     protected int nextUnstunFrame = 0;
+    protected int nextUnfreezeFrame = 0;
 
     // endregion properties
 
@@ -71,9 +71,10 @@ public class Fighter extends MovingObj{
     }
     protected Attack currentATK = Attack.NOATTACK;
     protected boolean attackAlreadyHit = false;
-    //region projectiles
-    boolean projectileCharged = false;
-    boolean projectileSent = false;
+    //region attack holding
+    private int nextAttackHoldLimitFrame = 0;
+    private boolean attackCharged = false;
+    protected boolean attackSent = false;
     //endregion
 
     protected int nextATKFrame = 0;
@@ -114,31 +115,34 @@ public class Fighter extends MovingObj{
                 stopJump();
                 resetJumps();
                 vertVelocity = -135;
+                isOnWall = true;
 
                 this.pushOutOf(platform, RIGHT);
-            }
+            } else isOnWall = false;
             if (this.isCollidingWith(platform)[RIGHTCOLLISION]) { //if hitting a platform from the side
                 if(horVelocity > 0) horVelocity = 0;
                 stopJump();
                 resetJumps();
                 vertVelocity = -135;
+                isOnWall = true;
 
                 this.pushOutOf(platform, LEFT);
-            }
+            } else isOnWall = false;
 
             i++;
         }   
         //endregion
 
         //region gravity
-        applyPhysics();
+        if(!isFrozen) applyPhysics();
         if(vertVelocity < -100 && !isAttacking()) swapAnimation(fallAnimation);
 
         //endregion
 
         //applying a jump cool down
-        if (GameScreen.getFrame() >= nextJumpFrame) isJumping = false;
-        if (GameScreen.getFrame() >= nextUnstunFrame) isStunned = false;
+        if (getFrame() >= nextJumpFrame) isJumping = false;
+        if (getFrame() >= nextUnstunFrame) isStunned = false;
+        if (getFrame() >= nextUnfreezeFrame) isFrozen = false;
     }
 
     /**
@@ -146,43 +150,18 @@ public class Fighter extends MovingObj{
      */
     // region attacks
 
-    public void initiateAtk(int atkIndexConstant, int recoveryFrames){
-        Attack[] atks = Attack.values();
-
-        Attack ATK = atks[atkIndexConstant];
-        DualAnimation atkAnim = null;
-        switch (atkIndexConstant){
-            case 0:
-                atkAnim = nLightAnimation;
-                break;
-            case 1:
-                atkAnim = sLightAnimation;
-                break;
-            case 2:
-                atkAnim = dLightAnimation;
-                break;
-            case 3:
-                atkAnim = nHeavyAnimation;
-                break;
-            case 4:
-                atkAnim = sHeavyAnimation;
-                break;
-            case 5:
-                atkAnim = dHeavyAnimation;
-                break;
-        }
-        if(atkAnim == null) return;
-
-        if(currentATK == ATK && atkAnim.isAnimationFinished(stateTime)){
-            endAttack(recoveryFrames);
-            return;
-        }
-        currentATK = ATK;
-        swapAnimation(atkAnim);
-        beStunned(atkAnim.getRemainingFrames(stateTime));
+    /**
+     * @return returns false any time the function has to end early
+     */
+    public boolean initiateAtk(int atkIndexConstant, int recoveryFrames) {
+        return initiateAtk(atkIndexConstant, recoveryFrames, null);
     }
 
-    public void initiateProjectileAtk(int atkIndexConstant, int recoveryFrames){
+    /**
+     * @return returns false any time the function has to end early
+     */
+    public boolean initiateAtk(int atkIndexConstant, int recoveryFrames, DualAnimation holdingAnimation){
+        //region retrieving attack type
         Attack[] atks = Attack.values();
 
         Attack ATK = atks[atkIndexConstant];
@@ -207,15 +186,46 @@ public class Fighter extends MovingObj{
                 atkAnim = dHeavyAnimation;
                 break;
         }
-        if(atkAnim == null) return;
+        if(atkAnim == null) return false;
+        //endregion
 
-        if(currentATK == ATK && atkAnim.isAnimationFinished(stateTime) && projectileSent){ //this line is the only change
+        //region holding/delaying attack
+        int typeOfAttack = KeyBinds.Keys.LIGHTATTACK;
+        if(ATK == Attack.NHEAVY || ATK == Attack.SHEAVY ||ATK == Attack.DHEAVY)
+            typeOfAttack = KeyBinds.Keys.HEAVYATTACK;
+
+        if(nextAttackHoldLimitFrame < getFrame() && !attackCharged)
+            nextAttackHoldLimitFrame = getFrame() + 90;
+        if(getFrame() >= nextAttackHoldLimitFrame) attackCharged = true;
+        if(KeyBinds.isKeyPressed(typeOfAttack, player.getPlayerNum() - 1)) { //if they're holding down the attack key
+            if(!attackCharged) { //so they can't charge again while it's being sent out
+                if(holdingAnimation != null) holdAtk(ATK, holdingAnimation, false);
+                else holdAtk(ATK, atkAnim, true);
+                return false;
+            }
+
+        } else{
+            attackCharged = true;
+            nextAttackHoldLimitFrame = getFrame() - 1;
+        }
+        //endregion
+
+        if(currentATK == ATK && atkAnim.isAnimationFinished(stateTime) && attackSent){
             endAttack(recoveryFrames);
-            return;
+            return false;
         }
         currentATK = ATK;
         swapAnimation(atkAnim);
         beStunned(atkAnim.getRemainingFrames(stateTime));
+
+        return true;
+    }
+
+
+    protected void holdAtk(Attack ATK, DualAnimation atkAnimation, boolean shouldFreezeAnimation){
+        currentATK = ATK;
+        swapAnimation(atkAnimation, shouldFreezeAnimation); //this either should hold the animation at frame 0 or let it play through;
+        beStunned(atkAnimation.getRemainingFrames(stateTime));
     }
 
     // region light attacks
@@ -296,8 +306,14 @@ public class Fighter extends MovingObj{
             isJumping = true;
             canFall = true;
             vertVelocity = 1660;
-            nextJumpFrame = GameScreen.getFrame() + 6;
+            nextJumpFrame = getFrame() + 6;
             jumpsLeft--;
+
+            if(isOnWall){
+                if(isFacingRight) setPosition(getX() - 15, getY()); //If on left side of wall
+                else setPosition(getX() + 15, getY());; //If on right side of wall
+                vertVelocity = 2000;
+            }
 
             if(jumpAnimation != null) swapAnimation(jumpAnimation, true);
         }
@@ -326,6 +342,8 @@ public class Fighter extends MovingObj{
     public void endAttack(int recoveryFrames){
         //ending the attack and resetting values
         attackAlreadyHit = false;
+        attackSent = false;
+        attackCharged = false;
         currentATK = Attack.NOATTACK;
         stateTime = currentAnimation.getTotalFrames() / 60f; //ending animation
 
@@ -333,7 +351,7 @@ public class Fighter extends MovingObj{
     }
 
     private void recover(int recoveryFrames){
-        nextATKFrame = GameScreen.getFrame() + recoveryFrames;
+        nextATKFrame = getFrame() + recoveryFrames;
         if(isStunned)
             beStunned(recoveryFrames); //if stunned, extend it through the recovery frames
     }
@@ -402,7 +420,12 @@ public class Fighter extends MovingObj{
 //        if(!isInHitStun) stop();
 
         isStunned = true;
-        nextUnstunFrame = GameScreen.getFrame() + duration;
+        nextUnstunFrame = getFrame() + duration;
+    }
+    public void beFrozen(int duration){
+        isFrozen = true;
+        beStunned(duration);
+        nextUnfreezeFrame = getFrame() + duration;
     }
 
     public void die(){

@@ -51,6 +51,7 @@ public class Robot extends Fighter{
 
     public void neutralLightAtk() {
         initiateAtk(FighterConstants.kNLIGHTIndex, 15);
+        attackSent = true;
 
         Player struckPlayer = player.checkHit();
         boolean hit = struckPlayer != null;
