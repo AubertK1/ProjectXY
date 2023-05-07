@@ -15,6 +15,7 @@ import java.util.LinkedList;
 public class Vampire extends Fighter{
     private LinkedList<Float> pastXs = new LinkedList<>();
     private LinkedList<Float> pastYs = new LinkedList<>();
+    private LinkedList<Integer> pastAnims = new LinkedList<>();
 
     private VampireShadow shadow;
 
@@ -38,6 +39,8 @@ public class Vampire extends Fighter{
         //region setting animations
         swapAnimation(idleAnimation = animate(idleSheet = new Texture("assets\\textures\\Vampire_Bot\\Vampire_Bot_Idle_Sheet.png"), 2, 3, 36));
 
+        runAnimation = animate(new Texture("assets\\textures\\Vampire_Bot\\Vampire_Bot_Running_Sheet.png"), 2, 3, 36);
+
         //region neutral heavy
         nHeavyAnimation = animate(new Texture("assets\\textures\\Vampire_Bot\\Vampire_Bot_Idle_Sheet.png"), 2, 3, 12);
         //endregion
@@ -59,12 +62,15 @@ public class Vampire extends Fighter{
         //region updating past positions lists
         pastXs.add(getX());
         pastYs.add(getY());
+        pastAnims.add(currentAnimationToInt());
         if(pastXs.size() == 121){ //can go back a max of 181 frames
             pastXs.remove(); //remove the first index / the oldest x position
             pastYs.remove(); //remove the first index / the oldest y position
+            pastAnims.remove();
         }
         //endregion
         shadow.setPosition(pastXs.element(), pastYs.element());
+        shadow.selectAnimationFromNumber(pastAnims.element());
     }
 
     @Override
@@ -87,6 +93,29 @@ public class Vampire extends Fighter{
         super.reset();
         pastXs.clear();
         pastYs.clear();
+    }
+    //endregion
+    //region animation number storing
+    private int currentAnimationToInt(){
+        if (currentAnimation == runAnimation) {
+            return 1;
+        } else if (currentAnimation == jumpAnimation) {
+            return 2;
+        } else if (currentAnimation == fallAnimation) {
+            return 3;
+        } else if (currentAnimation == nLightAnimation) {
+            return 4;
+        } else if (currentAnimation == sLightAnimation) {
+            return 5;
+        } else if (currentAnimation == dLightAnimation) {
+            return 6;
+        } else if (currentAnimation == nHeavyAnimation) {
+            return 7;
+        } else if (currentAnimation == sHeavyAnimation) {
+            return 8;
+        } else if (currentAnimation == dHeavyAnimation) {
+            return 9;
+        } else return 0;
     }
     //endregion
 
