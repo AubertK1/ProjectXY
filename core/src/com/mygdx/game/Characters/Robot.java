@@ -34,7 +34,7 @@ public class Robot extends Fighter{
         runAnimation = animate(new Texture("assets\\textures\\Security_Robot\\Security_Robot_Running_Sheet.png"), 2, 2, 18);
 
 
-        nLightAnimation = animate(new Texture("assets\\textures\\Security_Robot\\Security_Robot_Attack#1_trimmed.png"), 1, 5, 35);
+        nLightAnimation = animate(new Texture("assets\\textures\\Security_Robot\\Security_Robot_Attack#1_trimmed.png"), 1, 6, 35);
         nLightAnimation.setHitboxes(
                 new Rectangle(0, 0, 0, 0),
                 new Rectangle(0, 0, 0, 0),
