@@ -4,6 +4,9 @@ import java.util.HashMap;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.mygdx.game.OI.ControlScreen;
+
+import static com.mygdx.game.Main.controlScreen;
 
 public class KeyBinds {
 
@@ -19,7 +22,6 @@ public class KeyBinds {
             KeyBinds.Keys.INTERACT,
             KeyBinds.Keys.LIGHTATTACK,
             KeyBinds.Keys.HEAVYATTACK,
-            KeyBinds.Keys.TEMP
     };
     /**
      * Player 1 will always be using this keyset
@@ -33,7 +35,6 @@ public class KeyBinds {
             Input.Keys.E,
             Input.Keys.F,
             Input.Keys.G,
-            Input.Keys.Y
     };
 
     public static HashMap<Integer, Integer> keySetMap = new HashMap<Integer, Integer>() {
@@ -55,7 +56,6 @@ public class KeyBinds {
             Input.Keys.CONTROL_RIGHT,
             Input.Keys.COMMA,
             Input.Keys.PERIOD,
-            Input.Keys.BACKSLASH
     };
 
     private final static int[][] keysets = new int[][]{
@@ -71,9 +71,13 @@ public class KeyBinds {
         else return defaultKeys[newKey];
     }
 
-    public static void changeKeyBind(int oldKey, int newKey){
+    public static boolean changeKeyBind(int oldKey, int newKey){
+        if(findKeyIndex(newKey)>=0){
+            return false;
+        }
         keysets[findKeySetIndex(oldKey)][findKeyIndex(oldKey)] = newKey;
         System.out.print("key changed");
+        return true;
     }
 
     public static int findKeyFromDefaultKey(int defaultKey, int keyset){
@@ -92,6 +96,38 @@ public class KeyBinds {
             }
         }
         return -2;
+    }
+
+    public static void resetKeyBinds(){
+        keysets[0][0] = Input.Keys.W;//jump
+        ControlScreen.upP1Text = Input.Keys.toString(Input.Keys.W);
+        keysets[0][1] = Input.Keys.S;
+        ControlScreen.downP1Text = Input.Keys.toString(Input.Keys.S);
+        keysets[0][2] = Input.Keys.A;
+        ControlScreen.leftP1Text = Input.Keys.toString(Input.Keys.A);
+        keysets[0][3] = Input.Keys.D;
+        ControlScreen.rightP1Text = Input.Keys.toString(Input.Keys.D);
+        keysets[0][4] = Input.Keys.E;
+        ControlScreen.interactP1text = Input.Keys.toString(Input.Keys.E);
+        keysets[0][5] = Input.Keys.F;
+        ControlScreen.lightP1Text = Input.Keys.toString(Input.Keys.F);
+        keysets[0][6] = Input.Keys.G;
+        ControlScreen.heavyP1Text = Input.Keys.toString(Input.Keys.G);
+
+        keysets[1][0] = Input.Keys.UP;
+        ControlScreen.upP2Text = Input.Keys.toString(Input.Keys.UP);
+        keysets[1][1] = Input.Keys.LEFT;
+        ControlScreen.leftP2Text = Input.Keys.toString(Input.Keys.LEFT);
+        keysets[1][2] = Input.Keys.DOWN;
+        ControlScreen.downP2Text = Input.Keys.toString(Input.Keys.DOWN);
+        keysets[1][3] = Input.Keys.RIGHT;
+        ControlScreen.rightP2Text = Input.Keys.toString(Input.Keys.RIGHT);
+        keysets[1][4] = Input.Keys.CONTROL_RIGHT;
+        ControlScreen.interactP2text = Input.Keys.toString(Input.Keys.CONTROL_RIGHT);
+        keysets[1][5] = Input.Keys.COMMA;
+        ControlScreen.lightP2Text = Input.Keys.toString(Input.Keys.COMMA);
+        keysets[1][6] = Input.Keys.PERIOD;
+        ControlScreen.heavyP2Text = Input.Keys.toString(Input.Keys.PERIOD);
     }
 
     public static int findKeySetIndex(int KEY){

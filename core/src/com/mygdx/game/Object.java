@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 
-import java.awt.*;
+import java.awt.Point;
 import java.awt.geom.Line2D;
 
 public abstract class Object {

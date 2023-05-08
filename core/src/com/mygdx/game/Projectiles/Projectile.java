@@ -2,9 +2,13 @@ package com.mygdx.game.Projectiles;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.mygdx.game.*;
+import com.mygdx.game.MovingObj;
+import com.mygdx.game.GameScreen;
+import com.mygdx.game.HitData;
+import com.mygdx.game.Main;
 import com.mygdx.game.OI.Player;
 import com.mygdx.game.Object;
+import com.mygdx.game.Platform;
 
 public class Projectile extends MovingObj {
     protected int activeTime = 0;

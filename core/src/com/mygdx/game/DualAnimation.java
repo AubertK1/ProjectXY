@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
-import java.awt.*;
+import java.awt.Point;
 
 public class DualAnimation extends Animation<TextureRegion> {
     private Rectangle[] hitboxes;

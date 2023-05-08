@@ -1,13 +1,16 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.*;
+import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.mygdx.game.OI.ControlScreen;
 import com.mygdx.game.OI.MainMenu;
-import com.mygdx.game.OI.*;
 import com.mygdx.game.OI.P1CharacterSelectScreen;
 import com.mygdx.game.OI.P2CharacterSelectScreen;
 import com.mygdx.game.OI.Screen;
@@ -32,7 +35,7 @@ public class Main extends ApplicationAdapter {
 	//detects whether the game is currently being played or not
 	public static String activeScreenName = "MainMenu";
 	//shows hitboxes
-	public static boolean inDebugMode = false;
+	public static boolean inDebugMode = true;
 
 	/**
 	 * This class sets up the screen. It's only called ONCE (when the game is loaded)
@@ -62,10 +65,23 @@ public class Main extends ApplicationAdapter {
 		InputProcessor screenProcessor = new InputProcessor() {
 			@Override
 			public boolean keyDown(int keycode) {
-				int affectedPlayer = getAffectedPlayer(keycode);
-				if(affectedPlayer != -1)
-					GameScreen.getPlayers().get(getAffectedPlayer(keycode)).interact(keycode);
-				return true;
+				//if control screen
+				if(currentScreen == controlScreen){
+					if (controlScreen.oldKey  != -1){
+						boolean changed = KeyBinds.changeKeyBind(controlScreen.oldKey,keycode);
+						if(changed) {
+							controlScreen.changeButtonText(keycode);
+							controlScreen.oldKey  = -1;
+						}
+					}
+					return true;
+				}
+				else {
+					int affectedPlayer = getAffectedPlayer(keycode);
+					if (affectedPlayer != -1)
+						GameScreen.getPlayers().get(getAffectedPlayer(keycode)).interact(keycode);
+					return true;
+				}
 			}
 
 			@Override
@@ -132,6 +148,7 @@ public class Main extends ApplicationAdapter {
 	public void dispose () {
 		batch.dispose();
 	}
+
 	static public void changeScreen(String newScreenName){
 		currentScreen.stopDrawing();
 		if(newScreenName.equals("MainMenu")){
@@ -147,10 +164,14 @@ public class Main extends ApplicationAdapter {
 		}
 		currentScreen.startDrawing();
 	}
+
 	public static float getFrameRate(){
 		return Gdx.graphics.getDeltaTime();
 	}
+
 	public int getAffectedPlayer(int KEY){
 		return KeyBinds.findKeySetIndex(KEY);
 	}
+
+
 }

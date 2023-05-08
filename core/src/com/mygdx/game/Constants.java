@@ -22,7 +22,12 @@ public class Constants {
 
     // All constants unique to the Fighter
     public class FighterConstants {
-
+        public static final int kNLIGHTIndex = 0;
+        public static final int kSLIGHTIndex = 1;
+        public static final int kDLIGHTIndex = 2;
+        public static final int kNHEAVYIndex = 3;
+        public static final int kSHEAVYIndex = 4;
+        public static final int kDHEAVYIndex = 5;
     }
 
     // The constants that govern keybinds
