@@ -10,6 +10,7 @@ import com.mygdx.game.Constants.CyborgConstants;
 import com.mygdx.game.OI.Player;
 import com.mygdx.game.Projectiles.PlasmaBallProjectile;
 import com.mygdx.game.Projectiles.StunBallProjectile;
+import com.mygdx.game.Constants.FighterConstants;
 
 import java.awt.Point;
 
@@ -17,8 +18,6 @@ public class Cyborg extends Fighter {
 
     DualAnimation sHeavyChargeAnimation;
     DualAnimation nHeavyChargeAnimation;
-    boolean plasmaBallAlreadyCharged = false;
-    boolean plasmaBallSent = false;
     float plasmaBallScale = 1;
 
     public Cyborg(float x, float y, Player player) {
@@ -117,22 +116,16 @@ public class Cyborg extends Fighter {
     }
 
     public void neutralLightAtk() {
-
-        if(currentATK == Attack.NLIGHT && nLightAnimation.isAnimationFinished(stateTime)){
-            endAttack(0);
+        if(!initiateAtk(FighterConstants.kNLIGHTIndex, 0))
             return;
-        }
-
-        currentATK = Attack.NLIGHT;
-        swapAnimation(nLightAnimation);
-        beStunned(nLightAnimation.getRemainingFrames(stateTime));
+        attackSent = true;
 
         Player struckPlayer = player.checkHit();
         boolean hit = struckPlayer != null;
         int atkFrame = nLightAnimation.getKeyFrameIndex(stateTime);
         int direction = isFacingRight ? UPRIGHT : UPLEFT;
         if(hit){
-            int damage = attackAlreadyHit ? 0 : 80;
+            int damage = attackAlreadyHit ? 0 : 14;
             float deltaT = nLightAnimation.getFrameDuration();
             switch (atkFrame){
                 case 1:
@@ -153,13 +146,9 @@ public class Cyborg extends Fighter {
     }
 
     public void sideLightAtk() {
-        if(currentATK == Attack.SLIGHT && sLightAnimation.isAnimationFinished(stateTime)){
-            endAttack(16);
+        if(!initiateAtk(FighterConstants.kSLIGHTIndex, 16))
             return;
-        }
-        currentATK = Attack.SLIGHT;
-        swapAnimation(sLightAnimation);
-        beStunned(sLightAnimation.getRemainingFrames(stateTime));
+        attackSent = true;
 
         Player struckPlayer = player.checkHit();
         boolean hit = struckPlayer != null;
@@ -189,14 +178,9 @@ public class Cyborg extends Fighter {
     }
 
     public void downLightAtk() {
-        if(currentATK == Attack.DLIGHT && dLightAnimation.isAnimationFinished(stateTime)){
-            endAttack(0);
-            isStunned = false; //force unstun
+        if(!initiateAtk(FighterConstants.kDLIGHTIndex, 0))
             return;
-        }
-        currentATK = Attack.DLIGHT;
-        swapAnimation(dLightAnimation);
-        beStunned(dLightAnimation.getRemainingFrames(stateTime));
+        attackSent = true;
 
         Player struckPlayer = player.checkHit();
         boolean hit = struckPlayer != null;
@@ -216,81 +200,53 @@ public class Cyborg extends Fighter {
     }
 
     public void neutralHeavyAtk() {
-        currentATK = Attack.NHEAVY;
-        if(KeyBinds.isKeyPressed(KeyBinds.Keys.HEAVYATTACK, player.getPlayerNum() - 1)) {
-            
-            if(!plasmaBallAlreadyCharged) { //so they can't charge again while it's being sent out
-                hold();
-                return;
-            }
-
-        } else plasmaBallAlreadyCharged = true;
-
-        if(currentATK == Attack.NHEAVY && nHeavyAnimation.isAnimationFinished(stateTime) && plasmaBallSent){
-            endAttack(6);
-            plasmaBallAlreadyCharged = false;
-            plasmaBallSent = false;
+        if (!initiateAtk(FighterConstants.kNHEAVYIndex, 6, nHeavyChargeAnimation))
             return;
-        }
 
-        currentATK = Attack.NHEAVY;
-        swapAnimation(nHeavyAnimation);
-        beStunned(nHeavyAnimation.getRemainingFrames(stateTime));
-
-        if(!plasmaBallSent){
+        if(!attackSent){
             StunBallProjectile plasmaBall = (StunBallProjectile) GameScreen.projectilePool.grab(StunBallProjectile.class);
             boolean flip = !isFacingRight;
             applyHitbox(currentAnimation.getKeyHitBox(stateTime), flip);
             plasmaBall.use(this.player, new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_Stun_Bullet.png"),
                     getHitboxBounds().x, getHitboxBounds().y, 10, 10, flip ? -600 : 600, 0);
-            plasmaBall.setHitData(new HitData().set(6, 1, .75f, NODIRECTION, 16));
-            plasmaBallSent = true;
+            plasmaBall.setHitData(new HitData().set(6, 1, 0, NODIRECTION, 16));
+            attackSent = true;
         }
-    }
-
-    private void hold(){
-        currentATK = Attack.NHEAVY;
-        swapAnimation(nHeavyChargeAnimation);
-        beStunned(nHeavyChargeAnimation.getRemainingFrames(stateTime));
     }
 
     public void sideHeavyAtk() {
-        if(KeyBinds.isKeyPressed(KeyBinds.Keys.HEAVYATTACK, player.getPlayerNum() - 1)) {
-            if(!plasmaBallAlreadyCharged) { //so they can't charge again while it's being sent out
-                charge();
-                return;
-            }
-        } else plasmaBallAlreadyCharged = true;
-        if(currentATK == Attack.SHEAVY && sHeavyAnimation.isAnimationFinished(stateTime) && plasmaBallSent){
-            endAttack(8);
-            plasmaBallAlreadyCharged = false;
-            plasmaBallSent = false;
-            plasmaBallScale = 1f;
+        if (!initiateAtk(FighterConstants.kSHEAVYIndex, 8, sHeavyChargeAnimation))
             return;
-        }
-        currentATK = Attack.SHEAVY;
-        swapAnimation(sHeavyAnimation);
 
-        if(!plasmaBallSent){
+        if(!attackSent){
             PlasmaBallProjectile plasmaBall = (PlasmaBallProjectile) GameScreen.projectilePool.grab(PlasmaBallProjectile.class);
             boolean flip = !isFacingRight;
             applyHitbox(currentAnimation.getKeyHitBox(stateTime), flip);
             plasmaBall.use(this.player, new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_Charge_Bullet.png"),
                     getHitboxBounds().x, getHitboxBounds().y, 10 * (plasmaBallScale * plasmaBallScale), 10 * (plasmaBallScale * plasmaBallScale), flip ? -600 : 600, 0);
             plasmaBall.setHitData(new HitData().set((int) (3 * plasmaBallScale), 1, .65f * plasmaBallScale, NODIRECTION, (int) (10 * plasmaBallScale)));
-            plasmaBallSent = true;
+            attackSent = true;
         }
-    }
-    private void charge(){
-        currentATK = Attack.SHEAVY;
-        swapAnimation(sHeavyChargeAnimation);
-        beStunned(sHeavyChargeAnimation.getRemainingFrames(stateTime));
-
-        if(plasmaBallScale < 2f && GameScreen.getFrame() % 8 == 0) plasmaBallScale += .1f;
     }
 
     public void downHeavyAtk() {
 
+    }
+
+    @Override
+    public void endAttack(int recoveryFrames){
+        super.endAttack(recoveryFrames);
+        plasmaBallScale = 1f;
+    }
+
+    @Override
+    protected void holdAtk(Attack ATK, DualAnimation atkAnimation, boolean shouldFreezeAnimation) {
+        super.holdAtk(ATK, atkAnimation, shouldFreezeAnimation);
+
+        //region Side Heavy
+        if(plasmaBallScale < 2f && GameScreen.getFrame() % 8 == 0)
+            plasmaBallScale += .1f; //grows every 8 frames and maxes at 2x
+        //endregion
     }
     // endregion
 

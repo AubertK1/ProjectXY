@@ -29,6 +29,7 @@ public class StunBallProjectile  extends Projectile{
         else if(collidedObj instanceof Fighter){
             hitData.direction = this.horVelocity > 0 ? RIGHT : LEFT;
             owner.strike(((Fighter) collidedObj).getPlayer(), hitData);
+            ((Fighter) collidedObj).beFrozen(hitData.hitStunDuration);
             free();
         }
     }

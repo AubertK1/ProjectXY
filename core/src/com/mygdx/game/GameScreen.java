@@ -90,18 +90,21 @@ public class GameScreen extends Screen {
         players.add(player1);
         players.add(player2);
 
+/*
+        //fixme Add this back later if needed
         Weapon sword = new Sword(spawnCenter.x, spawnCenter.y);
         sword.scale(2);
         weapons.add(sword);
+*/
 
         //region screen UI
         UI.setPosition(100, 50);
 
-        p1Label = new Label("ROBOT: " + player1.getFighter().getHealth(), skin);
+        p1Label = new Label("", skin);
         p1Label.setSize(100, 50);
         p1Label.setPosition(0, 0);
 
-        p2Label = new Label("VAMPIRE: " + player2.getFighter().getHealth(), skin);
+        p2Label = new Label("", skin);
         p2Label.setSize(p1Label.getWidth(), p1Label.getHeight());
         p2Label.setPosition(p1Label.getX() + p1Label.getWidth() + 5, p1Label.getY());
 
@@ -130,10 +133,12 @@ public class GameScreen extends Screen {
             if(!gameBounds.contains(player.getFighter().getX(), player.getFighter().getY())) player.resetAssets();
         }
 
-        //fixme Remove this later
+/*
+        //fixme Add this back later if needed
         for (Weapon weapon: weapons) {
             if(!gameBounds.contains(weapon.getX(), weapon.getY())) weapon.setPosition(spawnCenter.x, spawnCenter.y);
         }
+*/
 
         //region UI
         p1Label.setText("ROBOT: " + player1.getFighter().getHealth());
