@@ -5,11 +5,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.mygdx.game.Characters.Cyborg;
 import com.mygdx.game.Characters.Robot;
 import com.mygdx.game.Characters.Vampire;
@@ -59,6 +61,9 @@ public class GameScreen extends Screen {
     int sec;
     int min;
     float timerTimeElapsed=0;
+    //endregion
+    //region backButton
+    public TextButton back;
     //endregion
     public GameScreen() {
         // initializing everything
@@ -114,13 +119,23 @@ public class GameScreen extends Screen {
 
         //region timerRegion
         sec=0;
-        min=4;
+        min=5;
 
         timerLabel = new Label("Timer: " + min +":"+getSecString(), skin);
         timerLabel.setSize(100, 50);
-        timerLabel.setPosition(1000, 500);
+        timerLabel.setPosition(1700, 900);
 
         UI.addActor(timerLabel);
+        //endregion
+
+        //region backButton
+         back = createTextButton("BACK",-100,850,200,100);
+        back.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeListener.ChangeEvent event, Actor actor) {
+                Main.changeScreen("MainMenu");
+            }
+        });
         //endregion
     }
     private void update(){
@@ -150,6 +165,12 @@ public class GameScreen extends Screen {
        timerTimeElapsed = timerTimeElapsed+Gdx.graphics.getDeltaTime();
        if (timerTimeElapsed>=1){
            decreaseSec();
+       if (min<0){
+           if (sec<0){
+               System.out.println("TIMES UP");
+
+           }
+       }
        }
         //endregion
 
@@ -159,7 +180,7 @@ public class GameScreen extends Screen {
     }
 
 
-    //TextButton back = createTextButton("back");
+
 
     public static ArrayList<Player> getPlayers(){
         return players;
@@ -236,5 +257,12 @@ public class GameScreen extends Screen {
     }
     //endregion
 
+    public TextButton createTextButton(String buttonText,int x, int y, int width, int height){
+        final TextButton aTextbutton = new TextButton(buttonText,skin);
+        aTextbutton.setPosition(x,y);
+        aTextbutton.setSize(width,height);
+        UI.addActor(aTextbutton);
+        return aTextbutton;
+    }
 
 }

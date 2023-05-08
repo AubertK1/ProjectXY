@@ -27,7 +27,7 @@ public class KeyBinds {
      * Player 1 will always be using this keyset
      * MAKE SURE THE KEYS ON HERE ALIGN WITH THE KEYS ON THE OTHER KEYSETS
      */
-    final static int[] keyset0 = new int[]{
+     static int[] keyset0 = new int[]{
             Input.Keys.W,
             Input.Keys.A,
             Input.Keys.S,
@@ -48,14 +48,14 @@ public class KeyBinds {
      * Player 2 will always be using this keyset
      * MAKE SURE THE KEYS ON HERE ALIGN WITH THE KEYS ON THE OTHER KEYSETS
      */
-    final static int[] keyset1 = new int[]{
+     static int[] keyset1 = new int[]{
             Input.Keys.UP,
             Input.Keys.LEFT,
             Input.Keys.DOWN,
             Input.Keys.RIGHT,
             Input.Keys.CONTROL_RIGHT,
-            Input.Keys.COMMA,
             Input.Keys.PERIOD,
+            Input.Keys.SLASH,
     };
 
     private final static int[][] keysets = new int[][]{
@@ -124,8 +124,8 @@ public class KeyBinds {
         ControlScreen.rightP2Text = Input.Keys.toString(Input.Keys.RIGHT);
         keysets[1][4] = Input.Keys.CONTROL_RIGHT;
         ControlScreen.interactP2text = Input.Keys.toString(Input.Keys.CONTROL_RIGHT);
-        keysets[1][5] = Input.Keys.COMMA;
-        ControlScreen.lightP2Text = Input.Keys.toString(Input.Keys.COMMA);
+        keysets[1][5] = Input.Keys.SLASH;
+        ControlScreen.lightP2Text = Input.Keys.toString(Input.Keys.SLASH);
         keysets[1][6] = Input.Keys.PERIOD;
         ControlScreen.heavyP2Text = Input.Keys.toString(Input.Keys.PERIOD);
     }

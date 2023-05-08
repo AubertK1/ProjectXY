@@ -49,12 +49,12 @@ public class ControlScreen extends MenuScreen {
     TextButton rightP2;
     public static  String leftP2Text = Input.Keys.toString(Input.Keys.LEFT);
     TextButton leftP2;
-    public static String lightP2Text = Input.Keys.toString(Input.Keys.CONTROL_RIGHT);
+    public static String lightP2Text = Input.Keys.toString(Input.Keys.PERIOD);
     TextButton lightP2;
-    public static String heavyP2Text = Input.Keys.toString(Input.Keys.COMMA);
+    public static String heavyP2Text = Input.Keys.toString(Input.Keys.SLASH);
     TextButton heavyP2;
 
-    public static String interactP2text = Input.Keys.toString(Input.Keys.PERIOD);
+    public static String interactP2text = Input.Keys.toString(Input.Keys.CONTROL_RIGHT);
     TextButton interactP2;
 
 
@@ -64,9 +64,10 @@ public class ControlScreen extends MenuScreen {
         downLabel = createLabel("DOWN", 450, 650, 150, 100);
         rightLabel = createLabel("RIGHT", 450, 550, 150, 100);
         leftLabel = createLabel("LEFT", 450, 450, 150, 100);
-        lightLabel = createLabel("LIGHT", 450, 350, 150, 100);
-        heavyLabel = createLabel("HEAVY", 450, 250, 150, 100);
-        interactLabel = createLabel("INTERACT", 450, 150, 100, 75);
+        interactLabel = createLabel("INTERACT", 450, 350, 100, 75);
+        lightLabel = createLabel("HEAVY", 450, 250, 150, 100);
+        heavyLabel = createLabel("LIGHT", 450, 150, 150, 100);
+
 
 
         final TextButton play = createTextButton("BACK",25,550,200,200);
@@ -76,7 +77,7 @@ public class ControlScreen extends MenuScreen {
                 Main.changeScreen("MainMenu");
             }
         });
-        final TextButton defaultKeys = createTextButton("DEFAULT KEYBINDS",25,350,200,200);
+        final TextButton defaultKeys = createTextButton("DEFAULT KEYBINDS",25,300,200,200);
             defaultKeys.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
@@ -114,15 +115,21 @@ public class ControlScreen extends MenuScreen {
                 oldKey = Input.Keys.valueOf(leftP1Text);
             }
         });
-
-        lightP1 = createTextButton("F", 550, 350, 100, 75);
+        interactP1 = createTextButton("E", 550, 350, 100, 75);
+        interactP1.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                oldKey = Input.Keys.valueOf(interactP1text);
+            }
+        });
+        lightP1 = createTextButton("F", 550, 250, 100, 75);
         lightP1.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 oldKey = Input.Keys.valueOf(lightP1Text);
             }
         });
-        heavyP1 = createTextButton("G", 550, 250, 100, 75);
+        heavyP1 = createTextButton("G", 550, 150, 100, 75);
         heavyP1.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -132,24 +139,14 @@ public class ControlScreen extends MenuScreen {
 
 
 
-
-        interactP1 = createTextButton("E", 550, 150, 100, 75);
-        interactP1.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                oldKey = Input.Keys.valueOf(interactP1text);
-            }
-        });
-
-
-        upP2 = createTextButton("UP ARROW", 1050, 750, 100, 75);
+        upP2 = createTextButton(upP2Text, 1050, 750, 100, 75);
         upP2.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 oldKey = Input.Keys.valueOf(upP2Text);
             }
         });
-        downP2 = createTextButton("DOWN ARROW", 1050, 650, 100, 75);
+        downP2 = createTextButton(downP2Text, 1050, 650, 100, 75);
         downP2.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -170,14 +167,22 @@ public class ControlScreen extends MenuScreen {
                 oldKey = Input.Keys.valueOf(leftP2Text);
             }
         });
-        lightP2 = createTextButton("COMMA", 1050, 350, 100, 75);
+
+        interactP2 = createTextButton("CTRL R", 1050, 350, 100, 75);
+        interactP2.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                oldKey = Input.Keys.valueOf(interactP2text);
+            }
+        });
+        lightP2 = createTextButton("PERIOD", 1050, 250, 100, 75);
         lightP2.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 oldKey = Input.Keys.valueOf(lightP2Text);
             }
         });
-        heavyP2 = createTextButton("PERIOD", 1050, 250, 100, 75);
+        heavyP2 = createTextButton("SLASH", 1050, 150, 100, 75);
         heavyP2.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -185,13 +190,8 @@ public class ControlScreen extends MenuScreen {
             }
         });
 
-        interactP2 = createTextButton("CTRL R", 1050, 150, 100, 75);
-        interactP2.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                oldKey = Input.Keys.valueOf(interactP2text);
-            }
-        });
+
+
 
     }
 
