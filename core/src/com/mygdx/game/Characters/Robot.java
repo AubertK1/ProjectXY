@@ -38,9 +38,9 @@ public class Robot extends Fighter{
         nLightAnimation.setHitboxes(
                 new Rectangle(0, 0, 0, 0),
                 new Rectangle(0, 0, 0, 0),
-                new Rectangle(0, 0, 0, 0),
-                new Rectangle(27, 10, 25, 36),
-                new Rectangle(34, 19, 17, 28));
+                new Rectangle(10, 18, 8, 9),
+                new Rectangle(13, 10, 36, 36),
+                new Rectangle(13, 10, 36, 36));
 
         //region attack animations
 
