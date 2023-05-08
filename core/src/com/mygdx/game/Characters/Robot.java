@@ -15,10 +15,17 @@ public class Robot extends Fighter{
     public Robot(float x, float y, Player player) {
         //runs the Fighter class's constructor, so it can set up anything in that constructor
         super(x, y, 1, 1, true, true, player);
+
         //setting the visual model of the robot
         model = new Texture("assets\\textures\\Security_Robot\\Security_Robot_48x.png");
         setHurtbox(9, 0, 34, 48);
         setSize(model.getWidth(), model.getHeight());
+
+        //region stats
+        name = "Sarge";
+        maxHealth = 150;
+        health = maxHealth;
+        //endregion
 
         //region setting animations
         swapAnimation(idleAnimation = animate(idleSheet = new Texture("assets\\textures\\Security_Robot\\Security_Robot_Idle_Sheet.png"), 2, 2, 36));
@@ -49,7 +56,7 @@ public class Robot extends Fighter{
 
         currentATK = Attack.NLIGHT;
         swapAnimation(nLightAnimation);
-        getStunned(nLightAnimation.getRemainingFrames(stateTime));
+        beStunned(nLightAnimation.getRemainingFrames(stateTime));
 
         int atkFrame = nLightAnimation.getKeyFrameIndex(stateTime);
         if(atkFrame == 4){

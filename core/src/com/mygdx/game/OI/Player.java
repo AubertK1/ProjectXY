@@ -147,13 +147,14 @@ public class Player {
         HitData attackData = new HitData().set(fighterHitData.damage,
                 HitData.IGNORE, avgKBMultiplier, fighterHitData.direction, fighterHitData.hitStunDuration);
 
+        struckPlayer.getFighter().endAttack(1);
         struckPlayer.getStruck(attackData, fighter.isFacingRight());
     }
 
     public void getStruck(HitData hitData, boolean preferRight){
-        fighter.getStunned(hitData.hitStunDuration);
-        fighter.knockBack(hitData.direction, hitData.knockbackMultiplier, preferRight);
-        fighter.takeDamage(hitData.damage);
+        fighter.beStunned(hitData.hitStunDuration);
+        fighter.beKnockedBack(hitData.direction, hitData.knockbackMultiplier, preferRight);
+        fighter.beDamaged(hitData.damage);
     }
 
     public void pull(Player pulledPlayer, Point point, float time){
