@@ -18,6 +18,7 @@ class VampireShadow extends Fighter{
         swapAnimation(idleAnimation = animate(idleSheet = new Texture("assets\\textures\\Vampire_Bot\\Vampire_Bot_Idle_Sheet.png"), 2, 3, 36));
 
         runAnimation = animate(new Texture("assets\\textures\\Vampire_Bot\\Vampire_Bot_Running_Sheet.png"), 2, 3, 36);
+        jumpAnimation = animate(new Texture("assets\\textures\\Vampire_Bot\\Vampire_Bot_Jumping_Sheet.png"), 1, 1, 30);
 
         //region neutral heavy
         nHeavyAnimation = animate(new Texture("assets\\textures\\Vampire_Bot\\Vampire_Bot_Idle_Sheet.png"), 2, 3, 12);

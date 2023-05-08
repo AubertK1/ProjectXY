@@ -40,6 +40,7 @@ public class Vampire extends Fighter{
         swapAnimation(idleAnimation = animate(idleSheet = new Texture("assets\\textures\\Vampire_Bot\\Vampire_Bot_Idle_Sheet.png"), 2, 3, 36));
 
         runAnimation = animate(new Texture("assets\\textures\\Vampire_Bot\\Vampire_Bot_Running_Sheet.png"), 2, 3, 36);
+        jumpAnimation = animate(new Texture("assets\\textures\\Vampire_Bot\\Vampire_Bot_Jumping_Sheet.png"), 1, 1, 30);
 
         //region neutral heavy
         nHeavyAnimation = animate(new Texture("assets\\textures\\Vampire_Bot\\Vampire_Bot_Idle_Sheet.png"), 2, 3, 12);
@@ -75,8 +76,8 @@ public class Vampire extends Fighter{
 
     @Override
     public void render(SpriteBatch batch) {
-        super.render(batch);
         shadow.render(batch);
+        super.render(batch);
     }
     @Override
     public void setSize(float width, float height){
@@ -120,6 +121,7 @@ public class Vampire extends Fighter{
     //endregion
 
     public void neutralHeavyAtk() {
+        if(!shadow.getIsVisible()) return;
         if (!initiateAtk(Constants.FighterConstants.kNHEAVYIndex, 0))
             return;
 
@@ -127,6 +129,7 @@ public class Vampire extends Fighter{
             setPosition(shadow.getX(), shadow.getY());
             pastXs.clear();
             pastYs.clear();
+            pastAnims.clear();
             shadow.beInvisible(120);
             attackSent = true;
         }
