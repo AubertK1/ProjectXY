@@ -3,13 +3,9 @@ package com.mygdx.game.Characters;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.Constants;
-import com.mygdx.game.GameScreen;
-import com.mygdx.game.HitData;
 import com.mygdx.game.KeyBinds;
 import com.mygdx.game.OI.Player;
-import com.mygdx.game.Projectiles.StunBallProjectile;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class Vampire extends Fighter{
