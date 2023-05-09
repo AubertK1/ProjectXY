@@ -531,8 +531,9 @@ public class Fighter extends MovingObj{
             applyFocalPoint(currentAnimation.getKeyFocalPoint(stateTime), flip);
             if(currentAnimation != idleAnimation && currentAnimation.isAnimationFinished(stateTime)) currentAnimation = idleAnimation;
 
-            batch.draw(modelFrame, flip ? getX() + modelFrame.getRegionWidth() * getScale() : getX(), getY(),
-                    flip ? -modelFrame.getRegionWidth() * getScale() : modelFrame.getRegionWidth() * getScale(), modelFrame.getRegionHeight() * getScale());
+            float frameWidth = modelFrame.getRegionWidth() * getScale(), frameHeight = modelFrame.getRegionHeight() * getScale();
+            batch.draw(modelFrame, flip ? getX() + getWidth() : getX(), getY(),
+                    flip ? -frameWidth : frameWidth, frameHeight);
         }
 
         if(Main.inDebugMode) {

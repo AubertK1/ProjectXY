@@ -35,7 +35,12 @@ class VampireShadow extends Fighter{
         //endregion
         if(!getIsVisible()) return;
 
-        boolean flip = getX() - lastX < 0;
+        //region which direction to face
+        if(getX() - lastX < 0) isFacingRight = false;
+        else if(getX() - lastX > 0) isFacingRight = true;
+        boolean flip = !isFacingRight;
+        //endregion
+
         stateTime += Main.getFrameRate();
         modelFrame = currentAnimation.getKeyFrame(stateTime, true);
 

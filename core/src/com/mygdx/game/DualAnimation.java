@@ -35,7 +35,7 @@ public class DualAnimation extends Animation<TextureRegion> {
         for (int i = 0; i < hitboxes.length; i++) {
             if(i < hitboxOffsets.length){
                 if(hitboxOffsets[i] == null) hitboxes[i].set(-1, -1, 0, 0);
-                hitboxes[i].set(hitboxOffsets[i]);
+                else hitboxes[i].set(hitboxOffsets[i]);
             }
             else hitboxes[i].set(hitboxOffsets[hitboxOffsets.length-1]);
         }

@@ -35,14 +35,26 @@ public class Robot extends Fighter{
 
         //region attack animations
 
-        nLightAnimation = animate(new Texture("assets\\textures\\Security_Robot\\Security_Robot_Attack#1_trimmed.png"), 1, 6, 36);
+        //region neutral light
+        nLightAnimation = animate(new Texture("assets\\textures\\Security_Robot\\Security_Robot_Attack1_Sheet.png"), 3, 2, 36);
         nLightAnimation.setHitboxes(
-                new Rectangle(0, 0, 0, 0),
-                new Rectangle(0, 0, 0, 0),
-                new Rectangle(10, 18, 8, 9),
+                null,
+                null,
+                null,
+                null,
                 new Rectangle(13, 10, 36, 36),
                 new Rectangle(13, 10, 36, 36));
-
+        //endregion
+        //region neutral light
+        sLightAnimation = animate(new Texture("assets\\textures\\Security_Robot\\Security_Robot_Whip_Attack_Sheet.png"), 3, 2, 30);
+        sLightAnimation.setHitboxes(
+                null,
+                null,
+                null,
+                null,
+                new Rectangle(40, 28, 88, 18),
+                new Rectangle(40, 28, 80, 18));
+        //endregion
         //endregion
         //endregion
     }
@@ -61,7 +73,20 @@ public class Robot extends Fighter{
             player.strike(struckPlayer, new HitData().set(damage, 2, 2, direction, 20));
             attackAlreadyHit = true;
         }
+    }
+    public void sideLightAtk() {
+        initiateAtk(FighterConstants.kSLIGHTIndex, 12);
+        attackSent = true;
 
+        Player struckPlayer = player.checkHit();
+        boolean hit = struckPlayer != null;
+        int direction = isFacingRight ? DOWNRIGHT : DOWNLEFT;
+
+        if(hit){
+            int damage = attackAlreadyHit ? 0 : 20;
+            player.strike(struckPlayer, new HitData().set(damage, 2, 3, direction, 20));
+            attackAlreadyHit = true;
+        }
     }
 
 }
