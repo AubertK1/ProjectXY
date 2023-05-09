@@ -33,16 +33,15 @@ public class Robot extends Fighter{
 
         runAnimation = animate(new Texture("assets\\textures\\Security_Robot\\Security_Robot_Running_Sheet.png"), 2, 2, 18);
 
+        //region attack animations
 
-        nLightAnimation = animate(new Texture("assets\\textures\\Security_Robot\\Security_Robot_Attack#1_trimmed.png"), 1, 6, 35);
+        nLightAnimation = animate(new Texture("assets\\textures\\Security_Robot\\Security_Robot_Attack#1_trimmed.png"), 1, 6, 36);
         nLightAnimation.setHitboxes(
                 new Rectangle(0, 0, 0, 0),
                 new Rectangle(0, 0, 0, 0),
                 new Rectangle(10, 18, 8, 9),
                 new Rectangle(13, 10, 36, 36),
                 new Rectangle(13, 10, 36, 36));
-
-        //region attack animations
 
         //endregion
         //endregion
@@ -62,7 +61,7 @@ public class Robot extends Fighter{
             player.strike(struckPlayer, new HitData().set(damage, 2, 2, direction, 20));
             attackAlreadyHit = true;
         }
-    }
 
+    }
 
 }

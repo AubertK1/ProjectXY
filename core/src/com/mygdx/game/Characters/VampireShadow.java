@@ -6,7 +6,9 @@ import com.mygdx.game.GameScreen;
 import com.mygdx.game.Main;
 
 class VampireShadow extends Fighter{
+
     private final Vampire owner;
+
     private int nextVisibleFrame = 0;
     private float lastX;
 

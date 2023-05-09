@@ -157,7 +157,7 @@ public class Cyborg extends Fighter {
         if(isFacingRight) moveRight(); else moveLeft();
         horVelocity *= .7f;
         if(hit){
-            int damage = attackAlreadyHit ? 0 : 20;
+            int damage = attackAlreadyHit ? 0 : 18;
             float deltaT = sLightAnimation.getFrameDuration();
             switch (atkFrame){
                 case 1:
@@ -209,7 +209,7 @@ public class Cyborg extends Fighter {
             applyHitbox(currentAnimation.getKeyHitBox(stateTime), flip);
             plasmaBall.use(this.player, new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_Stun_Bullet.png"),
                     getHitboxBounds().x, getHitboxBounds().y, 10, 10, flip ? -600 : 600, 0);
-            plasmaBall.setHitData(new HitData().set(6, 1, 0, NODIRECTION, 16));
+            plasmaBall.setHitData(new HitData().set(6, 1, 0, NODIRECTION, 10));
             attackSent = true;
         }
     }
