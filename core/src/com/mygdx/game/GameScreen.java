@@ -61,6 +61,9 @@ public class GameScreen extends Screen {
     int sec;
     int min;
     float timerTimeElapsed=0;
+    final int ROUND_TIME_SEC = 30;
+    final int ROUND_TIME_MIN = 0;
+    Label winLabel;
     //endregion
     //region backButton
     public TextButton back;
@@ -118,14 +121,19 @@ public class GameScreen extends Screen {
         //endregion
 
         //region timerRegion
-        sec=0;
-        min=5;
+        sec=ROUND_TIME_SEC;
+        min=ROUND_TIME_MIN;
 
         timerLabel = new Label("Timer: " + min +":"+getSecString(), skin);
         timerLabel.setSize(100, 50);
         timerLabel.setPosition(1700, 900);
 
+        winLabel = new Label("" , skin);
+        winLabel.setSize(500, 200);
+        winLabel.setPosition(800, 600);
+
         UI.addActor(timerLabel);
+        UI.addActor(winLabel);
         //endregion
 
         //region backButton
@@ -133,6 +141,8 @@ public class GameScreen extends Screen {
         back.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeListener.ChangeEvent event, Actor actor) {
+                min = ROUND_TIME_MIN;
+                sec=ROUND_TIME_SEC;
                 Main.changeScreen("MainMenu");
             }
         });
@@ -161,16 +171,15 @@ public class GameScreen extends Screen {
         //endregion
 
         //region Timer
-        timerLabel.setText("Timer: " + min +":"+sec);
+        timerLabel.setText("Timer: " + min +":"+getSecString());
        timerTimeElapsed = timerTimeElapsed+Gdx.graphics.getDeltaTime();
-       if (timerTimeElapsed>=1){
+       if (timerTimeElapsed>=1) {
            decreaseSec();
-       if (min<0){
-           if (sec<0){
-               System.out.println("TIMES UP");
-
+           if (min == 0) {
+               if (sec == 0) {
+                   System.out.println("time");
+               }
            }
-       }
        }
         //endregion
 
@@ -241,6 +250,7 @@ public class GameScreen extends Screen {
 
     //region Timer
     private void decreaseSec(){
+
         sec=sec-1;
         if (sec<0){
             min=min-1;
