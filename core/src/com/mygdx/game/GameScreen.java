@@ -47,6 +47,8 @@ public class GameScreen extends Screen {
     //game gravity variable. This determines how fast the characters fall
     public static float GRAVITY = -115;
 
+    public static boolean gameOver = false;
+
     //region UI
     Skin skin = Main.skin;
     Stage stage = Main.stage;
@@ -143,6 +145,8 @@ public class GameScreen extends Screen {
             public void changed(ChangeListener.ChangeEvent event, Actor actor) {
                 min = ROUND_TIME_MIN;
                 sec=ROUND_TIME_SEC;
+                gameOver = false;
+                winLabel.setText("");
                 Main.changeScreen("MainMenu");
             }
         });
@@ -170,6 +174,15 @@ public class GameScreen extends Screen {
         p2Label.setText("VAMPIRE: " + player2.getFighter().getHealth());
         //endregion
 
+        //region Deaths
+        if (players.get(0).getFighter().getLives() ==0){
+            winLabel.setText("player2 wins");
+            gameOver = true;
+        } else if (players.get(1).getFighter().getLives()==0){
+            winLabel.setText("player1 wins");
+            gameOver = true;
+        }
+        //endregion
         //region Timer
         timerLabel.setText("Timer: " + min +":"+getSecString());
        timerTimeElapsed = timerTimeElapsed+Gdx.graphics.getDeltaTime();
@@ -177,7 +190,25 @@ public class GameScreen extends Screen {
            decreaseSec();
            if (min == 0) {
                if (sec == 0) {
-                   System.out.println("time");
+                   if(players.get(0).getFighter().getLives() > players.get(1).getFighter().getLives()) {
+                       winLabel.setText("Player1 wins");
+                   }else  if(players.get(1).getFighter().getLives() > players.get(0).getFighter().getLives()) {
+                       winLabel.setText("Player2 wins");
+                   }
+                   else  if(players.get(0).getFighter().getHealth() == players.get(1).getFighter().getHealth()) {
+                       if (players.get(0).getFighter().getHealth()/players.get(0).getFighter().maxHealth > players.get(1).getFighter().getHealth()/players.get(1).getFighter().maxHealth){
+                           winLabel.setText("Player1 wins");
+                       }
+                       else if (players.get(1).getFighter().getHealth()/players.get(1).getFighter().maxHealth > players.get(0).getFighter().getHealth()/players.get(0).getFighter().maxHealth) {
+                           winLabel.setText("Player2 wins");
+                       }
+
+                   }
+                   else  {
+                       winLabel.setText("tie");
+                   }
+
+                 gameOver = true;
                }
            }
        }

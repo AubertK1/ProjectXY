@@ -26,7 +26,7 @@ public class Fighter extends MovingObj{
     protected static int maxJumps = 2;
     protected float speed = 500;
     protected int damage = 10;
-    protected int maxHealth = 100;
+    public int maxHealth = 100;
     protected int health = maxHealth;
     protected int fortitude = 15;
     //endregion
@@ -46,6 +46,8 @@ public class Fighter extends MovingObj{
     protected int nextJumpFrame = 0;
     protected int nextUnstunFrame = 0;
     protected int nextUnfreezeFrame = 0;
+
+    private int lives =3;
 
     // endregion properties
 
@@ -358,9 +360,13 @@ public class Fighter extends MovingObj{
     }
 
     public void beDamaged(int damage){
+        int oldHealth = health;
         health -= damage;
 
         if (health <= 0) {
+            if(oldHealth>0){
+                lives--;
+            }
             die();
         }
     }
@@ -542,5 +548,9 @@ public class Fighter extends MovingObj{
             renderOutlines();
             batch.begin();
         }
+    }
+
+    public int getLives(){
+        return lives;
     }
 }
