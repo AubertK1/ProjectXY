@@ -63,8 +63,8 @@ public class GameScreen extends Screen {
     int sec;
     int min;
     float timerTimeElapsed=0;
-    final int ROUND_TIME_SEC = 30;
-    final int ROUND_TIME_MIN = 0;
+    final int ROUND_TIME_SEC = 0;
+    final int ROUND_TIME_MIN = 10;
     Label winLabel;
     //endregion
     //region backButton
