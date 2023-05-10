@@ -364,6 +364,7 @@ public class Fighter extends MovingObj{
             die();
         }
     }
+    
     public void beKnockedBack(int direction, float multiplier, boolean preferRight){
         float baseHorKB = 800;
         float baseVertKB = -GameScreen.GRAVITY + baseHorKB;
