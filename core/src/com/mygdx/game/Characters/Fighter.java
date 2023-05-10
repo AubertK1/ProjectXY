@@ -364,13 +364,9 @@ public class Fighter extends MovingObj{
         health -= damage;
 
         if (health <= 0) {
-            if(oldHealth>0){
-                lives--;
-            }
             die();
         }
     }
-    
     public void beKnockedBack(int direction, float multiplier, boolean preferRight){
         float baseHorKB = 800;
         float baseVertKB = -GameScreen.GRAVITY + baseHorKB;
@@ -484,6 +480,7 @@ public class Fighter extends MovingObj{
     }
 
     public void reset(){
+        lives--;
         health = maxHealth;
 
         horVelocity = 0;

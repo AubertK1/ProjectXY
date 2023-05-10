@@ -195,12 +195,12 @@ public class GameScreen extends Screen {
                    }else  if(players.get(1).getFighter().getLives() > players.get(0).getFighter().getLives()) {
                        winLabel.setText("Player2 wins");
                    }
-                   else  if(players.get(0).getFighter().getHealth() == players.get(1).getFighter().getHealth()) {
+                   else  if(players.get(0).getFighter().getLives() == players.get(1).getFighter().getLives()) {
                        if (players.get(0).getFighter().getHealth()/players.get(0).getFighter().maxHealth > players.get(1).getFighter().getHealth()/players.get(1).getFighter().maxHealth){
-                           winLabel.setText("Player1 wins");
+                           winLabel.setText("Player1 Wins");
                        }
                        else if (players.get(1).getFighter().getHealth()/players.get(1).getFighter().maxHealth > players.get(0).getFighter().getHealth()/players.get(0).getFighter().maxHealth) {
-                           winLabel.setText("Player2 wins");
+                           winLabel.setText("Player2 Wins");
                        }
 
                    }
