@@ -155,6 +155,7 @@ public class Cyborg extends Fighter {
         boolean hit = struckPlayer != null;
         int atkFrame = sLightAnimation.getKeyFrameIndex(stateTime);
         int direction = isFacingRight ? RIGHT : LEFT;
+        
         if(isFacingRight) moveRight(); else moveLeft();
         horVelocity *= .7f;
         if(hit){
