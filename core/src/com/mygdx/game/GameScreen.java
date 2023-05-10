@@ -183,7 +183,8 @@ public class GameScreen extends Screen {
             gameOver = true;
         }
         //endregion
-        //region Timer
+
+        //region Timer and Wins
         timerLabel.setText("Timer: " + min +":"+getSecString());
        timerTimeElapsed = timerTimeElapsed+Gdx.graphics.getDeltaTime();
        if (timerTimeElapsed>=1) {
