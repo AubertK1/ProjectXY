@@ -27,35 +27,35 @@ public class ControlScreen extends MenuScreen {
 
     public int oldKey = -1;
     public static String upP1Text = "W";
-    TextButton upP1;
+    public static TextButton upP1;
     public static String downP1Text = "S";
-    TextButton downP1;
+    public static TextButton downP1;
     public static String rightP1Text = "A";
-    TextButton rightP1;
+    public static TextButton rightP1;
     public static String leftP1Text = "D";
-    TextButton leftP1;
+    public static TextButton leftP1;
     public static String lightP1Text = "F";
-    TextButton lightP1;
+    public static TextButton lightP1;
     public static String heavyP1Text = "G";
-    TextButton heavyP1;
+    public static TextButton heavyP1;
     public static String interactP1text = "E";
-    TextButton interactP1;
+    public static TextButton interactP1;
     public static String upP2Text = Input.Keys.toString(Input.Keys.UP);
-    TextButton upP2;
+    public static TextButton upP2;
     public static String downP2Text = Input.Keys.toString(Input.Keys.DOWN);
-    TextButton downP2;
+    public static TextButton downP2;
 
     public static String rightP2Text = Input.Keys.toString(Input.Keys.RIGHT);
-    TextButton rightP2;
+    public static TextButton rightP2;
     public static  String leftP2Text = Input.Keys.toString(Input.Keys.LEFT);
-    TextButton leftP2;
+    public static TextButton leftP2;
     public static String lightP2Text = Input.Keys.toString(Input.Keys.PERIOD);
-    TextButton lightP2;
+    public static TextButton lightP2;
     public static String heavyP2Text = Input.Keys.toString(Input.Keys.SLASH);
-    TextButton heavyP2;
+    public static TextButton heavyP2;
 
     public static String interactP2text = Input.Keys.toString(Input.Keys.CONTROL_RIGHT);
-    TextButton interactP2;
+    public static TextButton interactP2;
 
 
     public ControlScreen() {
@@ -82,7 +82,6 @@ public class ControlScreen extends MenuScreen {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
                     KeyBinds.resetKeyBinds();
-
                 }
             });
 

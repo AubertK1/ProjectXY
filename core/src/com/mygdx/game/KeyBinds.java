@@ -128,6 +128,21 @@ public class KeyBinds {
         ControlScreen.lightP2Text = Input.Keys.toString(Input.Keys.SLASH);
         keysets[1][6] = Input.Keys.PERIOD;
         ControlScreen.heavyP2Text = Input.Keys.toString(Input.Keys.PERIOD);
+
+        ControlScreen.downP1.setText(ControlScreen.downP1Text);
+        ControlScreen.downP2.setText(ControlScreen.downP2Text);
+        ControlScreen.upP1.setText(ControlScreen.upP1Text);
+        ControlScreen.upP2.setText(ControlScreen.upP2Text);
+        ControlScreen.rightP1.setText(ControlScreen.rightP1Text);
+        ControlScreen.rightP2.setText(ControlScreen.rightP2Text);
+        ControlScreen.leftP1.setText(ControlScreen.leftP1Text);
+        ControlScreen.leftP2.setText(ControlScreen.leftP2Text);
+        ControlScreen.lightP1.setText(ControlScreen.lightP1Text);
+        ControlScreen.lightP2.setText(ControlScreen.lightP2Text);
+        ControlScreen.heavyP1.setText(ControlScreen.heavyP1Text);
+        ControlScreen.heavyP2.setText(ControlScreen.heavyP2Text);
+        ControlScreen.interactP1.setText(ControlScreen.interactP1text);
+        ControlScreen.interactP2.setText(ControlScreen.interactP2text);
     }
 
     public static int findKeySetIndex(int KEY){
