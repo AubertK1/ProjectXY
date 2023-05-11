@@ -6,8 +6,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.mygdx.game.OI.ControlScreen;
 
-import static com.mygdx.game.Main.controlScreen;
-
 public class KeyBinds {
 
     /**
@@ -23,6 +21,7 @@ public class KeyBinds {
             KeyBinds.Keys.LIGHTATTACK,
             KeyBinds.Keys.HEAVYATTACK,
     };
+
     /**
      * Player 1 will always be using this keyset
      * MAKE SURE THE KEYS ON HERE ALIGN WITH THE KEYS ON THE OTHER KEYSETS
@@ -61,6 +60,7 @@ public class KeyBinds {
     private final static int[][] keysets = new int[][]{
             keyset0, keyset1
     };
+
     public static int convertKey(int KEY){
         int newKey = findKeyIndex(KEY);
 
@@ -72,7 +72,7 @@ public class KeyBinds {
     }
 
     public static boolean changeKeyBind(int oldKey, int newKey){
-        if(findKeyIndex(newKey)>=0){
+        if(findKeyIndex(newKey) >= 0){
             return false;
         }
         keysets[findKeySetIndex(oldKey)][findKeyIndex(oldKey)] = newKey;
