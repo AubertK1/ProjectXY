@@ -32,7 +32,7 @@ public class Robot extends Fighter{
         swapAnimation(idleAnimation = animate(idleSheet = new Texture("assets\\textures\\Security_Robot\\Security_Robot_Idle_Sheet.png"), 2, 2, 36));
 
         runAnimation = animate(new Texture("assets\\textures\\Security_Robot\\Security_Robot_Running_Sheet.png"), 2, 2, 20);
-        jumpAnimation = animate(new Texture("assets\\textures\\Security_Robot\\Security_Robot_jumping 48x.png"), 1, 1, 30);
+        // jumpAnimation = animate(new Texture("assets\\textures\\Security_Robot\\Security_Robot_jumping 48x.png"), 1, 2, 30);
 
         //region attack animations
 
@@ -50,9 +50,8 @@ public class Robot extends Fighter{
 
         //endregion
         //region neutral light
-        nHeavyAnimation = animate(new Texture("assets\\textures\\Security_Robot\\Security_Robot_Whip_Attack_Sheet.png"), 3, 2, 24);
+        nHeavyAnimation = animate(new Texture("assets\\textures\\Security_Robot\\Security_Robot_Whip_Attack_Sheet.png"), 1, 5, 20);
         nHeavyAnimation.setHitboxes(
-                null,
                 null,
                 null,
                 null,
@@ -67,7 +66,7 @@ public class Robot extends Fighter{
 
 
     public void sideHeavyAtk() {
-        initiateAtk(FighterConstants.kSHEAVYIndex, 0);
+        initiateAtk(FighterConstants.kSHEAVYIndex, 10);
         attackSent = true;
 
         Player struckPlayer = player.checkHit();
@@ -79,13 +78,13 @@ public class Robot extends Fighter{
 
         if(hit){
             int damage = attackAlreadyHit ? 0 : 15;
-            player.strike(struckPlayer, new HitData().set(damage, 2, -.75f, direction, 35));
+            player.strike(struckPlayer, new HitData().set(damage, 2, -.75f, direction, 15));
             attackAlreadyHit = true;
         }
     }
 
     public void neutralHeavyAtk() {
-        initiateAtk(FighterConstants.kNHEAVYIndex, 0);
+        initiateAtk(FighterConstants.kNHEAVYIndex, 10);
         attackSent = true;
 
         Player struckPlayer = player.checkHit();
@@ -94,7 +93,7 @@ public class Robot extends Fighter{
 
         if(hit){
             int damage = attackAlreadyHit ? 0 : 15;
-            player.strike(struckPlayer, new HitData().set(damage, 2, -.75f, direction, 35));
+            player.strike(struckPlayer, new HitData().set(damage, 2, -.75f, direction, 15));
             attackAlreadyHit = true;
         }
     }
