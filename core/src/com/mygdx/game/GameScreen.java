@@ -18,7 +18,6 @@ import com.mygdx.game.Characters.Vampire;
 import com.mygdx.game.OI.Player;
 import com.mygdx.game.OI.Screen;
 import com.mygdx.game.Projectiles.ProjectilePool;
-import com.mygdx.game.Weapons.Sword;
 import com.mygdx.game.Weapons.Weapon;
 
 import java.util.ArrayList;

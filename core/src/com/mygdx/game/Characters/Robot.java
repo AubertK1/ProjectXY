@@ -31,7 +31,8 @@ public class Robot extends Fighter{
         //region setting animations
         swapAnimation(idleAnimation = animate(idleSheet = new Texture("assets\\textures\\Security_Robot\\Security_Robot_Idle_Sheet.png"), 2, 2, 36));
 
-        runAnimation = animate(new Texture("assets\\textures\\Security_Robot\\Security_Robot_Running_Sheet.png"), 2, 2, 18);
+        runAnimation = animate(new Texture("assets\\textures\\Security_Robot\\Security_Robot_Running_Sheet.png"), 2, 2, 20);
+        jumpAnimation = animate(new Texture("assets\\textures\\Security_Robot\\Security_Robot_jumping 48x.png"), 1, 1, 30);
 
         //region attack animations
 
@@ -40,7 +41,7 @@ public class Robot extends Fighter{
         nLightAnimation.setHitboxes(
                 null,
                 null,
-                null,
+                new Rectangle(14, 10, 36, 36),
                 new Rectangle(14, 10, 36, 36),
                 new Rectangle(14, 10, 36, 36),
                 new Rectangle(14, 10, 36, 36));
@@ -49,7 +50,7 @@ public class Robot extends Fighter{
 
         //endregion
         //region neutral light
-        nHeavyAnimation = animate(new Texture("assets\\textures\\Security_Robot\\Security_Robot_Whip_Attack_Sheet.png"), 3, 2, 30);
+        nHeavyAnimation = animate(new Texture("assets\\textures\\Security_Robot\\Security_Robot_Whip_Attack_Sheet.png"), 3, 2, 24);
         nHeavyAnimation.setHitboxes(
                 null,
                 null,
@@ -57,11 +58,31 @@ public class Robot extends Fighter{
                 null,
                 new Rectangle(40, 28, 88, 20),
                 new Rectangle(40, 28, 80, 18));
+
+        sHeavyAnimation = nHeavyAnimation;
         //endregion
         //endregion
         //endregion
     }
 
+
+    public void sideHeavyAtk() {
+        initiateAtk(FighterConstants.kSHEAVYIndex, 0);
+        attackSent = true;
+
+        Player struckPlayer = player.checkHit();
+        boolean hit = struckPlayer != null;
+        int direction = !isFacingRight ? UPRIGHT : UPLEFT;
+
+        if(isFacingRight) moveRight(); else moveLeft();
+        horVelocity *= .65f;
+
+        if(hit){
+            int damage = attackAlreadyHit ? 0 : 15;
+            player.strike(struckPlayer, new HitData().set(damage, 2, -.75f, direction, 35));
+            attackAlreadyHit = true;
+        }
+    }
 
     public void neutralHeavyAtk() {
         initiateAtk(FighterConstants.kNHEAVYIndex, 0);
@@ -73,7 +94,7 @@ public class Robot extends Fighter{
 
         if(hit){
             int damage = attackAlreadyHit ? 0 : 15;
-            player.strike(struckPlayer, new HitData().set(damage, 2, -.75f, direction, 20));
+            player.strike(struckPlayer, new HitData().set(damage, 2, -.75f, direction, 35));
             attackAlreadyHit = true;
         }
     }
