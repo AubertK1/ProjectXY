@@ -47,6 +47,8 @@ public class GameScreen extends Screen {
     //game gravity variable. This determines how fast the characters fall
     public static float GRAVITY = -115;
 
+    public static boolean gameOver = false;
+
     //region UI
     Skin skin = Main.skin;
     Stage stage = Main.stage;
@@ -61,6 +63,9 @@ public class GameScreen extends Screen {
     int sec;
     int min;
     float timerTimeElapsed=0;
+    final int ROUND_TIME_SEC = 0;
+    final int ROUND_TIME_MIN = 10;
+    Label winLabel;
     //endregion
     //region backButton
     public TextButton back;
@@ -118,14 +123,19 @@ public class GameScreen extends Screen {
         //endregion
 
         //region timerRegion
-        sec=0;
-        min=5;
+        sec=ROUND_TIME_SEC;
+        min=ROUND_TIME_MIN;
 
         timerLabel = new Label("Timer: " + min +":"+getSecString(), skin);
         timerLabel.setSize(100, 50);
         timerLabel.setPosition(1700, 900);
 
+        winLabel = new Label("" , skin);
+        winLabel.setSize(500, 200);
+        winLabel.setPosition(800, 600);
+
         UI.addActor(timerLabel);
+        UI.addActor(winLabel);
         //endregion
 
         //region backButton
@@ -133,6 +143,10 @@ public class GameScreen extends Screen {
         back.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeListener.ChangeEvent event, Actor actor) {
+                min = ROUND_TIME_MIN;
+                sec=ROUND_TIME_SEC;
+                gameOver = false;
+                winLabel.setText("");
                 Main.changeScreen("MainMenu");
             }
         });
@@ -160,17 +174,44 @@ public class GameScreen extends Screen {
         p2Label.setText("VAMPIRE: " + player2.getFighter().getHealth());
         //endregion
 
-        //region Timer
-        timerLabel.setText("Timer: " + min +":"+sec);
-       timerTimeElapsed = timerTimeElapsed+Gdx.graphics.getDeltaTime();
-       if (timerTimeElapsed>=1){
-           decreaseSec();
-       if (min<0){
-           if (sec<0){
-               System.out.println("TIMES UP");
+        //region Deaths
+        if (players.get(0).getFighter().getLives() ==0){
+            winLabel.setText("player2 wins");
+            gameOver = true;
+        } else if (players.get(1).getFighter().getLives()==0){
+            winLabel.setText("player1 wins");
+            gameOver = true;
+        }
+        //endregion
 
+        //region Timer and Wins
+        timerLabel.setText("Timer: " + min +":"+getSecString());
+       timerTimeElapsed = timerTimeElapsed+Gdx.graphics.getDeltaTime();
+       if (timerTimeElapsed>=1) {
+           decreaseSec();
+           if (min == 0) {
+               if (sec == 0) {
+                   if(players.get(0).getFighter().getLives() > players.get(1).getFighter().getLives()) {
+                       winLabel.setText("Player1 wins");
+                   }else  if(players.get(1).getFighter().getLives() > players.get(0).getFighter().getLives()) {
+                       winLabel.setText("Player2 wins");
+                   }
+                   else  if(players.get(0).getFighter().getLives() == players.get(1).getFighter().getLives()) {
+                       if (players.get(0).getFighter().getHealth()/players.get(0).getFighter().maxHealth > players.get(1).getFighter().getHealth()/players.get(1).getFighter().maxHealth){
+                           winLabel.setText("Player1 Wins");
+                       }
+                       else if (players.get(1).getFighter().getHealth()/players.get(1).getFighter().maxHealth > players.get(0).getFighter().getHealth()/players.get(0).getFighter().maxHealth) {
+                           winLabel.setText("Player2 Wins");
+                       }
+
+                   }
+                   else  {
+                       winLabel.setText("tie");
+                   }
+
+                 gameOver = true;
+               }
            }
-       }
        }
         //endregion
 
@@ -241,6 +282,7 @@ public class GameScreen extends Screen {
 
     //region Timer
     private void decreaseSec(){
+
         sec=sec-1;
         if (sec<0){
             min=min-1;

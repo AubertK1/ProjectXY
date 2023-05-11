@@ -167,55 +167,56 @@ public class Player {
      * @param PRESSEDKEY The key being pressed
      */
     public void interact(int PRESSEDKEY){
-        if(fighter.isStunned()) return;
-        
-        //converts the key into its value in the default keyset
-        int KEY = KeyBinds.convertKey(PRESSEDKEY);
+        if(GameScreen.gameOver==false) {
+            if (fighter.isStunned()) return;
 
-        //registers player's input
-        //key presses
-        switch (KEY){
-            case (KeyBinds.Keys.RIGHT):
-                if (fighter.isCollidingWith(Main.gameScreen.mainPlatform)[Object.RIGHTCOLLISION]) fighter.stop();
-                else if(fighter.getXVelocity() < 0) fighter.stop();
-                else fighter.moveRight();
-                break;
-            case (KeyBinds.Keys.LEFT):
-                if (fighter.isCollidingWith(Main.gameScreen.mainPlatform)[Object.LEFTCOLLISION]) fighter.stop();
-                else if(fighter.getXVelocity() > 0) fighter.stop();
-                else fighter.moveLeft();
-                break;
-            case (KeyBinds.Keys.JUMP):
-                if (fighter.isAttacking());
-                else if(!fighter.isJumping()) fighter.jump();
-                break;
-            case (KeyBinds.Keys.DOWN):
-                if(fighter.canFall()) fighter.moveDown();
-                break;
-            case (KeyBinds.Keys.INTERACT):
-                if(equippedWeapon == null) {
-                    Weapon interactedWeapon = null;
-                    for (Weapon weapon : GameScreen.getWeapons()) {
-                        if (!fighter.isCollidingWith(weapon)[Object.NOCOLLISION] && weapon.getOwner() == null){
-                            interactedWeapon = weapon;
-                            break;
+            //converts the key into its value in the default keyset
+            int KEY = KeyBinds.convertKey(PRESSEDKEY);
+
+            //registers player's input
+            //key presses
+            switch (KEY) {
+                case (KeyBinds.Keys.RIGHT):
+                    if (fighter.isCollidingWith(Main.gameScreen.mainPlatform)[Object.RIGHTCOLLISION]) fighter.stop();
+                    else if (fighter.getXVelocity() < 0) fighter.stop();
+                    else fighter.moveRight();
+                    break;
+                case (KeyBinds.Keys.LEFT):
+                    if (fighter.isCollidingWith(Main.gameScreen.mainPlatform)[Object.LEFTCOLLISION]) fighter.stop();
+                    else if (fighter.getXVelocity() > 0) fighter.stop();
+                    else fighter.moveLeft();
+                    break;
+                case (KeyBinds.Keys.JUMP):
+                    if (fighter.isAttacking()) ;
+                    else if (!fighter.isJumping()) fighter.jump();
+                    break;
+                case (KeyBinds.Keys.DOWN):
+                    if (fighter.canFall()) fighter.moveDown();
+                    break;
+                case (KeyBinds.Keys.INTERACT):
+                    if (equippedWeapon == null) {
+                        Weapon interactedWeapon = null;
+                        for (Weapon weapon : GameScreen.getWeapons()) {
+                            if (!fighter.isCollidingWith(weapon)[Object.NOCOLLISION] && weapon.getOwner() == null) {
+                                interactedWeapon = weapon;
+                                break;
+                            }
                         }
+                        if (interactedWeapon != null) equipWeapon(interactedWeapon);
+                    } else {
+                        throwWeapon();
                     }
-                    if (interactedWeapon != null) equipWeapon(interactedWeapon);
-                }
-                else {
-                    throwWeapon();
-                }
-                break;
-            case (KeyBinds.Keys.LIGHTATTACK):
-                startAttack(false);
-                break;
-            case (KeyBinds.Keys.HEAVYATTACK):
-                startAttack(true);
-                break;
-            case (KeyBinds.Keys.TEMP): //fixme testing keybind changing. Delete later
-                KeyBinds.changeKeyBind(KeyBinds.findKeyFromDefaultKey(KeyBinds.Keys.JUMP, playerNum - 1), Input.Keys.SPACE);
-                break;
+                    break;
+                case (KeyBinds.Keys.LIGHTATTACK):
+                    startAttack(false);
+                    break;
+                case (KeyBinds.Keys.HEAVYATTACK):
+                    startAttack(true);
+                    break;
+                case (KeyBinds.Keys.TEMP): //fixme testing keybind changing. Delete later
+                    KeyBinds.changeKeyBind(KeyBinds.findKeyFromDefaultKey(KeyBinds.Keys.JUMP, playerNum - 1), Input.Keys.SPACE);
+                    break;
+            }
         }
     }
     /**

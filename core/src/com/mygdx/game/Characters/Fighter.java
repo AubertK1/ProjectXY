@@ -26,7 +26,7 @@ public class Fighter extends MovingObj{
     protected static int maxJumps = 2;
     protected float speed = 500;
     protected int damage = 10;
-    protected int maxHealth = 100;
+    public int maxHealth = 100;
     protected int health = maxHealth;
     protected int fortitude = 15;
     //endregion
@@ -46,6 +46,8 @@ public class Fighter extends MovingObj{
     protected int nextJumpFrame = 0;
     protected int nextUnstunFrame = 0;
     protected int nextUnfreezeFrame = 0;
+
+    private int lives =3;
 
     // endregion properties
 
@@ -358,6 +360,7 @@ public class Fighter extends MovingObj{
     }
 
     public void beDamaged(int damage){
+        int oldHealth = health;
         health -= damage;
 
         if (health <= 0) {
@@ -477,6 +480,7 @@ public class Fighter extends MovingObj{
     }
 
     public void reset(){
+        lives--;
         health = maxHealth;
 
         horVelocity = 0;
@@ -531,8 +535,9 @@ public class Fighter extends MovingObj{
             applyFocalPoint(currentAnimation.getKeyFocalPoint(stateTime), flip);
             if(currentAnimation != idleAnimation && currentAnimation.isAnimationFinished(stateTime)) currentAnimation = idleAnimation;
 
-            batch.draw(modelFrame, flip ? getX() + modelFrame.getRegionWidth() * getScale() : getX(), getY(),
-                    flip ? -modelFrame.getRegionWidth() * getScale() : modelFrame.getRegionWidth() * getScale(), modelFrame.getRegionHeight() * getScale());
+            float frameWidth = modelFrame.getRegionWidth() * getScale(), frameHeight = modelFrame.getRegionHeight() * getScale();
+            batch.draw(modelFrame, flip ? getX() + getWidth() : getX(), getY(),
+                    flip ? -frameWidth : frameWidth, frameHeight);
         }
 
         if(Main.inDebugMode) {
@@ -540,5 +545,9 @@ public class Fighter extends MovingObj{
             renderOutlines();
             batch.begin();
         }
+    }
+
+    public int getLives(){
+        return lives;
     }
 }

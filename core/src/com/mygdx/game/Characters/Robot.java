@@ -24,7 +24,7 @@ public class Robot extends Fighter{
 
         //region stats
         name = "Sarge";
-        maxHealth = 150;
+        maxHealth = 125;
         health = maxHealth;
         //endregion
 
@@ -35,33 +35,80 @@ public class Robot extends Fighter{
 
         //region attack animations
 
-        nLightAnimation = animate(new Texture("assets\\textures\\Security_Robot\\Security_Robot_Attack#1_trimmed.png"), 1, 6, 36);
+        //region neutral light
+        nLightAnimation = animate(new Texture("assets\\textures\\Security_Robot\\Security_Robot_Attack1_Sheet.png"), 3, 2, 24);
         nLightAnimation.setHitboxes(
-                new Rectangle(0, 0, 0, 0),
-                new Rectangle(0, 0, 0, 0),
-                new Rectangle(10, 18, 8, 9),
-                new Rectangle(13, 10, 36, 36),
-                new Rectangle(13, 10, 36, 36));
+                null,
+                null,
+                null,
+                new Rectangle(14, 10, 36, 36),
+                new Rectangle(14, 10, 36, 36),
+                new Rectangle(14, 10, 36, 36));
 
+        sLightAnimation = nLightAnimation;
+
+        //endregion
+        //region neutral light
+        nHeavyAnimation = animate(new Texture("assets\\textures\\Security_Robot\\Security_Robot_Whip_Attack_Sheet.png"), 3, 2, 30);
+        nHeavyAnimation.setHitboxes(
+                null,
+                null,
+                null,
+                null,
+                new Rectangle(40, 28, 88, 20),
+                new Rectangle(40, 28, 80, 18));
+        //endregion
         //endregion
         //endregion
     }
 
 
-    public void neutralLightAtk() {
-        initiateAtk(FighterConstants.kNLIGHTIndex, 15);
+    public void neutralHeavyAtk() {
+        initiateAtk(FighterConstants.kNHEAVYIndex, 0);
         attackSent = true;
 
         Player struckPlayer = player.checkHit();
         boolean hit = struckPlayer != null;
-        int direction = isFacingRight ? UPRIGHT : UPLEFT;
+        int direction = !isFacingRight ? UPRIGHT : UPLEFT;
+
+        if(hit){
+            int damage = attackAlreadyHit ? 0 : 15;
+            player.strike(struckPlayer, new HitData().set(damage, 2, -.75f, direction, 20));
+            attackAlreadyHit = true;
+        }
+    }
+
+    public void sideLightAtk() {
+        initiateAtk(FighterConstants.kSLIGHTIndex, 12);
+        attackSent = true;
+
+        Player struckPlayer = player.checkHit();
+        boolean hit = struckPlayer != null;
+        int direction = isFacingRight ? DOWNRIGHT : DOWNLEFT;
+
+        if(isFacingRight) moveRight(); else moveLeft();
+        horVelocity *= .75f;
 
         if(hit){
             int damage = attackAlreadyHit ? 0 : 20;
             player.strike(struckPlayer, new HitData().set(damage, 2, 2, direction, 20));
             attackAlreadyHit = true;
         }
+    }
 
+    public void neutralLightAtk() {
+        initiateAtk(FighterConstants.kNLIGHTIndex, 12);
+        attackSent = true;
+
+        Player struckPlayer = player.checkHit();
+        boolean hit = struckPlayer != null;
+        int direction = isFacingRight ? DOWNRIGHT : DOWNLEFT;
+
+        if(hit){
+            int damage = attackAlreadyHit ? 0 : 20;
+            player.strike(struckPlayer, new HitData().set(damage, 2, 2, direction, 20));
+            attackAlreadyHit = true;
+        }
     }
 
 }

@@ -49,7 +49,7 @@ public class Cyborg extends Fighter {
         //region side light
         sLightAnimation = animate(new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_Attack1_Sheet.png"), 2, 3, 30);
         sLightAnimation.setHitboxes(
-                new Rectangle(0, 0, 0, 0),
+                null,
                 new Rectangle(0, 19, 5, 8),
                 new Rectangle(4, 22, 27, 6),
                 new Rectangle(12, 20, 25, 7),
@@ -65,8 +65,8 @@ public class Cyborg extends Fighter {
         //region neutral light
         nLightAnimation = animate(new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_Attack2_Sheet.png"), 1, 7, 21);
         nLightAnimation.setHitboxes(
-                new Rectangle(0, 0, 0, 0),
-                new Rectangle(0, 0, 0, 0),
+                null,
+                null,
                 new Rectangle(23, 20, 9, 10),
                 new Rectangle(23, 20, 13, 10),
                 new Rectangle(27, 18, 17, 12),
@@ -82,8 +82,9 @@ public class Cyborg extends Fighter {
         //endregion
         //region down light
         dLightAnimation = animate(new Texture("assets\\textures\\Violet_Cyborg\\Violet_Cyborg_Attack3_Sheet.png"), 2, 2, 13);
-        dLightAnimation.setHitboxes(new Rectangle(0, 0, 0, 0),
-                new Rectangle(0, 0, 0, 0),
+        dLightAnimation.setHitboxes(
+                null,
+                null,
                 new Rectangle(24, 7, 12, 8),
                 new Rectangle(25, 6, 14, 8));
         //endregion
@@ -154,6 +155,7 @@ public class Cyborg extends Fighter {
         boolean hit = struckPlayer != null;
         int atkFrame = sLightAnimation.getKeyFrameIndex(stateTime);
         int direction = isFacingRight ? RIGHT : LEFT;
+        
         if(isFacingRight) moveRight(); else moveLeft();
         horVelocity *= .7f;
         if(hit){

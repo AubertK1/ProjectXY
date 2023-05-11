@@ -54,8 +54,8 @@ public class KeyBinds {
             Input.Keys.DOWN,
             Input.Keys.RIGHT,
             Input.Keys.CONTROL_RIGHT,
-            Input.Keys.PERIOD,
             Input.Keys.SLASH,
+            Input.Keys.PERIOD,
     };
 
     private final static int[][] keysets = new int[][]{

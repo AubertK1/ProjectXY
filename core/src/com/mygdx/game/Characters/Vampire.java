@@ -127,6 +127,8 @@ public class Vampire extends Fighter{
             pastYs.clear();
             pastAnims.clear();
             shadow.beInvisible(120);
+
+            endAttack(0);
             attackSent = true;
         }
     }
