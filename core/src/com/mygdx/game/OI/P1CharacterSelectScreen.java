@@ -10,7 +10,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.GameScreen;
 import com.mygdx.game.Main;
-
+/**
+ * Allows user to choose a character by clicking the image, then sends them to the second character selection screen
+ * The back button takes the user back to the Main Menu Screen
+ */
 public class P1CharacterSelectScreen extends MenuScreen{
 
 
@@ -51,6 +54,10 @@ public class P1CharacterSelectScreen extends MenuScreen{
     }
 
 
+    /**
+     * Draws the characters on the screen
+     *  @param batch
+     */
     public void render(SpriteBatch batch){
         batch.draw(background,0, 0,2000,1000);
         batch.draw(characterSelectImage,750, 800, 400, 200);

@@ -57,9 +57,13 @@ public class ControlScreen extends MenuScreen {
     public static String interactP2text = Input.Keys.toString(Input.Keys.CONTROL_RIGHT);
     public static TextButton interactP2;
 
-
+    /*
+     * This is where you can see the keybinds that control the character and the moves
+     */
     public ControlScreen() {
-
+/*
+moves and abilities
+ */
         jumpLabel = createLabel("JUMP", 450, 750, 150, 100);
         downLabel = createLabel("DOWN", 450, 650, 150, 100);
         rightLabel = createLabel("RIGHT", 450, 550, 150, 100);
@@ -69,7 +73,9 @@ public class ControlScreen extends MenuScreen {
         heavyLabel = createLabel("LIGHT", 450, 150, 150, 100);
 
 
-
+/*
+Back button to the menu screen and a button to reset the keyninds to their original values
+ */
         final TextButton play = createTextButton("BACK",25,550,200,200);
         play.addListener(new ChangeListener() {
             @Override
@@ -85,6 +91,9 @@ public class ControlScreen extends MenuScreen {
                 }
             });
 
+            /*
+            The buttons
+             */
         upP1 = createTextButton(upP1Text, 550, 750, 100, 75);
         upP1.addListener(new ChangeListener() {
             @Override
@@ -202,8 +211,12 @@ public class ControlScreen extends MenuScreen {
 
     }
 
+    /**
+     * Changes the button text
+     * @param newKey The new keybinds
+     */
     public void changeButtonText(int newKey) {
-        //fixme find correct button based on old key
+
         if (Input.Keys.toString(oldKey).equalsIgnoreCase(upP1Text)) {
             upP1Text = Input.Keys.toString(newKey);
             upP1.setText(upP1Text);

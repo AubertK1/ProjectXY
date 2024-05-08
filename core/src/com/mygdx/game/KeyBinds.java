@@ -71,6 +71,12 @@ public class KeyBinds {
         else return defaultKeys[newKey];
     }
 
+    /**
+     *  Allows the user to change the keybinds
+     * @param oldKey The current keybind to an action
+     * @param newKey Will replace the current keybind
+     * @return
+     */
     public static boolean changeKeyBind(int oldKey, int newKey){
         if(findKeyIndex(newKey) >= 0){
             return false;
@@ -97,7 +103,9 @@ public class KeyBinds {
         }
         return -2;
     }
-
+/*
+Sets the Keybinds to their original values
+ */
     public static void resetKeyBinds(){
         keysets[0][0] = Input.Keys.W;//jump
         ControlScreen.upP1Text = Input.Keys.toString(Input.Keys.W);

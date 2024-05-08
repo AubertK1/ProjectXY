@@ -5,7 +5,10 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.mygdx.game.Main;
-
+/**
+ If the user presses the "Play" button, it will take them to the Player1 Character Selection screen
+ If the user presses the "Controls" button, it will take them to the Control Screen, where they could see their keybinds or change them if needed
+ */
 public class MainMenu extends MenuScreen {
 
     public MainMenu() {

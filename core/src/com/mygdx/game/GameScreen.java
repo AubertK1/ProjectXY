@@ -22,6 +22,9 @@ import com.mygdx.game.Weapons.Weapon;
 
 import java.util.ArrayList;
 
+/**
+ * This is where the player(s) fight with their chosen character
+ */
 public class GameScreen extends Screen {
     private Player player1;
     private Player player2;
@@ -51,13 +54,14 @@ public class GameScreen extends Screen {
     //region UI
     Skin skin = Main.skin;
     Stage stage = Main.stage;
+
     // Makes a new group
     Group UI = new Group();
 
     Label p1Label, p2Label;
     //endregion
 
-    //region timerRegion
+    //region timerRegion (Adds a time limit to how long a match can go on for)
     Label timerLabel;
     int sec;
     int min;
@@ -121,7 +125,7 @@ public class GameScreen extends Screen {
         UI.addActor(p2Label);
         //endregion
 
-        //region timerRegion
+        //region timerRegion (Displays timer counting down on GameScreen)
         sec=ROUND_TIME_SEC;
         min=ROUND_TIME_MIN;
 
@@ -137,7 +141,7 @@ public class GameScreen extends Screen {
         UI.addActor(winLabel);
         //endregion
 
-        //region backButton
+        //region backButton (Adds a button that allows the user to go back to the Main Menu Screen)\
          back = createTextButton("BACK",-100,850,200,100);
         back.addListener(new ChangeListener() {
             @Override
@@ -151,6 +155,10 @@ public class GameScreen extends Screen {
         });
         //endregion
     }
+
+    /**
+     * updates the system's frames and declares a winner based on which player won
+     */
     private void update(){
         FRAMECOUNT++;
 
@@ -168,12 +176,12 @@ public class GameScreen extends Screen {
         }
 */
 
-        //region UI
+        //region UI ( shows the fight's health)
         p1Label.setText("ROBOT: " + player1.getFighter().getHealth());
         p2Label.setText("VAMPIRE: " + player2.getFighter().getHealth());
         //endregion
 
-        //region Deaths
+        //region Deaths  (States who wins based on if the lives run out)
         if (players.get(0).getFighter().getLives() ==0){
             winLabel.setText("player2 wins");
             gameOver = true;
@@ -183,7 +191,7 @@ public class GameScreen extends Screen {
         }
         //endregion
 
-        //region Timer and Wins
+        //region Timer and Wins (Sets the results of the match if the timer runs out with conditions)
         timerLabel.setText("Timer: " + min +":"+getSecString());
        timerTimeElapsed = timerTimeElapsed+Gdx.graphics.getDeltaTime();
        if (timerTimeElapsed>=1) {
@@ -216,15 +224,17 @@ public class GameScreen extends Screen {
 
         p1Label.setText(player1.getFighter().getName() + ": " + player1.getFighter().getHealth());
         p2Label.setText(player2.getFighter().getName() + ": " + player2.getFighter().getHealth());
-
     }
-
-
-
 
     public static ArrayList<Player> getPlayers(){
         return players;
     }
+
+    /**
+     *  Places the character the user(s) chose and puts it on the screen
+     * @param player the user
+     * @param fighter the character the user chose
+     */
     public static void setPlayers(int player,String fighter){
         Vector2 spawn;
         if (player == 1){
@@ -279,9 +289,11 @@ public class GameScreen extends Screen {
         projectilePool.renderProjectiles(batch);
     }
 
-    //region Timer
+    //region Timer (makes the timer countdown)
+    /**
+     * makes the time go down
+     */
     private void decreaseSec(){
-
         sec=sec-1;
         if (sec<0){
             min=min-1;
@@ -290,6 +302,10 @@ public class GameScreen extends Screen {
         timerTimeElapsed= timerTimeElapsed-1;
     }
 
+    /**
+     * Puts a 0 in front of single digit numbers
+     * @return
+     */
     private String getSecString(){
         if(sec<10){
             return "0"+sec;
@@ -298,6 +314,15 @@ public class GameScreen extends Screen {
     }
     //endregion
 
+    /**
+     *  Adds a textbutton to the screen
+     * @param buttonText
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     * @return
+     */
     public TextButton createTextButton(String buttonText,int x, int y, int width, int height){
         final TextButton aTextbutton = new TextButton(buttonText,skin);
         aTextbutton.setPosition(x,y);

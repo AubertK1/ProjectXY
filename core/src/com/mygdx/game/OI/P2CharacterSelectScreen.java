@@ -12,6 +12,11 @@ import com.mygdx.game.GameScreen;
 import com.mygdx.game.Main;
 
 public class P2CharacterSelectScreen extends MenuScreen{
+    /*
+     * Allows user to choose a character by clicking the image
+     * The back button takes the user back to the Player1Character Screen
+     * The Fight button takes the players to the Game Screen
+     */
     public Texture characterSelectImage = new Texture("textures/Background/CHOOSE_YOUR_CHARACTER.png");
     public Texture player2Image = new Texture("textures/Background/P2.png");
 
